@@ -2,13 +2,15 @@ package com.example.testapp.models;
 
 public class Product {
     private String productName;
+    private String productImage;
     private String productDescription;
     private double productPrice;
     private double productPreviousPrice;
     private String productUnit;
 
-    public Product(String productName, String productDescription, double productPrice, double productPreviousPrice, String productUnit) {
+    public Product(String productName, String productImage, String productDescription, double productPrice, double productPreviousPrice, String productUnit) {
         this.productName = productName;
+        this.productImage = productImage;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productPreviousPrice = productPreviousPrice;
@@ -55,4 +57,11 @@ public class Product {
         this.productUnit = productUnit;
     }
 
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
 }

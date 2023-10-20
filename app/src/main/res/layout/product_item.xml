@@ -3,10 +3,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
+    android:padding="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
         app:cardMaxElevation="4dp"
@@ -19,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/product_image_view"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="Product Image"
                 android:src="@drawable/ic_launcher_background" />

@@ -41,9 +41,14 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/popularRecyclerView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/product_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
