@@ -1,25 +1,27 @@
 package com.example.testapp;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.example.testapp.models.HomePageModel;
+import com.example.testapp.models.Product;
 
 public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //views
-    private static final int NORMAL_PRODUCT_LIST = 0;
-    private static final int IMAGE_CAROUSEL = 1;
-    private static final int POPULAR_PRODUCT_SLIDER = 2;
+    public static final int NORMAL_PRODUCT_LIST = 0;
+    public static final int IMAGE_CAROUSEL = 1;
+    public static final int POPULAR_PRODUCT_SLIDER = 2;
 
     private final HomePageModel homePageModel;
     private final Context homePageContext;
@@ -43,7 +45,7 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 break;
 
             case POPULAR_PRODUCT_SLIDER:
-                view = inflater.inflate(R.layout.popular_listview, parent, false);
+                view = inflater.inflate(R.layout.popular_products_rv, parent, false);
                 viewHolder = new PopularProductViewHolder(view);
                 break;
 
@@ -57,12 +59,13 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
-            return IMAGE_CAROUSEL;
-        } else if(position == 1) {
-            return POPULAR_PRODUCT_SLIDER;
-        } else {
-            return NORMAL_PRODUCT_LIST;
+        switch (position) {
+            case 0:
+                return IMAGE_CAROUSEL;
+            case 1:
+                return POPULAR_PRODUCT_SLIDER;
+            default:
+                return NORMAL_PRODUCT_LIST;
         }
     }
 
@@ -73,35 +76,32 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 CarouselViewHolder carouselViewHolder = (CarouselViewHolder) holder;
                 carouselViewHolder.imageSlider.setImageList(homePageModel.getBestDealsList());
                 break;
+
             case POPULAR_PRODUCT_SLIDER:
                 PopularProductViewHolder popularProductViewHolder = (PopularProductViewHolder) holder;
-                //load images
-                Glide.with(homePageContext)
-                        .load(homePageModel.getPopularProductsList().get(position).getImageUrl())
-                        .centerCrop()
-                        //.placeholder(R.drawable.loading_spinner)
-                        .into(popularProductViewHolder.popularImage);
 
-                //load titles
-                popularProductViewHolder.productTitle.setText(homePageModel.getPopularProductsList().get(position).getImageTitle());
-
-                //set click listener
-                popularProductViewHolder.popularImage.setOnClickListener(view -> Toast.makeText(homePageContext, String.format("%s clicked", homePageModel.getPopularProductsList().get(position).getImageTitle()), Toast.LENGTH_SHORT).show());
+                PopularRecyclerViewAdapter popularAdapter = new PopularRecyclerViewAdapter(homePageContext, homePageModel.getPopularProductsList());
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(homePageContext, LinearLayoutManager.HORIZONTAL, false);
+                popularProductViewHolder.popularProductRecyclerView.setLayoutManager(linearLayoutManager);
+                popularProductViewHolder.popularProductRecyclerView.setAdapter(popularAdapter);
                 break;
+
             default:
                 NormalProductViewHolder normalProductViewHolder = (NormalProductViewHolder) holder;
+                //get current normal product
+                Product normalProduct = homePageModel.getNormalProductsList().get(position);
                 //load images
                 Glide.with(homePageContext)
-                        .load(homePageModel.getNormalProductsList().get(position).getProductImage())
+                        .load(normalProduct.getProductImage())
                         .centerCrop()
                         //.placeholder(R.drawable.loading_spinner)
                         .into(normalProductViewHolder.productImageView);
 
-                normalProductViewHolder.productTitle.setText(homePageModel.getNormalProductsList().get(position).getProductName());
-                normalProductViewHolder.productDescription.setText(homePageModel.getNormalProductsList().get(position).getProductDescription());
-                normalProductViewHolder.productPrice.setText(String.format("%s", homePageModel.getNormalProductsList().get(position).getProductPrice()));
-                normalProductViewHolder.productUnit.setText(homePageModel.getNormalProductsList().get(position).getProductUnit());
-                normalProductViewHolder.productPreviousPrice.setText(String.format("%s", homePageModel.getNormalProductsList().get(position).getProductPreviousPrice()));
+                normalProductViewHolder.productTitle.setText(normalProduct.getProductName());
+                normalProductViewHolder.productDescription.setText(normalProduct.getProductDescription());
+                normalProductViewHolder.productPrice.setText(String.format("%s per %s", normalProduct.getProductPrice(), normalProduct.getProductUnit()));
+                normalProductViewHolder.productPreviousPrice.setText(String.format("%s per %s", normalProduct.getProductPreviousPrice(), normalProduct.getProductUnit()));
+                normalProductViewHolder.productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
                 break;
         }
     }
@@ -113,31 +113,51 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     public static class CarouselViewHolder extends RecyclerView.ViewHolder {
         ImageSlider imageSlider;
+
         public CarouselViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageSlider = itemView.findViewById(R.id.image_slider);
         }
     }
-    public static class PopularProductViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView popularImage;
-        TextView productTitle;
+    public static class PopularProductViewHolder extends RecyclerView.ViewHolder {
+        RecyclerView popularProductRecyclerView;
 
         public PopularProductViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            popularImage = itemView.findViewById(R.id.popular_image_view);
-            productTitle = itemView.findViewById(R.id.product_title);
+            popularProductRecyclerView = itemView.findViewById(R.id.popular_products_rv);
+
         }
     }
+
     public static class NormalProductViewHolder extends RecyclerView.ViewHolder {
         private final ImageView productImageView;
         private final TextView productTitle;
         private final TextView productDescription;
         private final TextView productPrice;
-        private final TextView productUnit;
         private final TextView productPreviousPrice;
+
+        public ImageView getProductImageView() {
+            return productImageView;
+        }
+
+        public TextView getProductTitle() {
+            return productTitle;
+        }
+
+        public TextView getProductDescription() {
+            return productDescription;
+        }
+
+        public TextView getProductPrice() {
+            return productPrice;
+        }
+
+        public TextView getProductPreviousPrice() {
+            return productPreviousPrice;
+        }
 
         public NormalProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,7 +166,6 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             productTitle = itemView.findViewById(R.id.product_title);
             productDescription = itemView.findViewById(R.id.product_description);
             productPrice = itemView.findViewById(R.id.product_price);
-            productUnit = itemView.findViewById(R.id.product_unit);
             productPreviousPrice = itemView.findViewById(R.id.product_previous_price);
         }
     }

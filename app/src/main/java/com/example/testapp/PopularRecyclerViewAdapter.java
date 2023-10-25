@@ -12,19 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.testapp.models.PopularProduct;
 
 import java.util.List;
 
 public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecyclerViewAdapter.ViewHolder>{
 
     //variables
-    private List<String> popularImageUrls;
-    private List<String> popularImageTitles;
+    private List<PopularProduct> popularProducts;
     private Context popularImageContext;
 
-    public PopularRecyclerViewAdapter(Context popularImageContext, List<String> popularImageUrls, List<String> popularImageTitles) {
-        this.popularImageUrls = popularImageUrls;
-        this.popularImageTitles = popularImageTitles;
+    public PopularRecyclerViewAdapter(Context popularImageContext, List<PopularProduct> popularProducts) {
+        this.popularProducts = popularProducts;
         this.popularImageContext = popularImageContext;
     }
 
@@ -42,24 +41,24 @@ public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecy
         Toast.makeText(popularImageContext, "Inside recycler view", Toast.LENGTH_SHORT);
         //load images
         Glide.with(popularImageContext)
-                .load(popularImageUrls.get(position))
+                .load(popularProducts.get(position).getImageUrl())
                 .centerCrop()
                 //.placeholder(R.drawable.loading_spinner)
                 .into(holder.popularImage);
 
         //load titles
-        holder.productTitle.setText(popularImageTitles.get(position));
+        holder.productTitle.setText(popularProducts.get(position).getImageTitle());
 
         //set click listener
         holder.popularImage.setOnClickListener(view -> {
-            Toast.makeText(popularImageContext, String.format("%s clicked", popularImageTitles.get(position)), Toast.LENGTH_SHORT).show();
+            Toast.makeText(popularImageContext, String.format("%s clicked", popularProducts.get(position).getImageTitle()), Toast.LENGTH_SHORT).show();
         });
 
     }
 
     @Override
     public int getItemCount() {
-        return popularImageUrls.size();
+        return popularProducts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    android:padding="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:padding="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="150dp"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         app:cardCornerRadius="8dp"
         app:cardMaxElevation="4dp"
-        app:cardElevation="2dp"
-        android:layout_centerInParent="true">
+        app:cardElevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,8 +21,9 @@
 
             <ImageView
                 android:id="@+id/product_image_view"
-                android:layout_width="150dp"
+                android:layout_width="160dp"
                 android:layout_height="150dp"
+                android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="Product Image"
                 android:src="@drawable/ic_launcher_background" />
@@ -39,7 +41,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Description"
-                android:gravity="center"
                 android:layout_below="@+id/product_title"/>
 
             <TextView
@@ -51,23 +52,12 @@
                 android:layout_below="@+id/product_description" />
 
             <TextView
-                android:id="@+id/product_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="per piece"
-                android:layout_marginLeft="2dp"
-                android:gravity="center"
-                android:layout_below="@+id/product_description"
-                android:layout_toRightOf="@+id/product_price" />
-
-            <TextView
                 android:id="@+id/product_previous_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rs 110"
                 android:layout_marginLeft="2dp"
                 android:layout_below="@+id/product_price" />
-
 
         </RelativeLayout>
 

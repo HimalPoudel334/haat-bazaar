@@ -51,7 +51,6 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
         Chip categoryChip;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             categoryChip = itemView.findViewById(R.id.category_chip);
         }
     }
