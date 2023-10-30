@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.BuyProductFragment"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/buy_now_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy Now"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_close_24"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/buy_now_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.942"
+            app:layout_constraintLeft_toRightOf="@+id/buy_now_tv"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buy_now_tv"
+            app:layout_constraintTop_toTopOf="@+id/buy_now_tv" />
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="5dp">
+        
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
+            android:id="@+id/product_about_to_buy_iv"
+            android:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/product_about_to_buy_price_tv"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@+id/product_about_to_buy_iv"
+            android:text="Rs 100" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/product_about_to_buy_prev_price"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/product_about_to_buy_iv"
+            android:layout_below="@+id/product_about_to_buy_price_tv"
+            android:text="Rs 125" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/product_about_to_buy_iv"
+            android:layout_below="@+id/product_about_to_buy_prev_price"
+            android:text="-20%" />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

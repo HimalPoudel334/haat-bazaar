@@ -1,6 +1,11 @@
 package com.example.testapp.models;
 
-public class Product {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Product implements Parcelable {
     private String productName;
     private String productImage;
     private String productDescription;
@@ -15,6 +20,15 @@ public class Product {
         this.productPrice = productPrice;
         this.productPreviousPrice = productPreviousPrice;
         this.productUnit = productUnit;
+    }
+
+    protected Product(Parcel in) {
+        productName = in.readString();
+        productImage = in.readString();
+        productDescription = in.readString();
+        productPrice = in.readDouble();
+        productPreviousPrice = in.readDouble();
+        productUnit = in.readString();
     }
 
     public String getProductName() {
@@ -64,4 +78,32 @@ public class Product {
     public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(productName);
+        parcel.writeString(productImage);
+        parcel.writeString(productDescription);
+        parcel.writeDouble(productPrice);
+        parcel.writeDouble(productPreviousPrice);
+        parcel.writeString(productUnit);
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel in) {
+            return new Product(in);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
+
 }

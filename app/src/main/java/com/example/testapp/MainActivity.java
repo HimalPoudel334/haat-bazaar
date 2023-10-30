@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.testapp.adapters.HomePageMainRecyclerViewAdapter;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.PopularProduct;
 import com.example.testapp.models.Product;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    HomePageModel homePageModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
-        HomePageModel homePageModel = new HomePageModel(productList, popularProducts, dealsList);
+        homePageModel = new HomePageModel(productList, popularProducts, dealsList);
         //init recycler view
         HomePageMainRecyclerViewAdapter adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
@@ -285,25 +289,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        /*MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search_view);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT);
-                return true;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Toast.makeText(MainActivity.this, newText, Toast.LENGTH_SHORT);
-                return true;
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);*/
         return true;
     }
 
@@ -318,15 +303,33 @@ public class MainActivity extends AppCompatActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-                    return true;
+                    if(query.length() == 0 || query == null) return false;
 
+                    ArrayList<Product> filteredList = new ArrayList<>();
+                    for(Product product : homePageModel.getNormalProductsList()){
+                        if(product.getProductName().equalsIgnoreCase(query.trim())) {
+                            filteredList.add(product);
+                        }
+                    }
+
+                    //later when connected to api, we will just pass the string query to new intent and
+                    // will call the api with that query on the activity itself.
+                    //be sure to remove the Parcelable interface from Product model.
+                    Intent intent = new Intent(MainActivity.this, FilteredProductActivity.class);
+                    //Create the bundle
+                    Bundle bundle = new Bundle();
+                    //Add your data to bundle
+                    bundle.putParcelableArrayList("filteredProductList", filteredList);
+                    //Add the bundle to the intent
+                    intent.putExtras(bundle);
+                    //Fire that second activity
+                    startActivity(intent);
+                    return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    Toast.makeText(MainActivity.this, newText, Toast.LENGTH_SHORT).show();
-                    return true;
+                    return false;
                 }
             });
             return true;

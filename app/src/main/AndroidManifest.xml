@@ -18,7 +18,7 @@
             android:name=".FilteredProductActivity"
             android:exported="false" />
         <activity
-            android:name=".ProductDetail"
+            android:name=".ProductDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_product_detail"
             android:theme="@style/Theme.TestApp" />

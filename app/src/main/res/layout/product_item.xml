@@ -10,6 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="160dp"
         android:layout_height="wrap_content"
+        android:id="@+id/product_card"
         android:layout_centerInParent="true"
         app:cardCornerRadius="8dp"
         app:cardMaxElevation="4dp"

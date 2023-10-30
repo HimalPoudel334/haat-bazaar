@@ -1,7 +1,9 @@
-package com.example.testapp;
+package com.example.testapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
+import com.example.testapp.ProductDetailActivity;
+import com.example.testapp.R;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.Product;
 
@@ -102,6 +107,16 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 normalProductViewHolder.productPrice.setText(String.format("%s per %s", normalProduct.getProductPrice(), normalProduct.getProductUnit()));
                 normalProductViewHolder.productPreviousPrice.setText(String.format("%s per %s", normalProduct.getProductPreviousPrice(), normalProduct.getProductUnit()));
                 normalProductViewHolder.productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
+                //set onclick listener for the product card
+                normalProductViewHolder.productCardView.setOnClickListener(view -> {
+                    Intent intent = new Intent(homePageContext, ProductDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("selectedProduct", normalProduct);
+                    intent.putExtras(bundle);
+                    homePageContext.startActivity(intent);
+                });
+
                 break;
         }
     }
@@ -138,26 +153,7 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         private final TextView productDescription;
         private final TextView productPrice;
         private final TextView productPreviousPrice;
-
-        public ImageView getProductImageView() {
-            return productImageView;
-        }
-
-        public TextView getProductTitle() {
-            return productTitle;
-        }
-
-        public TextView getProductDescription() {
-            return productDescription;
-        }
-
-        public TextView getProductPrice() {
-            return productPrice;
-        }
-
-        public TextView getProductPreviousPrice() {
-            return productPreviousPrice;
-        }
+        private final CardView productCardView;
 
         public NormalProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,6 +163,7 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             productDescription = itemView.findViewById(R.id.product_description);
             productPrice = itemView.findViewById(R.id.product_price);
             productPreviousPrice = itemView.findViewById(R.id.product_previous_price);
+            productCardView = itemView.findViewById(R.id.product_card);
         }
     }
 }

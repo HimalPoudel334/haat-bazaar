@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:padding="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="8dp"
+        app:cardMaxElevation="4dp"
+        app:cardElevation="2dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/filtered_product_image_view"
+                android:layout_width="160dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Product Image"
+                android:src="@drawable/ic_launcher_background" />
+
+            <RelativeLayout
+                android:id="@+id/filtered_product_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:layout_toEndOf="@+id/filtered_product_image_view">
+
+                <TextView
+                    android:id="@+id/filtered_product_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Product title"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/filtered_product_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:layout_marginTop="4dp"
+                    android:layout_below="@+id/filtered_product_title"/>
+
+                <TextView
+                    android:id="@+id/filtered_product_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs 99"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:layout_below="@+id/filtered_product_description" />
+
+                <TextView
+                    android:id="@+id/filtered_product_previous_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs 110"
+                    android:layout_marginTop="4dp"
+                    android:layout_below="@+id/filtered_product_price" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
