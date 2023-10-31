@@ -9,13 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.testapp.R;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BuyProductFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BuyProductFragment extends Fragment {
+public class BuyProductFragment extends BottomSheetDialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

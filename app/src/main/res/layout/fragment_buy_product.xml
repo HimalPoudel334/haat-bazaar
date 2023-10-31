@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.BuyProductFragment"
     android:padding="16dp"
@@ -87,6 +87,208 @@
             android:text="-20%" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/quantity_text_tv"
+            android:textSize="20sp"
+            android:text="Quantity:" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/quantity_plus"
+            android:layout_marginLeft="25dp"
+            android:src="@drawable/baseline_plus_24"
+            android:layout_toRightOf="@+id/quantity_text_tv" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:background="@drawable/black_border"
+            android:id="@+id/quantity_tv"
+            android:layout_toRightOf="@+id/quantity_plus" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/baseline_minus_24"
+            android:layout_toRightOf="@+id/quantity_tv" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/delivery_details_tv"
+            android:text="Delivery Details"
+            android:textSize="20sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/delivery_details_tv">
+
+            <TextView
+                android:id="@+id/deliver_location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Location: "
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/delivery_location_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:hint="Location is Edit Text for now"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/deliver_location_tv"
+                app:layout_constraintLeft_toRightOf="@+id/deliver_location_tv"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/deliver_location_tv"
+                app:layout_constraintTop_toTopOf="@+id/deliver_location_tv"
+                app:layout_constraintVertical_bias="0.346" />
+
+            <TextView
+                android:id="@+id/delivery_charge_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Charge: "
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/deliver_location_tv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/deliver_location_tv" />
+
+            <TextView
+                android:id="@+id/delivery_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs 100"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/delivery_charge_tv"
+                app:layout_constraintLeft_toLeftOf="@+id/delivery_location_et"
+                app:layout_constraintLeft_toRightOf="@+id/delivery_charge_tv"
+                app:layout_constraintTop_toTopOf="@+id/delivery_charge_tv"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/delivery_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Time: "
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/delivery_charge_tv"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/delivery_charge_tv" />
+
+            <TextView
+                android:id="@+id/delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 day"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/delivery_time_tv"
+                app:layout_constraintLeft_toRightOf="@+id/delivery_time_tv"
+                app:layout_constraintLeft_toLeftOf="@id/delivery_charge"
+                app:layout_constraintTop_toTopOf="@+id/delivery_time_tv"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/total_tv" />
+
+        <TextView
+            android:id="@+id/total_with_dc_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Including delivery charge)"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/total_tv"
+            app:layout_constraintTop_toBottomOf="@id/total_tv" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs 200"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/total_amount"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/total_tv"
+            app:layout_constraintBottom_toBottomOf="@+id/total_with_dc_tv"
+            android:layout_marginRight="5dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp">
+
+        <Button
+            android:id="@+id/order_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:text="Cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.142"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/place_order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Place Order"
+            app:layout_constraintBottom_toBottomOf="@+id/order_cancel_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/order_cancel_button"
+            app:layout_constraintTop_toTopOf="@+id/order_cancel_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

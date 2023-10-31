@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.testapp.fragments.BuyProductFragment;
 import com.example.testapp.models.Product;
 
 import java.util.ArrayList;
@@ -51,7 +52,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         buyNow.setOnClickListener(view -> {
-            Toast.makeText(ProductDetailActivity.this, "Buy now button clicked", Toast.LENGTH_SHORT).show();
+            BuyProductFragment fragment = new BuyProductFragment();
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
     }
 
