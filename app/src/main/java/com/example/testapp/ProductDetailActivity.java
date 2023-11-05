@@ -52,7 +52,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         buyNow.setOnClickListener(view -> {
-            BuyProductFragment fragment = new BuyProductFragment();
+            BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
     }
