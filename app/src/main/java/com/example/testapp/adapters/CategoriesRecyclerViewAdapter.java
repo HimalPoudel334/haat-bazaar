@@ -1,4 +1,4 @@
-package com.example.testapp;
+package com.example.testapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testapp.R;
 import com.google.android.material.chip.Chip;
 
 import java.util.List;

@@ -18,18 +18,12 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/custom_toolbar"
-                    android:layout_width="match_parent"
-                    app:layout_collapseMode="pin"
-                    android:background="@color/design_default_color_primary"
-                    android:layout_height="?attr/actionBarSize">
-                </com.google.android.material.appbar.MaterialToolbar>
+                <include layout="@layout/activity_base" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:layout_width="match_parent"
@@ -45,7 +39,7 @@
 
                 </com.google.android.material.chip.ChipGroup>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

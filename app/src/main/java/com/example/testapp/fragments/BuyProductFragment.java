@@ -63,10 +63,10 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         TextView quantityTextView = view.findViewById(R.id.quantity_tv);
 
         ImageView quantityPlus = view.findViewById(R.id.quantity_plus);
-        quantityPlus.setOnClickListener(v -> updateQuantity(quantityTextView, 0.5));
+        quantityPlus.setOnClickListener(v -> updateQuantity(quantityTextView, product.getProductUnitChangeQuantity()));
 
         ImageView quantityMinus = view.findViewById(R.id.quantity_minus);
-        quantityMinus.setOnClickListener(v -> updateQuantity(quantityTextView, -0.5));
+        quantityMinus.setOnClickListener(v -> updateQuantity(quantityTextView, -product.getProductUnitChangeQuantity()));
 
         TextView productPreviousPrice = view.findViewById(R.id.product_about_to_buy_prev_price);
         productPreviousPrice.setText(String.format("%s %s", product.getProductPreviousPrice(), product.getProductUnit()));
@@ -76,7 +76,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         cancelButton.setOnClickListener(v -> this.dismiss());
 
         Button placeOrderButton = view.findViewById(R.id.place_order_button);
-        placeOrderButton.setOnClickListener(v -> Toast.makeText(getContext(), "Order placed", Toast.LENGTH_SHORT).show());
+        placeOrderButton.setOnClickListener(v -> Toast.makeText(getContext(), "Order.java placed", Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -112,10 +112,15 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
     }
 
     private void updateQuantity(TextView quantityTV, double change) {
+        //this logic should be moved to Product model itself.
         double quantity = Double.parseDouble(quantityTV.getText().toString().split(" ")[0]);
         quantity += change;
-        if (quantity > 0) {
+        if(quantity > 0 && quantity <= product.getProductStock())
             quantityTV.setText(String.format("%s %s", quantity, product.getProductUnit()));
+        else if (quantity == 0) {
+            Toast.makeText(getContext(), "Cannot order less than that", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Out of stock", Toast.LENGTH_SHORT).show();
         }
     }
 }

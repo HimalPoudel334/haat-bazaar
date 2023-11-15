@@ -1,17 +1,21 @@
 package com.example.testapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.testapp.adapters.FilteredProductRecyclerViewAdapter;
 import com.example.testapp.models.Product;
 
 import java.util.ArrayList;
 
-public class FilteredProductActivity extends AppCompatActivity {
+public class FilteredProductActivity extends BaseActivity {
 
     private ArrayList<Product> filteredProductList;
     @Override
@@ -20,6 +24,10 @@ public class FilteredProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filtered_product);
 
         filteredProductList = getIntent().getExtras().getParcelableArrayList("filteredProductList");
+
+        Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         showFilteredProductRecyclerView();
     }
@@ -34,4 +42,18 @@ public class FilteredProductActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search_view);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setIconified(false);
+        searchMenuItem.expandActionView();
+        searchView.clearFocus();
+        ///AT THE END YOU NEED TO SET THE TEXT
+        String searchQuery = getIntent().getStringExtra("SEARCH_QUERY");
+        searchView.setQuery(searchQuery, false);
+        return true;
+
+    }
 }

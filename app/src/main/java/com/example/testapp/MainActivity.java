@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.testapp.adapters.CategoriesRecyclerViewAdapter;
 import com.example.testapp.adapters.HomePageMainRecyclerViewAdapter;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.PopularProduct;
@@ -23,7 +24,7 @@ import com.example.testapp.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     HomePageModel homePageModel;
 
@@ -67,7 +68,127 @@ public class MainActivity extends AppCompatActivity {
                         "Local bodi without chemicals",
                         120.0,
                         150.0,
-                        "kg"
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Vindi",
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6klA8SgPsjiv7mq-0qkzJQoI6Rkf8YeA3w&usqp=CAU", "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+
+                )
+        );
+
+        productList.add(new Product(
+                        "Baigun",
+                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
+                        "Local bodi without chemicals",
+                        60.0,
+                        80.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Iskus",
+                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
+                        20.0,
+                        30.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Iskus",
+                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
+                        20.0,
+                        30.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Baigun",
+                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
+                        "Local bodi without chemicals",
+                        60.0,
+                        80.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Baigun",
+                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
+                        "Local bodi without chemicals",
+                        60.0,
+                        80.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
                 )
         );
 
@@ -77,16 +198,20 @@ public class MainActivity extends AppCompatActivity {
                         "Local kharbuza without chemicals",
                         90.0,
                         120.0,
-                        "kg"
+                        "kg",
+                        0.25,
+                        5
                 )
         );
-
         productList.add(new Product(
-                        "Vindi",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6klA8SgPsjiv7mq-0qkzJQoI6Rkf8YeA3w&usqp=CAU", "Local bodi without chemicals",
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
                         120.0,
                         150.0,
-                        "kg"
+                        "kg",
+                        0.25,
+                        1
                 )
         );
 
@@ -96,7 +221,69 @@ public class MainActivity extends AppCompatActivity {
                         "Local bodi without chemicals",
                         60.0,
                         80.0,
-                        "kg"
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Baigun",
+                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
+                        "Local bodi without chemicals",
+                        60.0,
+                        80.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals.",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
+                )
+        );
+
+        productList.add(new Product(
+                        "Bodi",
+                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
+                        "Local bodi without chemicals",
+                        120.0,
+                        150.0,
+                        "kg",
+                        0.25,
+                        1
                 )
         );
 
@@ -105,146 +292,9 @@ public class MainActivity extends AppCompatActivity {
                         "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
                         20.0,
                         30.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Iskus",
-                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
-                        20.0,
-                        30.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg"
+                        "kg",
+                        0.25,
+                        1
                 )
         );
 
@@ -287,12 +337,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         //handle the item clicked
@@ -307,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
                     ArrayList<Product> filteredList = new ArrayList<>();
                     for(Product product : homePageModel.getNormalProductsList()){
-                        if(product.getProductName().equalsIgnoreCase(query.trim())) {
+                        if(product.getProductName().toLowerCase().contains(query.trim().toLowerCase())) {
                             filteredList.add(product);
                         }
                     }
@@ -320,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     //Add your data to bundle
                     bundle.putParcelableArrayList("filteredProductList", filteredList);
+                    bundle.putString("SEARCH_QUERY", query.trim());
                     //Add the bundle to the intent
                     intent.putExtras(bundle);
                     //Fire that second activity
@@ -333,13 +378,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             return true;
-        } else if (itemId == R.id.menu_item_cart) {
-            Toast.makeText(MainActivity.this, "Cart clicked", Toast.LENGTH_SHORT).show();
-            return true;
         }
         return super.onOptionsItemSelected(item);
-
-
     }
 
 }

@@ -12,14 +12,20 @@ public class Product implements Parcelable {
     private double productPrice;
     private double productPreviousPrice;
     private String productUnit;
+    private double productUnitChangeQuantity;
+    private int productStock;
+    private Category category;
+    private SubCategory subCategory;
 
-    public Product(String productName, String productImage, String productDescription, double productPrice, double productPreviousPrice, String productUnit) {
+    public Product(String productName, String productImage, String productDescription, double productPrice, double productPreviousPrice, String productUnit, double productUnitChangeQuantity, int productStock) {
         this.productName = productName;
         this.productImage = productImage;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productPreviousPrice = productPreviousPrice;
         this.productUnit = productUnit;
+        this.productUnitChangeQuantity = productUnitChangeQuantity;
+        this.productStock = productStock;
     }
 
     protected Product(Parcel in) {
@@ -29,6 +35,8 @@ public class Product implements Parcelable {
         productPrice = in.readDouble();
         productPreviousPrice = in.readDouble();
         productUnit = in.readString();
+        productUnitChangeQuantity = in.readDouble();
+        productStock = in.readInt();
     }
 
     public String getProductName() {
@@ -79,6 +87,22 @@ public class Product implements Parcelable {
         this.productImage = productImage;
     }
 
+    public double getProductUnitChangeQuantity() {
+        return productUnitChangeQuantity;
+    }
+
+    public void setProductUnitChangeQuantity(double productUnitChangeQuantity) {
+        this.productUnitChangeQuantity = productUnitChangeQuantity;
+    }
+
+    public int getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(int productStock) {
+        this.productStock = productStock;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -92,6 +116,8 @@ public class Product implements Parcelable {
         parcel.writeDouble(productPrice);
         parcel.writeDouble(productPreviousPrice);
         parcel.writeString(productUnit);
+        parcel.writeDouble(productUnitChangeQuantity);
+        parcel.writeInt(productStock);
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {

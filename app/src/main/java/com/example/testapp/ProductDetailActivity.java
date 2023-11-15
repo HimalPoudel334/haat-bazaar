@@ -1,11 +1,11 @@
 package com.example.testapp;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +18,7 @@ import com.example.testapp.models.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends BaseActivity {
 
     private Product selectedProduct;
     @Override
@@ -28,7 +28,19 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         selectedProduct = (Product) getIntent().getExtras().getParcelable("selectedProduct");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         setupMainContent();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.removeItem(R.id.menu_item_search_view);
+        return true;
     }
 
     private void setupMainContent() {
@@ -47,9 +59,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         productPreviousPrice.setText(String.format("%s %s", selectedProduct.getProductPrice(), selectedProduct.getProductUnit()));
         productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         
-        addToCart.setOnClickListener(view -> {
-            Toast.makeText(ProductDetailActivity.this, "Add to cart button clicked", Toast.LENGTH_SHORT).show();
-        });
+        addToCart.setOnClickListener(view -> Toast.makeText(ProductDetailActivity.this, "Add to cart button clicked", Toast.LENGTH_SHORT).show());
 
         buyNow.setOnClickListener(view -> {
             BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
@@ -58,8 +68,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void showSelectedProductImageSlider() {
-        List<SlideModel> productImages = new ArrayList<SlideModel>();
-        productImages.add(new SlideModel(selectedProduct.getProductImage(), selectedProduct.getProductName(), ScaleTypes.CENTER_CROP));
+        List<SlideModel> productImages = new ArrayList<>();
+        productImages.add(new SlideModel(selectedProduct.getProductImage(), ScaleTypes.CENTER_CROP));
 
         ImageSlider imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
         imageSlider.setImageList(productImages);
