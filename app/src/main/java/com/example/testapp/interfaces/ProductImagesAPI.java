@@ -1,2 +1,5 @@
-package com.example.testapp.interfaces;public interface ProductImagesAPI {
+package com.example.testapp.interfaces;
+
+public interface ProductImagesAPI {
+
 }

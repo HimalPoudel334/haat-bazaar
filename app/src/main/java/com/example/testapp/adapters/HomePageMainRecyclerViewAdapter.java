@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,17 @@ import com.example.testapp.ProductDetailActivity;
 import com.example.testapp.R;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.Product;
+import com.example.testapp.network.RetrofitClient;
 
 public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //views
     public static final int NORMAL_PRODUCT_LIST = 0;
     public static final int IMAGE_CAROUSEL = 1;
     public static final int POPULAR_PRODUCT_SLIDER = 2;
+
+    //this field is required because the the custom layouts would override the contents for the main recycler view
+    //should be made dynamic
+    public static final int NO_OF_CUSTOM_LAYOUT=2;
 
     private final HomePageModel homePageModel;
     private final Context homePageContext;
@@ -94,18 +100,19 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             default:
                 NormalProductViewHolder normalProductViewHolder = (NormalProductViewHolder) holder;
                 //get current normal product
-                Product normalProduct = homePageModel.getNormalProductsList().get(position);
+                Product normalProduct = homePageModel.getNormalProductsList().get(position - NO_OF_CUSTOM_LAYOUT);
+                Log.d("ProductImage", "onBindViewHolder: Current Product image is: "+normalProduct.getImage());
                 //load images
                 Glide.with(homePageContext)
-                        .load(normalProduct.getProductImage())
+                        .load(normalProduct.getImage())
                         .centerCrop()
                         //.placeholder(R.drawable.loading_spinner)
                         .into(normalProductViewHolder.productImageView);
 
-                normalProductViewHolder.productTitle.setText(normalProduct.getProductName());
-                normalProductViewHolder.productDescription.setText(normalProduct.getProductDescription());
-                normalProductViewHolder.productPrice.setText(String.format("%s per %s", normalProduct.getProductPrice(), normalProduct.getProductUnit()));
-                normalProductViewHolder.productPreviousPrice.setText(String.format("%s per %s", normalProduct.getProductPreviousPrice(), normalProduct.getProductUnit()));
+                normalProductViewHolder.productTitle.setText(normalProduct.getName());
+                normalProductViewHolder.productDescription.setText(normalProduct.getDescription());
+                normalProductViewHolder.productPrice.setText(String.format("%s per %s", normalProduct.getPrice(), normalProduct.getUnit()));
+                normalProductViewHolder.productPreviousPrice.setText(String.format("%s per %s", normalProduct.getPreviousPrice(), normalProduct.getUnit()));
                 normalProductViewHolder.productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
                 //set onclick listener for the product card
@@ -123,7 +130,7 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return homePageModel.getNormalProductsList().size();
+        return homePageModel.getNormalProductsList().size() + NO_OF_CUSTOM_LAYOUT;
     }
 
     public static class CarouselViewHolder extends RecyclerView.ViewHolder {

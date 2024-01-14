@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.testapp.R;
 import com.example.testapp.models.Product;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.internal.TextWatcherAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,25 +55,47 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
 
         ImageView productImage = view.findViewById(R.id.product_about_to_buy_iv);
         Glide.with(getContext())
-                .load(product.getProductImage())
+                .load(product.getImage())
                 .centerCrop()
                 //.placeholder(R.drawable.loading_spinner)
                 .into(productImage);
 
         TextView productPrice = view.findViewById(R.id.product_about_to_buy_price_tv);
-        productPrice.setText(String.format("%s per %s", product.getProductPrice(), product.getProductUnit()));
+        productPrice.setText(String.format("%s per %s", product.getPrice(), product.getUnit()));
 
         TextView quantityTextView = view.findViewById(R.id.quantity_tv);
 
         ImageView quantityPlus = view.findViewById(R.id.quantity_plus);
-        quantityPlus.setOnClickListener(v -> updateQuantity(quantityTextView, product.getProductUnitChangeQuantity()));
+        quantityPlus.setOnClickListener(v -> updateQuantity(quantityTextView, product.getUnitChange()));
 
         ImageView quantityMinus = view.findViewById(R.id.quantity_minus);
-        quantityMinus.setOnClickListener(v -> updateQuantity(quantityTextView, -product.getProductUnitChangeQuantity()));
+        quantityMinus.setOnClickListener(v -> updateQuantity(quantityTextView, -product.getUnitChange()));
 
         TextView productPreviousPrice = view.findViewById(R.id.product_about_to_buy_prev_price);
-        productPreviousPrice.setText(String.format("%s %s", product.getProductPreviousPrice(), product.getProductUnit()));
+        productPreviousPrice.setText(String.format("%s %s", product.getPreviousPrice(), product.getUnit()));
         productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+
+        TextView deliveryChargeTextView = view.findViewById(R.id.delivery_charge);
+        double deliveryCharge = Double.parseDouble(deliveryChargeTextView.getText().toString().split(" ")[1]);
+
+        TextView totalPriceTextView = view.findViewById(R.id.total_amount);
+        totalPriceTextView.setText(""+(product.getPrice() + deliveryCharge));
+        quantityTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                setTotalPrice(quantityTextView, totalPriceTextView, deliveryCharge);
+            }
+        });
 
         Button cancelButton = view.findViewById(R.id.order_cancel_button);
         cancelButton.setOnClickListener(v -> this.dismiss());
@@ -100,7 +125,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             product = (Product) getArguments().getParcelable("productAboutToBuy");
-            Log.d("Fragment", "onCreate: product is " + product.getProductName());
+            Log.d("Fragment", "onCreate: product is " + product.getName());
         }
     }
 
@@ -115,12 +140,19 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         //this logic should be moved to Product model itself.
         double quantity = Double.parseDouble(quantityTV.getText().toString().split(" ")[0]);
         quantity += change;
-        if(quantity > 0 && quantity <= product.getProductStock())
-            quantityTV.setText(String.format("%s %s", quantity, product.getProductUnit()));
+        if(quantity > 0 && quantity <= product.getStock())
+            quantityTV.setText(String.format("%s %s", quantity, product.getUnit()));
         else if (quantity == 0) {
             Toast.makeText(getContext(), "Cannot order less than that", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "Out of stock", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setTotalPrice(TextView quantityTV, TextView priceTV, double deliveryCharge) {
+        double quantity = Double.parseDouble(quantityTV.getText().toString().split(" ")[0]);
+        double price = product.getPrice() * quantity;
+        double priceWithDeliveryCharge = price + deliveryCharge;
+        priceTV.setText("" + priceWithDeliveryCharge);
     }
 }

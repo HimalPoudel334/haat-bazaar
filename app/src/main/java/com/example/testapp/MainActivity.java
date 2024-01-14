@@ -1,6 +1,5 @@
 package com.example.testapp;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,24 +8,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.testapp.adapters.CategoriesRecyclerViewAdapter;
 import com.example.testapp.adapters.HomePageMainRecyclerViewAdapter;
+import com.example.testapp.interfaces.CategoryAPI;
+import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.models.Category;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.PopularProduct;
 import com.example.testapp.models.Product;
+import com.example.testapp.network.RetrofitClient;
+import com.example.testapp.responses.CategoryResponse;
+import com.example.testapp.responses.ProductResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends BaseActivity {
 
     HomePageModel homePageModel;
+    List<Category> categoryList = new ArrayList<>();
+    List<Product> productList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +47,9 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(toolbar);
 
-        drawMainRecyclerView();
         initCategoriesRecyclerView();
+        drawMainRecyclerView();
+
 
     }
 
@@ -61,242 +73,43 @@ public class MainActivity extends BaseActivity {
         popularProducts.add(new PopularProduct("https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80", "from flutter 3"));
 
         //normal products
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
+        ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
+        productAPI.getProducts().enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                productList.addAll(response.body().getProducts());
+            }
 
-        productList.add(new Product(
-                        "Vindi",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6klA8SgPsjiv7mq-0qkzJQoI6Rkf8YeA3w&usqp=CAU", "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                Log.e("ProductsGet", "Error while reading products", t);
+            }
+        });
 
-                )
-        );
 
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
+        /*
+        //trying to post products to server
+        ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
+        for(Product p : productList) {
+            productAPI.createProduct(p).enqueue(new Callback<ProductResponse>() {
+                @Override
+                public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                    try {
+                        Log.d("ProductCreate", response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    //Log.d("ProductCreate", "onResponse: "+ response.body().getProduct().getProductName());
+                }
 
-        productList.add(new Product(
-                        "Iskus",
-                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
-                        20.0,
-                        30.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
+                @Override
+                public void onFailure(Call<ProductResponse> call, Throwable t) {
+                    Log.d("ProductCreateFailed", "onFailure: " + t.getMessage());
+                    Toast.makeText(getApplicationContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }*/
 
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Iskus",
-                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
-                        20.0,
-                        30.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Kharbuza",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsIzAQLsz1qKhCFfCDfeBwLOQwfrnThFu5Qg&usqp=CAU",
-                        "Local kharbuza without chemicals",
-                        90.0,
-                        120.0,
-                        "kg",
-                        0.25,
-                        5
-                )
-        );
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Baigun",
-                        "https://t4.ftcdn.net/jpg/03/69/98/49/360_F_369984944_mp5bcE534T45okjhprMta7z6ujQlaYXC.jpg",
-                        "Local bodi without chemicals",
-                        60.0,
-                        80.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals.",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Bodi",
-                        "https://khetifood.com/image/cache/catalog/kheti_bodi-500x500.jpg",
-                        "Local bodi without chemicals",
-                        120.0,
-                        150.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
-
-        productList.add(new Product(
-                        "Iskus",
-                        "https://4.bp.blogspot.com/-qXf8K4bD1Pc/U2qRMlOz2nI/AAAAAAAAS_4/bO9h-6m_RQk/s1600/1-DSC00457.JPG", "Local bodi without chemicals",
-                        20.0,
-                        30.0,
-                        "kg",
-                        0.25,
-                        1
-                )
-        );
 
         homePageModel = new HomePageModel(productList, popularProducts, dealsList);
         //init recycler view
@@ -320,18 +133,29 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initCategoriesRecyclerView() {
-        List<String> categoriesList = new ArrayList<>();
-        categoriesList.add("Home");
 
-        for (int i = 1; i <= 10; i++) {
-            categoriesList.add("Category " + i);
-        }
+        Retrofit retrofit = RetrofitClient.getClient();
+        CategoryAPI categoryAPI = retrofit.create(CategoryAPI.class);
+        categoryAPI.getCategories().enqueue(new Callback<CategoryResponse>() {
+            @Override
+            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
+                categoryList.addAll(response.body().getCategories());
+                //for home to be displayed on the category views
+                categoryList.add(0, new Category("home", "Home"));
+            }
+
+            @Override
+            public void onFailure(Call<CategoryResponse> call, Throwable t) {
+                Log.d("category", "onFailure: "+t.getMessage());
+            }
+        });
+
 
         //init recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView categoriesRecyclerView = findViewById(R.id.categories_rv);
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
-        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoriesList, this);
+        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoryList, this);
         categoriesRecyclerView.setAdapter(adapter);
 
     }
@@ -347,11 +171,11 @@ public class MainActivity extends BaseActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    if(query.length() == 0 || query == null) return false;
+                    if(query.length() == 0) return false;
 
                     ArrayList<Product> filteredList = new ArrayList<>();
                     for(Product product : homePageModel.getNormalProductsList()){
-                        if(product.getProductName().toLowerCase().contains(query.trim().toLowerCase())) {
+                        if(product.getName().toLowerCase().contains(query.trim().toLowerCase())) {
                             filteredList.add(product);
                         }
                     }

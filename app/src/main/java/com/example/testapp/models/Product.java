@@ -2,106 +2,127 @@ package com.example.testapp.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 public class Product implements Parcelable {
-    private String productName;
-    private String productImage;
-    private String productDescription;
-    private double productPrice;
-    private double productPreviousPrice;
-    private String productUnit;
-    private double productUnitChangeQuantity;
-    private int productStock;
+    private String name;
+    private String image;
+    private String description;
+    private double price;
+    private double previousPrice;
+    private String unit;
+    private double unitChange;
+    private int stock;
+    private String categoryId;
     private Category category;
     private SubCategory subCategory;
 
-    public Product(String productName, String productImage, String productDescription, double productPrice, double productPreviousPrice, String productUnit, double productUnitChangeQuantity, int productStock) {
-        this.productName = productName;
-        this.productImage = productImage;
-        this.productDescription = productDescription;
-        this.productPrice = productPrice;
-        this.productPreviousPrice = productPreviousPrice;
-        this.productUnit = productUnit;
-        this.productUnitChangeQuantity = productUnitChangeQuantity;
-        this.productStock = productStock;
+    public Product(String name, String image, String description, double price, double previousPrice, String unit, double unitChange, int stock, Category category) {
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.price = price;
+        this.previousPrice = previousPrice;
+        this.unit = unit;
+        this.unitChange = unitChange;
+        this.stock = stock;
+        this.categoryId=category.getId();
+        Log.d("ProductModel", "Product category id is: "+category.getId());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPreviousPrice() {
+        return previousPrice;
+    }
+
+    public void setPreviousPrice(double previousPrice) {
+        this.previousPrice = previousPrice;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getUnitChange() {
+        return unitChange;
+    }
+
+    public void setUnitChange(double unitChange) {
+        this.unitChange = unitChange;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public SubCategory getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
     }
 
     protected Product(Parcel in) {
-        productName = in.readString();
-        productImage = in.readString();
-        productDescription = in.readString();
-        productPrice = in.readDouble();
-        productPreviousPrice = in.readDouble();
-        productUnit = in.readString();
-        productUnitChangeQuantity = in.readDouble();
-        productStock = in.readInt();
+        name = in.readString();
+        image = in.readString();
+        description = in.readString();
+        price = in.readDouble();
+        previousPrice = in.readDouble();
+        unit = in.readString();
+        unitChange = in.readDouble();
+        stock = in.readInt();
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
-    }
-
-    public double getProductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public double getProductPreviousPrice() {
-        return productPreviousPrice;
-    }
-
-    public void setProductPreviousPrice(double productPreviousPrice) {
-        this.productPreviousPrice = productPreviousPrice;
-    }
-
-    public String getProductUnit() {
-        return productUnit;
-    }
-
-    public void setProductUnit(String productUnit) {
-        this.productUnit = productUnit;
-    }
-
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
-
-    public double getProductUnitChangeQuantity() {
-        return productUnitChangeQuantity;
-    }
-
-    public void setProductUnitChangeQuantity(double productUnitChangeQuantity) {
-        this.productUnitChangeQuantity = productUnitChangeQuantity;
-    }
-
-    public int getProductStock() {
-        return productStock;
-    }
-
-    public void setProductStock(int productStock) {
-        this.productStock = productStock;
-    }
 
     @Override
     public int describeContents() {
@@ -110,14 +131,14 @@ public class Product implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(productName);
-        parcel.writeString(productImage);
-        parcel.writeString(productDescription);
-        parcel.writeDouble(productPrice);
-        parcel.writeDouble(productPreviousPrice);
-        parcel.writeString(productUnit);
-        parcel.writeDouble(productUnitChangeQuantity);
-        parcel.writeInt(productStock);
+        parcel.writeString(name);
+        parcel.writeString(image);
+        parcel.writeString(description);
+        parcel.writeDouble(price);
+        parcel.writeDouble(previousPrice);
+        parcel.writeString(unit);
+        parcel.writeDouble(unitChange);
+        parcel.writeInt(stock);
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {

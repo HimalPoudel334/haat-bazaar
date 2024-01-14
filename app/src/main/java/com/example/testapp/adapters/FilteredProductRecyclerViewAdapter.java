@@ -37,15 +37,15 @@ public class FilteredProductRecyclerViewAdapter extends RecyclerView.Adapter<Fil
     public void onBindViewHolder(@NonNull FilteredProductViewHolder holder, int position) {
         Product filteredProduct = filteredProductList.get(position);
         Glide.with(context)
-                .load(filteredProduct.getProductImage())
+                .load(filteredProduct.getImage())
                 .centerCrop()
                 //.placeholder(R.drawable.loading_spinner)
                 .into(holder.filteredProductImageView);
 
-        holder.filteredProductTitle.setText(filteredProduct.getProductName());
-        holder.filteredProductDescription.setText(filteredProduct.getProductDescription());
-        holder.filteredProductPrice.setText(String.format("%s per %s", filteredProduct.getProductPrice(), filteredProduct.getProductUnit()));
-        holder.filteredProductPreviousPrice.setText(String.format("%s per %s", filteredProduct.getProductPreviousPrice(), filteredProduct.getProductUnit()));
+        holder.filteredProductTitle.setText(filteredProduct.getName());
+        holder.filteredProductDescription.setText(filteredProduct.getDescription());
+        holder.filteredProductPrice.setText(String.format("%s per %s", filteredProduct.getPrice(), filteredProduct.getUnit()));
+        holder.filteredProductPreviousPrice.setText(String.format("%s per %s", filteredProduct.getPreviousPrice(), filteredProduct.getUnit()));
         holder.filteredProductPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 

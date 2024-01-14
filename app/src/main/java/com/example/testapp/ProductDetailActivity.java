@@ -53,10 +53,10 @@ public class ProductDetailActivity extends BaseActivity {
         Button addToCart = (Button) findViewById(R.id.add_to_cart);
         Button buyNow = (Button) findViewById(R.id.buy_now);
 
-        productName.setText(selectedProduct.getProductName());
-        productDescription.setText(selectedProduct.getProductDescription());
-        productPrice.setText(String.format("%s %s", selectedProduct.getProductPrice(), selectedProduct.getProductUnit()));
-        productPreviousPrice.setText(String.format("%s %s", selectedProduct.getProductPrice(), selectedProduct.getProductUnit()));
+        productName.setText(selectedProduct.getName());
+        productDescription.setText(selectedProduct.getDescription());
+        productPrice.setText(String.format("%s %s", selectedProduct.getPrice(), selectedProduct.getUnit()));
+        productPreviousPrice.setText(String.format("%s %s", selectedProduct.getPrice(), selectedProduct.getUnit()));
         productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         
         addToCart.setOnClickListener(view -> Toast.makeText(ProductDetailActivity.this, "Add to cart button clicked", Toast.LENGTH_SHORT).show());
@@ -69,7 +69,7 @@ public class ProductDetailActivity extends BaseActivity {
 
     private void showSelectedProductImageSlider() {
         List<SlideModel> productImages = new ArrayList<>();
-        productImages.add(new SlideModel(selectedProduct.getProductImage(), ScaleTypes.CENTER_CROP));
+        productImages.add(new SlideModel(selectedProduct.getImage(), ScaleTypes.CENTER_CROP));
 
         ImageSlider imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
         imageSlider.setImageList(productImages);
