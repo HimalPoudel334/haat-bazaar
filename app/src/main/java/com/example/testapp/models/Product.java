@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 public class Product implements Parcelable {
+    private String id;
     private String name;
     private String image;
     private String description;
@@ -30,6 +31,14 @@ public class Product implements Parcelable {
         this.stock = stock;
         this.categoryId=category.getId();
         Log.d("ProductModel", "Product category id is: "+category.getId());
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -113,6 +122,7 @@ public class Product implements Parcelable {
     }
 
     protected Product(Parcel in) {
+        id = in.readString();
         name = in.readString();
         image = in.readString();
         description = in.readString();
@@ -131,6 +141,7 @@ public class Product implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(image);
         parcel.writeString(description);

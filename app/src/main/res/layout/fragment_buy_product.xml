@@ -108,10 +108,18 @@
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:id="@+id/quantity_plus"
+            android:id="@+id/quantity_minus"
             android:layout_marginLeft="25dp"
-            android:src="@drawable/baseline_plus_24"
+            android:src="@drawable/baseline_minus_24"
             android:layout_toRightOf="@+id/quantity_text_tv" />
+
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/quantity_plus"
+            android:src="@drawable/baseline_plus_24"
+            android:layout_toRightOf="@+id/quantity_tv" />
 
         <TextView
             android:layout_width="100dp"
@@ -121,14 +129,8 @@
             android:textSize="20sp"
             android:background="@drawable/black_border"
             android:id="@+id/quantity_tv"
-            android:layout_toRightOf="@+id/quantity_plus" />
+            android:layout_toRightOf="@+id/quantity_minus" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/quantity_minus"
-            android:src="@drawable/baseline_minus_24"
-            android:layout_toRightOf="@+id/quantity_tv" />
 
     </RelativeLayout>
 

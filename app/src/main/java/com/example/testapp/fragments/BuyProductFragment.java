@@ -14,15 +14,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.testapp.R;
+import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.models.Customer;
+import com.example.testapp.models.Order;
+import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
+import com.example.testapp.network.RetrofitClient;
+import com.example.testapp.responses.OrderResponses;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.internal.TextWatcherAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +96,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
 
         TextView totalPriceTextView = view.findViewById(R.id.total_amount);
         totalPriceTextView.setText(""+(product.getPrice() + deliveryCharge));
+
         quantityTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,8 +117,20 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         Button cancelButton = view.findViewById(R.id.order_cancel_button);
         cancelButton.setOnClickListener(v -> this.dismiss());
 
+        EditText deliveryLocationEditText = view.findViewById(R.id.delivery_location_et);
+
         Button placeOrderButton = view.findViewById(R.id.place_order_button);
-        placeOrderButton.setOnClickListener(v -> Toast.makeText(getContext(), "Order.java placed", Toast.LENGTH_SHORT).show());
+        placeOrderButton.setOnClickListener(v -> {
+            double quantity = Double.parseDouble(quantityTextView.getText().toString().split(" ")[0]);
+            Log.d("Place Order button", "onViewCreated: " + quantity);
+            String deliveryLocation = deliveryLocationEditText.getText().toString();
+            if(deliveryLocation.isEmpty() || deliveryLocation.length() == 0) {
+                Toast.makeText(getContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            } else {
+                createOrder(quantity, deliveryLocation, deliveryCharge);
+            }
+
+        });
     }
 
     /**
@@ -154,5 +183,47 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         double price = product.getPrice() * quantity;
         double priceWithDeliveryCharge = price + deliveryCharge;
         priceTV.setText("" + priceWithDeliveryCharge);
+    }
+
+    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
+        Log.d("Create Order", "inside createOrder:");
+
+        //TODO: get customer id from db or current logged in user
+        //lets hardcode the customerId here for now
+        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
+        Customer customer = new Customer();
+        customer.setId(customerId);
+
+        Order order = new Order(customer, deliveryLocation, deliveryCharge);
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
+        OrderDetail detail = new OrderDetail(order, product, quantity);
+        orderDetails.add(detail);
+
+        order.setOrderDetails(orderDetails);
+        Log.d("Create Order", "inside createOrder: order with order detail created:");
+
+        OrderAPI orderAPI = RetrofitClient.getClient().create(OrderAPI.class);
+        orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
+            @Override
+            public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
+                if(response.body() != null)
+                    Log.d("Create Order", "onResponse: " + response.body().getOrder().getOrderFulfilledDate());
+                try {
+                    Log.d("Create Order", "onResponse: "+response.errorBody().string());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderResponses.SingleOrderResponse> call, Throwable t) {
+                Log.d("Create Order", "onFailure: " + t.getMessage());
+            }
+        });
+
+        Log.d("Create Order", "inside createOrder: api call done:");
+
+
     }
 }

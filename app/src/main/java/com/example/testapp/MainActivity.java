@@ -22,8 +22,8 @@ import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.PopularProduct;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
-import com.example.testapp.responses.CategoryResponse;
-import com.example.testapp.responses.ProductResponse;
+import com.example.testapp.responses.CategoryResponses;
+import com.example.testapp.responses.ProductResponses;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,14 +74,15 @@ public class MainActivity extends BaseActivity {
 
         //normal products
         ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
-        productAPI.getProducts().enqueue(new Callback<ProductResponse>() {
+        productAPI.getProducts().enqueue(new Callback<ProductResponses.MultipleProductResonse>() {
             @Override
-            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                productList.addAll(response.body().getProducts());
+            public void onResponse(Call<ProductResponses.MultipleProductResonse> call, Response<ProductResponses.MultipleProductResonse> response) {
+                if(response.body() != null)
+                    productList.addAll(response.body().getProducts());
             }
 
             @Override
-            public void onFailure(Call<ProductResponse> call, Throwable t) {
+            public void onFailure(Call<ProductResponses.MultipleProductResonse> call, Throwable t) {
                 Log.e("ProductsGet", "Error while reading products", t);
             }
         });
@@ -136,16 +137,17 @@ public class MainActivity extends BaseActivity {
 
         Retrofit retrofit = RetrofitClient.getClient();
         CategoryAPI categoryAPI = retrofit.create(CategoryAPI.class);
-        categoryAPI.getCategories().enqueue(new Callback<CategoryResponse>() {
+        categoryAPI.getCategories().enqueue(new Callback<CategoryResponses.MultiCategoryResponse>() {
             @Override
-            public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
-                categoryList.addAll(response.body().getCategories());
+            public void onResponse(Call<CategoryResponses.MultiCategoryResponse> call, Response<CategoryResponses.MultiCategoryResponse> response) {
+                if(response.body() != null)
+                    categoryList.addAll(response.body().getCategories());
                 //for home to be displayed on the category views
                 categoryList.add(0, new Category("home", "Home"));
             }
 
             @Override
-            public void onFailure(Call<CategoryResponse> call, Throwable t) {
+            public void onFailure(Call<CategoryResponses.MultiCategoryResponse> call, Throwable t) {
                 Log.d("category", "onFailure: "+t.getMessage());
             }
         });

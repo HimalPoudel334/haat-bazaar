@@ -1,7 +1,7 @@
 package com.example.testapp.interfaces;
 
 import com.example.testapp.models.Product;
-import com.example.testapp.responses.ProductResponse;
+import com.example.testapp.responses.ProductResponses;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import retrofit2.http.Path;
 
 public interface ProductAPI {
     @GET("/products")
-    Call<ProductResponse> getProducts();
+    Call<ProductResponses.MultipleProductResonse> getProducts();
 
-    @GET("/products/{product_id}")
-    Call<ProductResponse> getProduct(@Path("product_id") String productId);
+    @GET("/products/{productId}")
+    Call<ProductResponses.SingleProductResponse> getProduct(@Path("productId") String productId);
 
     @POST("/products")
-    Call<ProductResponse> createProduct(@Body Product product);
+    Call<ProductResponses.SingleProductResponse> createProduct(@Body Product product);
 }
