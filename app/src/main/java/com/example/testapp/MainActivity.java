@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity {
         initCategoriesRecyclerView();
         drawMainRecyclerView();
 
-
     }
 
     private void drawMainRecyclerView() {
