@@ -24,6 +24,8 @@ import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 
+import java.util.Objects;
+
 public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //views
     public static final int NORMAL_PRODUCT_LIST = 0;
@@ -101,6 +103,9 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 NormalProductViewHolder normalProductViewHolder = (NormalProductViewHolder) holder;
                 //get current normal product
                 Product normalProduct = homePageModel.getNormalProductsList().get(position - NO_OF_CUSTOM_LAYOUT);
+                if(Objects.equals(normalProduct.getName(), "Mango")) {
+                    normalProduct.setImage(RetrofitClient.BASE_URL+"/"+normalProduct.getImage());
+                }
                 Log.d("ProductImage", "onBindViewHolder: Current Product image is: "+normalProduct.getImage());
                 //load images
                 Glide.with(homePageContext)

@@ -1,4 +1,6 @@
 package com.example.testapp.models;
+import android.util.Log;
+
 import com.example.testapp.basetypes.Location;
 
 import java.text.SimpleDateFormat;

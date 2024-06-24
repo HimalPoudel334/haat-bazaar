@@ -124,7 +124,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
             double quantity = Double.parseDouble(quantityTextView.getText().toString().split(" ")[0]);
             Log.d("Place Order button", "onViewCreated: " + quantity);
             String deliveryLocation = deliveryLocationEditText.getText().toString();
-            if(deliveryLocation.isEmpty() || deliveryLocation.length() == 0) {
+            if(deliveryLocation.isEmpty()) {
                 Toast.makeText(getContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
             } else {
                 createOrder(quantity, deliveryLocation, deliveryCharge);

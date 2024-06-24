@@ -1,5 +1,6 @@
 package com.example.testapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -114,6 +115,14 @@ public class MainActivity extends BaseActivity {
         homePageModel = new HomePageModel(productList, popularProducts, dealsList);
         //init recycler view
         HomePageMainRecyclerViewAdapter adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
+        GridLayoutManager gridLayoutManager = getGridLayoutManager(adapter);
+        RecyclerView productRecyclerView = findViewById(R.id.home_page_main_rv);
+        productRecyclerView.setLayoutManager(gridLayoutManager);
+        productRecyclerView.setAdapter(adapter);
+    }
+
+    @NonNull
+    private GridLayoutManager getGridLayoutManager(HomePageMainRecyclerViewAdapter adapter) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -127,9 +136,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        RecyclerView productRecyclerView = findViewById(R.id.home_page_main_rv);
-        productRecyclerView.setLayoutManager(gridLayoutManager);
-        productRecyclerView.setAdapter(adapter);
+        return gridLayoutManager;
     }
 
     private void initCategoriesRecyclerView() {
