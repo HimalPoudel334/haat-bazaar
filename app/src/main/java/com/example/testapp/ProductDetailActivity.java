@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -21,17 +20,13 @@ import com.example.testapp.models.Product;
 import com.example.testapp.models.ProductImage;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
-import com.example.testapp.responses.OrderResponses;
-import com.example.testapp.responses.ProductImageResponses;
-import com.example.testapp.responses.ProductResponses;
+import com.example.testapp.responses.ProductImageResponse;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,30 +87,30 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     private void showSelectedProductImageSlider() {
-        List<SlideModel> productImagesModel = new ArrayList<>();
+        List<SlideModel> productImagesModel= new ArrayList<>();
         productImagesModel.add(new SlideModel(selectedProduct.getImage(), ScaleTypes.CENTER_CROP));
 
         Retrofit retrofit = RetrofitClient.getClient();
         ProductImagesAPI productImagesAPI = retrofit.create(ProductImagesAPI.class);
-        productImagesAPI.getProductExtraImages(selectedProduct.getId()).enqueue(new Callback<ProductImageResponses.ProductExtraImageResonse>() {
+        productImagesAPI.getProductExtraImages(selectedProduct.getId()).enqueue(new Callback<ProductImageResponse>() {
             @Override
-            public void onResponse(Call<ProductImageResponses.ProductExtraImageResonse> call, Response<ProductImageResponses.ProductExtraImageResonse> response) {
+            public void onResponse(Call<ProductImageResponse> call, Response<ProductImageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<ProductImage> productImages = response.body().getProductExtraImages();
-                    for (ProductImage img : productImages) {
-                        Log.d("product extra", "onResponse: get extra images"+ img.getImageName());
-                        productImagesModel.add(new SlideModel(RetrofitClient.BASE_URL + "/" + img.getImageName(), ScaleTypes.CENTER_CROP));
+                    for (ProductImage img : response.body().getProductExtraImages()) {
+                        productImagesModel.add(new SlideModel(RetrofitClient.BASE_URL + "/" + img.getImageName(), ScaleTypes.FIT));
                     }
                 }
+
+                ImageSlider imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
+                imageSlider.setImageList(productImagesModel);
             }
 
             @Override
-            public void onFailure(Call<ProductImageResponses.ProductExtraImageResonse> call, Throwable t) {
-
+            public void onFailure(Call<ProductImageResponse> call, Throwable t) {
+                Log.d("product extra", "onFailure: "+t.getMessage());
             }
         });
-        ImageSlider imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
-        imageSlider.setImageList(productImagesModel);
+
     }
 
 

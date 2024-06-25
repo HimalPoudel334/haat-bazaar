@@ -58,9 +58,15 @@ public class MainActivity extends BaseActivity {
         //carousel
         List<SlideModel> dealsList = new ArrayList<>(); // Create image list
         // imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
-        dealsList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years.", ScaleTypes.FIT));
+       /* dealsList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years.", ScaleTypes.FIT));
         dealsList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct.", ScaleTypes.FIT));
         dealsList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that.", ScaleTypes.FIT));
+*/
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_9f614f8c-f04c-4c48-9efe-047be9381484_extra.png", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_3807e691-b5d0-405e-863d-19b428fac394_extra.png", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_4e08fe36-fe3a-42b3-a83b-99ae1922840c_extra.png", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_85f38a29-9529-489c-b81f-df7aa83ce12f_extra.png", ScaleTypes.CENTER_CROP));
+
 
         //popular products
         List<PopularProduct> popularProducts = new ArrayList<>();
