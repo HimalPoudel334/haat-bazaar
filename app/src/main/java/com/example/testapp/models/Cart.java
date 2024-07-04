@@ -1,18 +1,28 @@
 package com.example.testapp.models;
 
-public class    Cart {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Cart {
     private String id;
     private String productId;
     private String productName;
+    private String image;
     private double quantity;
+    private double price;
     private String createdOn;
     private String sku;
+    private double productStock;
+    private double productUnitChange;
+    private boolean isChecked;
 
-    public Cart(String productId, double quantity, String createdOn, String sku) {
+    public Cart(String productId, double quantity, String createdOn) {
         this.productId = productId;
         this.quantity = quantity;
         this.createdOn = createdOn;
-        this.sku = sku;
+        isChecked = false;
     }
 
     public String getId() {
@@ -39,12 +49,28 @@ public class    Cart {
         this.productName = productName;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public double getQuantity() {
         return quantity;
     }
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getCreatedOn() {
@@ -61,5 +87,29 @@ public class    Cart {
 
     public void setSku(String sku) {
         this.sku = sku;
+    }
+
+    public double getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(double productStock) {
+        this.productStock = productStock;
+    }
+
+    public double getProductUnitChange() {
+        return productUnitChange;
+    }
+
+    public void setProductUnitChange(double productUnitChange) {
+        this.productUnitChange = productUnitChange;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

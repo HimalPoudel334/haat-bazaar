@@ -43,11 +43,9 @@ public class ProductDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_product_detail);
 
         selectedProduct = (Product) getIntent().getExtras().getParcelable("selectedProduct");
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        Log.d("ProductDetail", "onCreate: "+selectedProduct.getName());
+        //setup toolbar
+        activateToolbar(true);
 
         setupMainContent();
     }
@@ -121,7 +119,7 @@ public class ProductDetailActivity extends BaseActivity {
         Date cartCreatedDate = GregorianCalendar.getInstance().getTime();
         String createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cartCreatedDate);
 
-        Cart cart = new Cart(selectedProduct.getId(), quantity, createdOn, selectedProduct.getUnit());
+        Cart cart = new Cart(selectedProduct.getId(), quantity, createdOn);
 
 
         CartAPI cartAPI = RetrofitClient.getClient().create(CartAPI.class);

@@ -18,8 +18,8 @@ import java.util.List;
 
 public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<CategoriesRecyclerViewAdapter.ViewHolder> {
 
-    private List<Category> categories;
-    private Context categoriesContext;
+    private final List<Category> categories;
+    private final Context categoriesContext;
 
     public CategoriesRecyclerViewAdapter(List<Category> categories, Context categoriesContext) {
         this.categories = categories;
@@ -51,7 +51,7 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
         return categories.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         Chip categoryChip;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

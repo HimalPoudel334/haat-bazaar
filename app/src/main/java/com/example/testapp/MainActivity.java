@@ -37,16 +37,16 @@ import retrofit2.Retrofit;
 public class MainActivity extends BaseActivity {
 
     HomePageModel homePageModel;
-    List<Category> categoryList = new ArrayList<>();
-    List<Product> productList = new ArrayList<>();
+    private final List<Category> categoryList = new ArrayList<>();
+    private final List<Product> productList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
-        setSupportActionBar(toolbar);
+        //setup the toolbar
+        activateToolbar(false);
 
         initCategoriesRecyclerView();
         drawMainRecyclerView();
@@ -57,11 +57,7 @@ public class MainActivity extends BaseActivity {
         //create the vars
         //carousel
         List<SlideModel> dealsList = new ArrayList<>(); // Create image list
-        // imageList.add(SlideModel("String Url" or R.drawable, "title") You can add title
-       /* dealsList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years.", ScaleTypes.FIT));
-        dealsList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct.", ScaleTypes.FIT));
-        dealsList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that.", ScaleTypes.FIT));
-*/
+
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_9f614f8c-f04c-4c48-9efe-047be9381484_extra.png", ScaleTypes.CENTER_CROP));
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_3807e691-b5d0-405e-863d-19b428fac394_extra.png", ScaleTypes.CENTER_CROP));
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/image_4e08fe36-fe3a-42b3-a83b-99ae1922840c_extra.png", ScaleTypes.CENTER_CROP));
@@ -93,31 +89,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
-        /*
-        //trying to post products to server
-        ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
-        for(Product p : productList) {
-            productAPI.createProduct(p).enqueue(new Callback<ProductResponse>() {
-                @Override
-                public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                    try {
-                        Log.d("ProductCreate", response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    //Log.d("ProductCreate", "onResponse: "+ response.body().getProduct().getProductName());
-                }
-
-                @Override
-                public void onFailure(Call<ProductResponse> call, Throwable t) {
-                    Log.d("ProductCreateFailed", "onFailure: " + t.getMessage());
-                    Toast.makeText(getApplicationContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }*/
-
-
         homePageModel = new HomePageModel(productList, popularProducts, dealsList);
         //init recycler view
         HomePageMainRecyclerViewAdapter adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
@@ -146,16 +117,25 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initCategoriesRecyclerView() {
+        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoryList, this);
+
 
         Retrofit retrofit = RetrofitClient.getClient();
         CategoryAPI categoryAPI = retrofit.create(CategoryAPI.class);
         categoryAPI.getCategories().enqueue(new Callback<CategoryResponses.MultiCategoryResponse>() {
             @Override
             public void onResponse(Call<CategoryResponses.MultiCategoryResponse> call, Response<CategoryResponses.MultiCategoryResponse> response) {
-                if(response.body() != null)
-                    categoryList.addAll(response.body().getCategories());
-                //for home to be displayed on the category views
-                categoryList.add(0, new Category("home", "Home"));
+                if (response.body() != null) {
+                    // Add "Home" category to the list at position 0
+                    categoryList.add(0, new Category("home", "Home"));
+                    adapter.notifyItemInserted(0);
+
+                    // Add remaining categories from the response
+                    int startPosition = 1; // after "Home" category
+                    int itemCount = response.body().getCategories().size();
+                    categoryList.addAll(startPosition, response.body().getCategories());
+                    adapter.notifyItemRangeInserted(startPosition, itemCount);
+                }
             }
 
             @Override
@@ -169,11 +149,9 @@ public class MainActivity extends BaseActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         RecyclerView categoriesRecyclerView = findViewById(R.id.categories_rv);
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
-        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoryList, this);
         categoriesRecyclerView.setAdapter(adapter);
 
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
