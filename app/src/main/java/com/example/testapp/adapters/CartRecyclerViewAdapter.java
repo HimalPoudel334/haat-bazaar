@@ -3,7 +3,6 @@ package com.example.testapp.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +36,7 @@ import retrofit2.Retrofit;
 
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerViewAdapter.ViewHolder> implements Filterable {
 
-    private List<Cart> cartList;
+    private final List<Cart> cartList;
     private List<Cart> backupCartList;
     private final Context cartContext;
     private final OnCheckBoxStateChangeListener checkBoxStateChangeListener;
@@ -47,8 +47,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         this.cartContext = cartContext;
         this.checkBoxStateChangeListener = checkBoxStateChangeListener;
         this.selectedCarts = new ArrayList<>();
-        Log.d("Cart const", "CartRecyclerViewAdapter: cartList size: "+this.cartList.size());
-
     }
 
     public List<Cart> getCartList() {
@@ -57,7 +55,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
     public void setBackupCartList(List<Cart> cartList) {
         this.backupCartList = cartList;
-        Log.d("Cart", "setBackupCartList: "+backupCartList.size());
     }
 
     @NonNull
@@ -70,32 +67,11 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart currentCart = cartList.get(position);
-        if(Objects.equals(currentCart.getProductName(), "Mango")) {
-            currentCart.setImage(RetrofitClient.BASE_URL+"/"+currentCart.getImage());
+        if (Objects.equals(currentCart.getProductName(), "Mango")) {
+            currentCart.setImage(RetrofitClient.BASE_URL + "/" + currentCart.getImage());
         }
         holder.productName.setText(currentCart.getProductName());
-        holder.productName.setOnClickListener(v -> {
-            Retrofit retrofit = RetrofitClient.getClient();
-            ProductAPI productAPI = retrofit.create(ProductAPI.class);
-            productAPI.getProduct(currentCart.getProductId()).enqueue(new Callback<ProductResponses.SingleProductResponse>() {
-                @Override
-                public void onResponse(Call<ProductResponses.SingleProductResponse> call, Response<ProductResponses.SingleProductResponse> response) {
-                    if(response.body() != null && response.isSuccessful()) {
-                        Intent intent = new Intent(cartContext, ProductDetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("selectedProduct", response.body().getProduct());
-                        intent.putExtras(bundle);
-                        cartContext.startActivity(intent);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ProductResponses.SingleProductResponse> call, Throwable t) {
-
-                }
-            });
-        });
-        holder.productPrice.setText(String.format("%s", currentCart.getPrice()));
+        holder.productPrice.setText(String.format("%s", currentCart.getRate()));
         holder.createdOn.setText(String.format("%s %s", "On", currentCart.getCreatedOn()));
         Glide.with(cartContext)
                 .load(currentCart.getImage())
@@ -104,22 +80,73 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                 .into(holder.cartProductImage);
 
         holder.cartCheckBox.setChecked(currentCart.isChecked());
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                CheckBox cartCheckbox = (CheckBox) v;
-                if(cartCheckbox.isChecked()) {
-                    cartList.get(pos).setChecked(true);
-                    selectedCarts.add(cartList.get(pos));
-                }
-                else if(!cartCheckbox.isChecked()) {
-                    cartList.get(pos).setChecked(false);
-                    selectedCarts.remove(cartList.get(pos));
-                }
-                checkBoxStateChangeListener.onCheckBoxStateChanged(selectedCarts);
+        holder.setItemClickListener((v, pos, viewType) -> {
+            Cart currentClickedCart = cartList.get(pos);
+            switch (viewType) {
+                case ViewType.CHECKBOX:
+                    CheckBox cartCheckbox = (CheckBox) v;
+                    if (cartCheckbox.isChecked()) {
+                        currentClickedCart.setChecked(true);
+                        selectedCarts.add(currentClickedCart);
+                    } else {
+                        currentClickedCart.setChecked(false);
+                        selectedCarts.remove(currentClickedCart);
+                    }
+                    checkBoxStateChangeListener.onCheckBoxStateChanged(new ArrayList<>(selectedCarts));
+                    break;
+                case ViewType.QUANTITY_PLUS:
+                    if(currentClickedCart.getQuantity() < currentClickedCart.getProductStock()){
+                        currentClickedCart.setQuantity(currentClickedCart.getQuantity() + currentClickedCart.getProductUnitChange());
+                        currentClickedCart.setPrice();
+                        holder.updateQuantityText(currentClickedCart.getQuantity());
+                        if(!currentClickedCart.isChecked()) {
+                            currentClickedCart.setChecked(true);
+                            selectedCarts.add(currentClickedCart);
+                        }
+                    } else {
+                        Toast.makeText(cartContext, "Out of stock", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case ViewType.QUANTITY_MINUS:
+                    if (currentClickedCart.getQuantity() > currentClickedCart.getProductUnitChange() ) {
+                        currentClickedCart.setQuantity(currentClickedCart.getQuantity() - currentClickedCart.getProductUnitChange());
+                        currentClickedCart.setPrice();
+                        holder.updateQuantityText(currentClickedCart.getQuantity());
+                        if(!currentClickedCart.isChecked()) {
+                            currentClickedCart.setChecked(true);
+                            selectedCarts.add(currentClickedCart);
+                        }
+                    } else {
+                        Toast.makeText(cartContext, "Cannot order less than that", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case ViewType.ITEM_VIEW:
+                    // Start the new activity
+                    Retrofit retrofit = RetrofitClient.getClient();
+                    ProductAPI productAPI = retrofit.create(ProductAPI.class);
+                    productAPI.getProduct(currentCart.getProductId()).enqueue(new Callback<ProductResponses.SingleProductResponse>() {
+                        @Override
+                        public void onResponse(Call<ProductResponses.SingleProductResponse> call, Response<ProductResponses.SingleProductResponse> response) {
+                            if (response.body() != null && response.isSuccessful()) {
+                                Intent intent = new Intent(cartContext, ProductDetailActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("selectedProduct", response.body().getProduct());
+                                intent.putExtras(bundle);
+                                cartContext.startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ProductResponses.SingleProductResponse> call, Throwable t) {
+                            // Handle failure
+                        }
+                    });
+                    break;
             }
+            checkBoxStateChangeListener.onCheckBoxStateChanged(selectedCarts);
         });
 
+        holder.updateQuantityText(currentCart.getQuantity());
     }
 
     @Override
@@ -132,19 +159,15 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
-                Log.d("Cart adapter", "performFiltering: "+charSequence);
-
                 final List<Cart> filteredCarts = new ArrayList<>();
-                if(charSequence.toString().isEmpty()) {
+                if (charSequence.toString().isEmpty()) {
                     filteredCarts.addAll(backupCartList);
-                }
-                else {
-                    for(Cart c : cartList) {
-                        if(c.getProductName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                } else {
+                    for (Cart c : cartList) {
+                        if (c.getProductName().toLowerCase().contains(charSequence.toString().toLowerCase())) {
                             filteredCarts.add(c);
                         }
                     }
-                    Log.d("Filtered Cart", "performFiltering: "+filteredCarts.size());
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredCarts;
@@ -154,16 +177,12 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 List<Cart> gotFilteredList = (List<Cart>) filterResults.values;
-                Log.d("Cart", "publishResults: "+gotFilteredList.size());
-                // Check if the filtered list size matches the current list size
                 if (cartList.size() != gotFilteredList.size() || !new HashSet<>(cartList).containsAll(gotFilteredList)) {
                     notifyItemRangeRemoved(0, cartList.size());
                     cartList.clear();
                     cartList.addAll(gotFilteredList);
-                    //notifyItemRangeChanged(0, gotFilteredList.size());
                     notifyItemRangeInserted(0, gotFilteredList.size());
                 }
-
             }
         };
     }
@@ -173,23 +192,27 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView productName, productPrice, quantity, createdOn;
+        TextView productName, productPrice, quantityTextView, createdOn;
         ImageView cartProductImage, quantityPlus, quantityMinus;
         CheckBox cartCheckBox;
         ItemClickListener itemClickListener;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //get the views from the cart_item resource
             productName = itemView.findViewById(R.id.cart_product_title);
             productPrice = itemView.findViewById(R.id.cart_product_price);
-            quantity = itemView.findViewById(R.id.quantity_tv);
+            quantityTextView = itemView.findViewById(R.id.quantity_tv);
             createdOn = itemView.findViewById(R.id.cart_created_date);
             cartProductImage = itemView.findViewById(R.id.cart_product_image_view);
             quantityPlus = itemView.findViewById(R.id.quantity_plus);
             quantityMinus = itemView.findViewById(R.id.quantity_minus);
             cartCheckBox = itemView.findViewById(R.id.cart_item_checkbox);
-            cartCheckBox.setOnClickListener(this);
 
+            // Set click listeners
+            cartCheckBox.setOnClickListener(this);
+            quantityPlus.setOnClickListener(this);
+            quantityMinus.setOnClickListener(this);
+            itemView.setOnClickListener(this); // Set click listener on the entire item view
         }
 
         public void setItemClickListener(ItemClickListener ic) {
@@ -198,12 +221,34 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
         @Override
         public void onClick(View v) {
-            this.itemClickListener.onItemClick(v, getLayoutPosition());
+            int viewType;
+            if (v.getId() == R.id.cart_item_checkbox) {
+                viewType = ViewType.CHECKBOX;
+            } else if (v.getId() == R.id.quantity_plus) {
+                cartCheckBox.setChecked(true);
+                viewType = ViewType.QUANTITY_PLUS;
+            } else if (v.getId() == R.id.quantity_minus) {
+                cartCheckBox.setChecked(true);
+                viewType = ViewType.QUANTITY_MINUS;
+            } else {
+                viewType = ViewType.ITEM_VIEW;
+            }
+            this.itemClickListener.onItemClick(v, getLayoutPosition(), viewType);
+        }
+
+        void updateQuantityText(double quantity) {
+            quantityTextView.setText(String.format("%s KG", quantity));
         }
     }
 
     public interface ItemClickListener {
-        void onItemClick(View v, int pos);
+        void onItemClick(View v, int pos, int viewType);
+    }
+
+    public static class ViewType {
+        public static final int CHECKBOX = 0;
+        public static final int QUANTITY_PLUS = 1;
+        public static final int QUANTITY_MINUS = 2;
+        public static final int ITEM_VIEW = 3; // New view type for the entire item view
     }
 }
-

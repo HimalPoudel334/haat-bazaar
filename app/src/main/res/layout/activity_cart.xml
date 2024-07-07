@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CartActivity">
 
     <include
         layout="@layout/activity_base"
+        android:id="@+id/custom_toolbar"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:id="@+id/cart_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/custom_toolbar"
+        android:layout_above="@id/bottom_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         />
 
     <LinearLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="8dp"
         android:gravity="end">
@@ -25,39 +33,36 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="2dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:id="@+id/delivery_charge_tv"
-                android:text="Delivery charge: " />
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:text="@string/delivery_charge" />
+            <TextView
                 android:id="@+id/total_charge_tv"
-                android:text="Total: " />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/total" />
         </LinearLayout>
 
         <Button
+            android:id="@+id/button_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:id="@+id/button_remove"
-            android:text="Remove" />
+            android:text="@string/remove" />
 
         <Button
+            android:id="@+id/button_checkout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:enabled="false"
-            android:id="@+id/button_checkout"
-            android:text="Checkout" />
+            android:text="@string/checkout" />
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

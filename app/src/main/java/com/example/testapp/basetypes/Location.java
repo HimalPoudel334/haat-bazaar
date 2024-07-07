@@ -1,5 +1,7 @@
 package com.example.testapp.basetypes;
 
+import androidx.annotation.NonNull;
+
 public class Location {
     private String District;
     private String City;
@@ -55,4 +57,9 @@ public class Location {
         this.toleName = toleName;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("%s, %s, %s, %s, %s", this.District, this.City, this.Municipality, this.wardNo, this.toleName);
+    }
 }

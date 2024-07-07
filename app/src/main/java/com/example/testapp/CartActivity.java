@@ -1,62 +1,33 @@
 package com.example.testapp;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.UserHandle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.CartRecyclerViewAdapter;
+import com.example.testapp.basetypes.Location;
 import com.example.testapp.interfaces.CartAPI;
+import com.example.testapp.interfaces.CustomerAPI;
+import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.models.Cart;
-import com.example.testapp.models.Product;
+import com.example.testapp.models.Customer;
+import com.example.testapp.models.Order;
+import com.example.testapp.models.OrderDetail;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
+import com.example.testapp.responses.CustomerResponses;
+import com.example.testapp.responses.OrderResponses;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,9 +55,6 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         totalChargeTv = findViewById(R.id.total_charge_tv);
         deliveryChargeTv = findViewById(R.id.delivery_charge_tv);
 
-
-        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
-
         // Initialize the RecyclerView and its adapter
         RecyclerView cartRecyclerView = findViewById(R.id.cart_rv);
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -96,7 +64,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         // Make the API call
         Retrofit retrofit = RetrofitClient.getClient();
         CartAPI cartAPI = retrofit.create(CartAPI.class);
-        cartAPI.getCustomerCart(customerId).enqueue(new Callback<CartResponses.MultiCartResponse>() {
+        cartAPI.getCustomerCart(RetrofitClient.CURRENT_CUSTOMER_ID).enqueue(new Callback<CartResponses.MultiCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -120,6 +88,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
     @Override
     public void onCheckBoxStateChanged(List<Cart> selectedCarts) {
         Log.d("Cart Activity", "onCheckBoxStateChanged: "+selectedCarts.size());
+
         if(!selectedCarts.isEmpty()) {
             buttonCheckout.setEnabled(true);
             buttonRemove.setEnabled(true);
@@ -127,41 +96,84 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             for(Cart c : selectedCarts) {
                 totalCharge[0] += c.getPrice();
             }
-            buttonRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            Retrofit retrofit = RetrofitClient.getClient();
+            CartAPI cartAPI = retrofit.create(CartAPI.class);
+            buttonRemove.setOnClickListener(view -> {
 
-                    for(Cart c : selectedCarts) {
-                        Retrofit retrofit = RetrofitClient.getClient();
-                        CartAPI cartAPI = retrofit.create(CartAPI.class);
-                        cartAPI.deleteCart(c.getId()).enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if(response.isSuccessful()){
-                                    carts.remove(c);
-                                    adapter.notifyItemRemoved(carts.indexOf(c));
-                                    // Update total charge display here
-                                    totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0] - c.getPrice()));
-                                }
-
+                for(Cart c : selectedCarts) {
+                    cartAPI.deleteCart(c.getId()).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if(response.isSuccessful()){
+                                carts.remove(c);
+                                adapter.notifyItemRemoved(carts.indexOf(c));
+                                // Update total charge display here
+                                totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0] - c.getPrice()));
                             }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                        }
 
-                            }
-                        });
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
                 }
             });
 
-            totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0]));
+            totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0]+100));
             deliveryChargeTv.setText(String.format("Delivery charge: Rs %s", 100));
+
+            //TODO: get customer id from db or current logged in user
+            //lets hardcode the customerId here for now
+            Customer customer = new Customer();
+            customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
+            customer.setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
+
+            buttonCheckout.setOnClickListener(v -> {
+                List<OrderDetail> orderDetails = new ArrayList<>();
+                Order order = new Order(customer, customer.getLocation(), 100);
+                for(Cart c : selectedCarts) {
+                    OrderDetail detail = new OrderDetail(order, c.getProductId(), c.getQuantity());
+                    orderDetails.add(detail);
+                }
+                order.setOrderDetails(orderDetails);
+
+                OrderAPI orderAPI = retrofit.create(OrderAPI.class);
+                orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
+                    @Override
+                    public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
+                        if(response.isSuccessful() && response.body().getOrder() != null) {
+                            Toast.makeText(getApplicationContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
+                            cartAPI.deleteCustomerCart(RetrofitClient.CURRENT_CUSTOMER_ID).enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    for(Cart c : selectedCarts) {
+                                        carts.remove(c);
+                                        adapter.notifyItemRemoved(carts.indexOf(c));
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<OrderResponses.SingleOrderResponse> call, Throwable t) {
+
+                    }
+                });
+
+            });
         } else {
             buttonCheckout.setEnabled(false);
             buttonRemove.setEnabled(false);
             totalChargeTv.setText(String.format("Total: Rs %s", 0.0));
-            deliveryChargeTv.setText(String.format("Delivery charge: Rs %s", 100));
+            deliveryChargeTv.setText(String.format("Delivery charge: Rs %s", 0.0));
         }
     }
 

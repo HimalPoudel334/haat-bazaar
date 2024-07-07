@@ -11,6 +11,7 @@ public class Cart {
     private String productName;
     private String image;
     private double quantity;
+    private double rate;
     private double price;
     private String createdOn;
     private String sku;
@@ -65,12 +66,20 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getRate() {
+        return rate;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public double getPrice() {
+        return quantity * rate;
+    }
+
+    public void setPrice() {
+        this.price = quantity * rate;
     }
 
     public String getCreatedOn() {
@@ -112,4 +121,5 @@ public class Cart {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+
 }

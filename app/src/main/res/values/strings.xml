@@ -39,4 +39,8 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delivery_charge">Delivery charge:</string>
+    <string name="total">Total:</string>
+    <string name="remove">Remove</string>
+    <string name="checkout">Checkout</string>
 </resources>

@@ -95,7 +95,11 @@ public class ProductDetailActivity extends BaseActivity {
             public void onResponse(Call<ProductImageResponse> call, Response<ProductImageResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     for (ProductImage img : response.body().getProductExtraImages()) {
-                        productImagesModel.add(new SlideModel(RetrofitClient.BASE_URL + "/" + img.getImageName(), ScaleTypes.FIT));
+                        String imageUrl = img.getImageName();
+                        if(!img.getImageName().contains(RetrofitClient.BASE_URL)) {
+                            imageUrl = RetrofitClient.BASE_URL + "/" + img.getImageName();
+                        }
+                        productImagesModel.add(new SlideModel(imageUrl, ScaleTypes.FIT));
                     }
                 }
 

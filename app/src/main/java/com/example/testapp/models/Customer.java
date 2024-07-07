@@ -42,8 +42,8 @@ public class Customer {
         this.mobileNumber = mobileNumber;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getLocation() {
+        return location.toString();
     }
 
     public void setLocation(Location location) {

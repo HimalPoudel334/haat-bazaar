@@ -16,6 +16,11 @@ public class OrderDetail {
         price = quantity * product.getPrice();
     }
 
+    public OrderDetail(Order order, String productId, double quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+
     public String getId() {
         return id;
     }
