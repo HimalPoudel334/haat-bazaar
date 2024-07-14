@@ -42,4 +42,5 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(files("libs/eSewaPaymentSdk-release.aar"))
 }

@@ -2,6 +2,7 @@ package com.example.testapp;
 
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,8 +80,10 @@ public class ProductDetailActivity extends BaseActivity {
         );
 
         buyNow.setOnClickListener(view -> {
-            BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
-            fragment.show(getSupportFragmentManager(), fragment.getTag());
+            /*BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
+            fragment.show(getSupportFragmentManager(), fragment.getTag());*/
+            Intent intent = new Intent(ProductDetailActivity.this, BuyProductActivity.class);
+            startActivity(intent);
         });
     }
 

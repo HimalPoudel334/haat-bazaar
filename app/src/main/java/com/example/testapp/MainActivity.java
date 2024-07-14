@@ -159,40 +159,43 @@ public class MainActivity extends BaseActivity {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_item_search_view) {
             SearchView searchView = (SearchView) item.getActionView();
-            searchView.setQueryHint("Search");
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    if(query.length() == 0) return false;
 
-                    ArrayList<Product> filteredList = new ArrayList<>();
-                    for(Product product : homePageModel.getNormalProductsList()){
-                        if(product.getName().toLowerCase().contains(query.trim().toLowerCase())) {
-                            filteredList.add(product);
+            if (searchView != null) {
+                searchView.setQueryHint("Search");
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        if(query.isEmpty()) return false;
+
+                        ArrayList<Product> filteredList = new ArrayList<>();
+                        for(Product product : homePageModel.getNormalProductsList()){
+                            if(product.getName().toLowerCase().contains(query.trim().toLowerCase())) {
+                                filteredList.add(product);
+                            }
                         }
+
+                        //later when connected to api, we will just pass the string query to new intent and
+                        // will call the api with that query on the activity itself.
+                        //be sure to remove the Parcelable interface from Product model.
+                        Intent intent = new Intent(MainActivity.this, FilteredProductActivity.class);
+                        //Create the bundle
+                        Bundle bundle = new Bundle();
+                        //Add your data to bundle
+                        bundle.putParcelableArrayList("filteredProductList", filteredList);
+                        bundle.putString("SEARCH_QUERY", query.trim());
+                        //Add the bundle to the intent
+                        intent.putExtras(bundle);
+                        //Fire that second activity
+                        startActivity(intent);
+                        return true;
                     }
 
-                    //later when connected to api, we will just pass the string query to new intent and
-                    // will call the api with that query on the activity itself.
-                    //be sure to remove the Parcelable interface from Product model.
-                    Intent intent = new Intent(MainActivity.this, FilteredProductActivity.class);
-                    //Create the bundle
-                    Bundle bundle = new Bundle();
-                    //Add your data to bundle
-                    bundle.putParcelableArrayList("filteredProductList", filteredList);
-                    bundle.putString("SEARCH_QUERY", query.trim());
-                    //Add the bundle to the intent
-                    intent.putExtras(bundle);
-                    //Fire that second activity
-                    startActivity(intent);
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
-                }
-            });
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

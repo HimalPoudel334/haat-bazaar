@@ -25,7 +25,10 @@ import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
 import com.example.testapp.responses.CustomerResponses;
 import com.example.testapp.responses.OrderResponses;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +71,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("Cart", "onResponse: success cart " + response.body().getCarts().get(1).getProductName());
+                    Log.d("Cart", "onResponse: success cart " + response.body().getCarts().get(1).getRate());
                     int startPosition = carts.size();
                     carts.addAll(response.body().getCarts());
                     // Notify the adapter about the new items
@@ -94,6 +97,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             buttonRemove.setEnabled(true);
             final double[] totalCharge = {0};
             for(Cart c : selectedCarts) {
+                Log.d("Cart Activity", "onCheckBoxStateChanged: cart price: "+c.getPrice());
                 totalCharge[0] += c.getPrice();
             }
             Retrofit retrofit = RetrofitClient.getClient();
@@ -135,11 +139,14 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                 Order order = new Order(customer, customer.getLocation(), 100);
                 for(Cart c : selectedCarts) {
                     OrderDetail detail = new OrderDetail(order, c.getProductId(), c.getQuantity());
+                    detail.setPrice(c.getQuantity() * c.getRate());
                     orderDetails.add(detail);
                 }
                 order.setOrderDetails(orderDetails);
 
                 OrderAPI orderAPI = retrofit.create(OrderAPI.class);
+                Gson gson = RetrofitClient.getGson();
+                Log.d("Cart order create", "Order object is"+gson.toJson(order));
                 orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
                     @Override
                     public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
@@ -156,15 +163,17 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
-
+                                    Log.d("Cart delete", "onFailure: "+t.getMessage());
                                 }
                             });
+                        } else {
+                            Toast.makeText(getApplicationContext(), response.raw().message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<OrderResponses.SingleOrderResponse> call, Throwable t) {
-
+                        Log.d("Create order from cart", "onFailure: "+t.getMessage());
                     }
                 });
 

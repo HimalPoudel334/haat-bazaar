@@ -15,12 +15,12 @@ public class Product implements Parcelable {
     private double previousPrice;
     private String unit;
     private double unitChange;
-    private int stock;
+    private double stock;
     private String categoryId;
     private Category category;
     private SubCategory subCategory;
 
-    public Product(String name, String image, String description, double price, double previousPrice, String unit, double unitChange, int stock, Category category) {
+    public Product(String name, String image, String description, double price, double previousPrice, String unit, double unitChange, double stock, Category category) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -97,11 +97,11 @@ public class Product implements Parcelable {
         this.unitChange = unitChange;
     }
 
-    public int getStock() {
+    public double getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(double stock) {
         this.stock = stock;
     }
 
@@ -130,7 +130,7 @@ public class Product implements Parcelable {
         previousPrice = in.readDouble();
         unit = in.readString();
         unitChange = in.readDouble();
-        stock = in.readInt();
+        stock = in.readDouble();
     }
 
 
@@ -149,7 +149,7 @@ public class Product implements Parcelable {
         parcel.writeDouble(previousPrice);
         parcel.writeString(unit);
         parcel.writeDouble(unitChange);
-        parcel.writeInt(stock);
+        parcel.writeDouble(stock);
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {

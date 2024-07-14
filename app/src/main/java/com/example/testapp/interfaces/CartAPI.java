@@ -26,6 +26,6 @@ public interface CartAPI {
     @DELETE("/carts/{cartId}")
     Call<Void> deleteCart(@Path("cartId") String cartId);
 
-    @DELETE("/delete-carts/{customerId}")
+    @DELETE("/carts/delete-carts/{customerId}")
     Call<Void> deleteCustomerCart(@Path("customerId") String customerId);
 }

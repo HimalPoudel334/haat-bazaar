@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ProductResponses {
 
-    public class  SingleProductResponse {
+    public static class  SingleProductResponse {
         private Product product;
 
         public Product getProduct() {
@@ -18,7 +18,7 @@ public class ProductResponses {
         }
     }
 
-    public class MultipleProductResonse {
+    public static class MultipleProductResonse {
         private List<Product> products;
         public List<Product> getProducts() {
             return products;

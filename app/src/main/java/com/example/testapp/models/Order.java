@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class Order {
     private String createdOn;
@@ -28,7 +29,7 @@ public class Order {
         this.deliveryCharge = deliveryCharge;
         totalPrice += deliveryCharge;
         Date orderDate = GregorianCalendar.getInstance().getTime();
-        createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(orderDate);
+        createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(orderDate);
     }
 
     public String getOrderCreationDate() {
@@ -77,6 +78,14 @@ public class Order {
 
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public double getDeliveryCharge() {
+        return deliveryCharge;
+    }
+
+    public void setDeliveryCharge(double deliveryCharge) {
+        this.deliveryCharge = deliveryCharge;
     }
 
     public List<OrderDetail> getOrderDetails() {

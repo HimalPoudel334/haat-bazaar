@@ -43,4 +43,11 @@
     <string name="total">Total:</string>
     <string name="remove">Remove</string>
     <string name="checkout">Checkout</string>
+    <string name="including_delivery_charge">(Including delivery charge)</string>
+    <string name="close_icon">Close icon</string>
+    <string name="main_product_image">Main prodcut image</string>
+    <string name="product_name">Product Name</string>
+    <string name="rs_100">Rs 100</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="enter_your_full_location">Enter your full location</string>
 </resources>

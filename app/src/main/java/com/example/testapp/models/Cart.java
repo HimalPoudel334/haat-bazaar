@@ -12,7 +12,6 @@ public class Cart {
     private String image;
     private double quantity;
     private double rate;
-    private double price;
     private String createdOn;
     private String sku;
     private double productStock;
@@ -70,16 +69,9 @@ public class Cart {
         return rate;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
 
     public double getPrice() {
-        return quantity * rate;
-    }
-
-    public void setPrice() {
-        this.price = quantity * rate;
+        return this.quantity * this.rate;
     }
 
     public String getCreatedOn() {

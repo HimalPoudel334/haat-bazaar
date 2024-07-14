@@ -1,8 +1,16 @@
 package com.example.testapp.fragments;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,12 +35,18 @@ import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
+import com.example.testapp.paymentgateway.EsewaPaymentGateway;
 import com.example.testapp.responses.OrderResponses;
+import com.f1soft.esewapaymentsdk.EsewaConfiguration;
+import com.f1soft.esewapaymentsdk.EsewaPayment;
+import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.internal.TextWatcherAdapter;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -57,6 +71,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
     private String mParam2;
 
     private Product product;
+    private ActivityResultLauncher<Intent> registerActivity;
 
     public BuyProductFragment() {
         // Required empty public constructor
@@ -156,6 +171,35 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
             product = (Product) getArguments().getParcelable("productAboutToBuy");
             Log.d("Fragment", "onCreate: product is " + product.getName());
         }
+        registerActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Log.d("TAGz", "result " + result.getResultCode());
+                        switch (result.getResultCode()) {
+                            case Activity.RESULT_OK:
+                                String resultMessage = result.getData().getStringExtra(EsewaPayment.EXTRA_RESULT_MESSAGE);
+                                if (resultMessage != null) {
+                                    Log.i("Proof of Payment", resultMessage);
+                                }
+                                Toast.makeText(getContext(), "SUCCESSFUL PAYMENT", Toast.LENGTH_SHORT).show();
+                                break;
+                            case Activity.RESULT_CANCELED:
+                                Toast.makeText(getContext(), "Canceled By User", Toast.LENGTH_SHORT).show();
+                                break;
+                            case EsewaPayment.RESULT_EXTRAS_INVALID:
+                                resultMessage = result.getData().getStringExtra(EsewaPayment.EXTRA_RESULT_MESSAGE);
+                                if (resultMessage != null) {
+                                    Toast.makeText(getContext(), resultMessage, Toast.LENGTH_SHORT).show();
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -202,6 +246,11 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
 
         order.setOrderDetails(orderDetails);
         Log.d("Create Order", "inside createOrder: order with order detail created:");
+        Gson gson = RetrofitClient.getGson();
+        Log.d("Place order", "createOrder: "+gson.toJson(order));
+
+        //make payment to esewa
+        makeEsewaPayment(""+order.getTotalPrice(), product.getName(), product.getId(), "", null);
 
         OrderAPI orderAPI = RetrofitClient.getClient().create(OrderAPI.class);
         orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
@@ -211,7 +260,7 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
                     Log.d("Create Order", "onResponse: " + response.body().getOrder().getOrderFulfilledDate());
                 try {
                     Log.d("Create Order", "onResponse: "+response.errorBody().string());
-                } catch (IOException e) {
+                } catch (IOException | NullPointerException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -225,5 +274,13 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         Log.d("Create Order", "inside createOrder: api call done:");
 
 
+    }
+
+    private void makeEsewaPayment(String amount, String productName, String productId, String callbackUrl, HashMap<String, String> hashMap) {
+        EsewaPayment eSewaPayment = new EsewaPayment(amount, productName, productId + System.nanoTime(), callbackUrl, hashMap);
+        Intent intent = new Intent(getActivity(), EsewaPaymentActivity.class);
+        intent.putExtra(EsewaConfiguration.ESEWA_CONFIGURATION, EsewaPaymentGateway.getEsewaConfiguration());
+        intent.putExtra(EsewaPayment.ESEWA_PAYMENT, eSewaPayment);
+        //startActivityForResult(getActivity(), intent, EsewaPaymentGateway.REQUEST_CODE_PAYMENT, null);
     }
 }

@@ -97,7 +97,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                 case ViewType.QUANTITY_PLUS:
                     if(currentClickedCart.getQuantity() < currentClickedCart.getProductStock()){
                         currentClickedCart.setQuantity(currentClickedCart.getQuantity() + currentClickedCart.getProductUnitChange());
-                        currentClickedCart.setPrice();
                         holder.updateQuantityText(currentClickedCart.getQuantity());
                         if(!currentClickedCart.isChecked()) {
                             currentClickedCart.setChecked(true);
@@ -110,7 +109,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                 case ViewType.QUANTITY_MINUS:
                     if (currentClickedCart.getQuantity() > currentClickedCart.getProductUnitChange() ) {
                         currentClickedCart.setQuantity(currentClickedCart.getQuantity() - currentClickedCart.getProductUnitChange());
-                        currentClickedCart.setPrice();
                         holder.updateQuantityText(currentClickedCart.getQuantity());
                         if(!currentClickedCart.isChecked()) {
                             currentClickedCart.setChecked(true);
