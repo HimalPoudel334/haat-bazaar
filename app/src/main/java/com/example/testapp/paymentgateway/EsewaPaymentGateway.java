@@ -23,11 +23,11 @@ public class EsewaPaymentGateway {
         return esewaConfiguration;
     }
 
-    public static void makeEsewaPayment(Activity activity, String amount, String productName, String productId, String callbackUrl, HashMap<String, String> hashMap) {
+    public static Intent makeEsewaPayment(Activity activity, String amount, String productName, String productId, String callbackUrl, HashMap<String, String> hashMap) {
         EsewaPayment eSewaPayment = new EsewaPayment(amount, productName, productId + System.nanoTime(), callbackUrl, hashMap);
         Intent intent = new Intent(activity, EsewaPaymentActivity.class);
         intent.putExtra(EsewaConfiguration.ESEWA_CONFIGURATION, getEsewaConfiguration());
         intent.putExtra(EsewaPayment.ESEWA_PAYMENT, eSewaPayment);
-        startActivityForResult(activity, intent, EsewaPaymentGateway.REQUEST_CODE_PAYMENT, null);
+        return intent;
     }
 }

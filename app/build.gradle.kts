@@ -43,4 +43,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(files("libs/eSewaPaymentSdk-release.aar"))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.viewbinding)
 }

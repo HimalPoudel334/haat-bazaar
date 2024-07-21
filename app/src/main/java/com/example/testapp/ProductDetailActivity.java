@@ -83,6 +83,9 @@ public class ProductDetailActivity extends BaseActivity {
             /*BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
             fragment.show(getSupportFragmentManager(), fragment.getTag());*/
             Intent intent = new Intent(ProductDetailActivity.this, BuyProductActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("productAboutToBuy", selectedProduct);
+            intent.putExtras(bundle);
             startActivity(intent);
         });
     }

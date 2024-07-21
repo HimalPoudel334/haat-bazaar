@@ -1,101 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.BuyProductFragment"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="16dp"
-    android:paddingTop="10dp"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:id="@+id/buy_now_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/buy_now_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buy Now"
-            android:textSize="34sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_centerInParent="true"
+            android:text="@string/buy_now"
+            android:textSize="35sp"/>
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/close_fragment_icon"
-            android:src="@drawable/baseline_close_24"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/buy_now_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.942"
-            app:layout_constraintLeft_toRightOf="@+id/buy_now_tv"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/buy_now_tv"
-            app:layout_constraintTop_toTopOf="@+id/buy_now_tv" />
-        
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginTop="5dp">
-        
-        <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:scaleType="centerCrop"
-            android:id="@+id/product_about_to_buy_iv"
-            android:src="@drawable/ic_launcher_background" />
-
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/product_about_to_buy_price_tv"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@+id/product_about_to_buy_iv"
-            android:text="Rs 100" />
+            android:layout_toEndOf="@+id/buy_now_tv">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/product_about_to_buy_prev_price"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@id/product_about_to_buy_iv"
-            android:layout_below="@+id/product_about_to_buy_price_tv"
-            android:text="Rs 125" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/product_about_to_buy_iv"
-            android:layout_below="@+id/product_about_to_buy_prev_price"
-            android:text="-20%" />
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:id="@+id/close_fragment_icon"
+                android:contentDescription="@string/close_icon"
+                android:src="@drawable/baseline_close_24"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
 
     </RelativeLayout>
 
+    <Space
+        android:id="@+id/space_layout"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/buy_now_layout"
+        android:background="?android:attr/listDivider" />
+
     <RelativeLayout
+        android:id="@+id/main_product_details"
+        android:layout_below="@+id/space_layout"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/main_product_image"
+            android:scaleType="centerCrop"
+            android:id="@+id/product_iv"
+            android:src="@drawable/ic_launcher_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/product_iv"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/product_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/product_name"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/product_price_tv"
+                android:textSize="20sp"
+                android:layout_marginTop="5dp"
+                android:text="@string/rs_100" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/product_prev_price"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:text="@string/rs_100" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="20% off" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/quantity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        android:layout_below="@+id/main_product_details"
         android:layout_marginTop="5dp">
 
         <TextView
@@ -103,23 +117,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/quantity_text_tv"
             android:textSize="20sp"
+            android:gravity="end"
+            android:layout_weight="1"
             android:text="Quantity:" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:id="@+id/quantity_minus"
-            android:layout_marginStart="25dp"
-            android:src="@drawable/baseline_minus_24"
-            android:layout_toEndOf="@+id/quantity_text_tv" />
-
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/quantity_plus"
-            android:src="@drawable/baseline_plus_24"
-            android:layout_toEndOf="@+id/quantity_tv" />
+            android:layout_weight="1"
+            android:src="@drawable/baseline_minus_24" />
 
         <TextView
             android:layout_width="100dp"
@@ -127,117 +134,140 @@
             android:text="1.0 KG"
             android:textAlignment="center"
             android:textSize="20sp"
+            android:layout_weight="1"
             android:background="@drawable/black_border"
-            android:id="@+id/quantity_tv"
-            android:layout_toEndOf="@+id/quantity_minus" />
+            android:id="@+id/quantity_tv"/>
 
 
-    </RelativeLayout>
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/quantity_plus"
+            android:layout_weight="1"
+            android:src="@drawable/baseline_plus_24" />
+
+    </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/delivery_details_tv_layout"
+        android:layout_below="@+id/quantity_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:layout_marginTop="5dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/delivery_details_tv"
-            android:text="Delivery Details"
-            android:textSize="20sp" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Delivery Details"
+            android:gravity="center"
+            android:textSize="20sp" />
+
+        <Space
+            android:id="@+id/space_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/delivery_details_tv"
+            android:background="?android:attr/listDivider" />
+
+        <RelativeLayout
+            android:id="@+id/delivery_details_inner_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
             android:layout_below="@+id/delivery_details_tv">
 
-            <TextView
-                android:id="@+id/deliver_location_tv"
+            <LinearLayout
+                android:id="@id/delivery_details_tv_lct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Location: "
-                android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="5dp"
+                android:layout_alignBottom="@+id/delivery_details_tv_lct"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/delivery_location_et"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:textSize="20sp"
+                    android:layout_gravity="end"
+                    android:gravity="center_vertical"
+                    android:text="@string/location" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp"
+                    android:layout_gravity="end"
+                    android:text="@string/charge" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp"
+                    android:layout_gravity="end"
+                    android:text="@string/time" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="5dp"
-                android:hint="Location is Edit Text for now"
-                android:minHeight="48dp"
-                app:layout_constraintBottom_toBottomOf="@+id/deliver_location_tv"
-                app:layout_constraintLeft_toRightOf="@+id/deliver_location_tv"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/deliver_location_tv"
-                app:layout_constraintTop_toTopOf="@+id/deliver_location_tv"
-                app:layout_constraintVertical_bias="0.346" />
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:layout_toEndOf="@+id/delivery_details_tv_lct">
 
-            <TextView
-                android:id="@+id/delivery_charge_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="Charge: "
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/deliver_location_tv"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/deliver_location_tv" />
+                <EditText
+                    android:id="@+id/delivery_location_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:hint="@string/enter_your_full_location" />
 
-            <TextView
-                android:id="@+id/delivery_charge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rs 100"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/delivery_charge_tv"
-                app:layout_constraintLeft_toLeftOf="@+id/delivery_location_et"
-                app:layout_constraintLeft_toRightOf="@+id/delivery_charge_tv"
-                app:layout_constraintTop_toTopOf="@+id/delivery_charge_tv"
-                app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/delivery_charge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp"
+                    android:text="Rs 100" />
 
-            <TextView
-                android:id="@+id/delivery_time_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Time: "
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/delivery_charge_tv"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/delivery_charge_tv" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp"
+                    android:text="1 day" />
 
-            <TextView
-                android:id="@+id/delivery_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1 day"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/delivery_time_tv"
-                app:layout_constraintLeft_toRightOf="@+id/delivery_time_tv"
-                app:layout_constraintLeft_toLeftOf="@id/delivery_charge"
-                app:layout_constraintTop_toTopOf="@+id/delivery_time_tv"
-                app:layout_constraintVertical_bias="0.0" />
+            </LinearLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 
+    <Space
+        android:id="@+id/space_layout3"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/delivery_details_tv_layout"
+        android:background="?android:attr/listDivider" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/total_with_dc_tv_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_below="@+id/space_layout3"
         android:padding="5dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total"
+            android:text="@string/total"
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -247,7 +277,7 @@
             android:id="@+id/total_with_dc_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(Including delivery charge)"
+            android:text="@string/including_delivery_charge"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="@+id/total_tv"
             app:layout_constraintTop_toBottomOf="@id/total_tv" />
@@ -267,23 +297,28 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_below="@+id/total_with_dc_tv_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end"
-        android:padding="5dp"
-        >
+        android:padding="8dp"
+        android:gravity="end">
+
         <Button
             android:id="@+id/order_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:stateListAnimator="@null"
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/place_order_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Place Order" />
+            android:stateListAnimator="@null"
+            android:text="@string/place_order" />
+
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
