@@ -46,4 +46,5 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation(libs.viewbinding)
+    implementation(libs.checkout.android)
 }

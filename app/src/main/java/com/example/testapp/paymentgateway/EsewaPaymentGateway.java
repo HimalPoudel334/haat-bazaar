@@ -17,6 +17,7 @@ public class EsewaPaymentGateway {
     private static final String MERCHANT_SECRET_KEY = "BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ==";
     public static final int REQUEST_CODE_PAYMENT = 1;
     private static EsewaConfiguration esewaConfiguration =null;
+
     public static EsewaConfiguration getEsewaConfiguration() {
         if(esewaConfiguration != null) return esewaConfiguration;
         esewaConfiguration = new EsewaConfiguration(MERCHANT_ID, MERCHANT_SECRET_KEY, EsewaConfiguration.ENVIRONMENT_TEST);
