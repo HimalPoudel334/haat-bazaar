@@ -263,6 +263,7 @@
         android:background="?android:attr/listDivider" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/total_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -302,13 +303,56 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/total_layout"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:text="Payment Options" />
+
+        <LinearLayout
+            android:id="@+id/payment_options_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_horizontal">
+
+            <Button
+                tools:ignore="ButtonStyle"
+                android:id="@+id/button_esewa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Esewa" />
+
+            <Button
+                tools:ignore="ButtonStyle"
+                android:id="@+id/button_khalti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Khalti" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:gravity="end">
+        android:gravity="start">
 
         <Button
             tools:ignore="ButtonStyle"
@@ -316,14 +360,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel" />
-
-        <Button
-            tools:ignore="ButtonStyle"
-            android:id="@+id/place_order_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/place_order" />
 
     </LinearLayout>
 

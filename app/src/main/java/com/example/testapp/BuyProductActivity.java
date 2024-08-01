@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
+import com.example.testapp.basetypes.PaymentMethod;
 import com.example.testapp.models.Customer;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
@@ -143,18 +144,47 @@ public class BuyProductActivity extends BaseActivity {
 
         EditText deliveryLocationEditText = findViewById(R.id.delivery_location_et);
 
-        Button placeOrderButton = findViewById(R.id.place_order_button);
-        placeOrderButton.setOnClickListener(v -> {
-            double quantity = Double.parseDouble(quantityTextView.getText().toString().trim().split(" ")[0]);
-            Log.d("Place Order button", "onViewCreated: " + quantity);
-            String deliveryLocation = deliveryLocationEditText.getText().toString().trim();
+        Button esewaButton = findViewById(R.id.button_esewa);
+        esewaButton.setOnClickListener(v -> {
+            double quantity = getQuantity(quantityTextView);
+            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
             if(deliveryLocation.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
             } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge);
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
             }
 
         });
+
+        Button khaltiButton = findViewById(R.id.button_khalti);
+        khaltiButton.setOnClickListener(v -> {
+            double quantity = getQuantity(quantityTextView);
+            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
+            if(deliveryLocation.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            } else {
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.KHALTI);
+            }
+        });
+    }
+
+    private String getDeliveryLocation(EditText deliveryLocationEditText) {
+        return deliveryLocationEditText.getText().toString().trim();
+    }
+
+    private double getQuantity(TextView quantityTV) {
+        return Double.parseDouble(quantityTV.getText().toString().trim().split(" ")[0]);
+    }
+
+    private String setupOrder(EditText deliveryLocation, TextView quantityTV) {
+        double quantity = getQuantity(quantityTV);
+        Log.d("Place Order button", "onViewCreated: " + quantity);
+        String deliveryLoc = getDeliveryLocation(deliveryLocation);
+        if(deliveryLoc.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+        return String.format("%s %s", quantity, deliveryLoc);
     }
 
     private void setTotalPrice(TextView quantityTV, TextView priceTV, double deliveryCharge) {
@@ -177,7 +207,7 @@ public class BuyProductActivity extends BaseActivity {
         }
     }
 
-    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
+    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
         Log.d("Create Order", "inside createOrder:");
 
         //TODO: get customer id from db or current logged in user
@@ -198,11 +228,15 @@ public class BuyProductActivity extends BaseActivity {
         Log.d("Place order", "createOrder: "+gson.toJson(order));
 
         //make payment to esewa
-        //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
-        String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
-        Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
-        registerActivity.launch(intent);
-
+        if(paymentMethod.equals(PaymentMethod.ESEWA)) {
+            //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
+            String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
+            Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
+            registerActivity.launch(intent);
+        } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
+            //call backend to get pidx
+            Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
+        }
 
         /*OrderAPI orderAPI = RetrofitClient.getClient().create(OrderAPI.class);
         orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
