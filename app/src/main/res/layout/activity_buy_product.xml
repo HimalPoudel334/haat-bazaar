@@ -305,6 +305,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/total_layout"
         android:gravity="center_horizontal"
         android:orientation="vertical">
@@ -324,42 +325,24 @@
             android:padding="8dp"
             android:gravity="center_horizontal">
 
-            <Button
-                tools:ignore="ButtonStyle"
-                android:id="@+id/button_esewa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Esewa" />
-
-            <Button
+            <ImageButton
+                android:contentDescription="Khalti"
                 tools:ignore="ButtonStyle"
                 android:id="@+id/button_khalti"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/khalti_logo" />
+
+            <ImageButton
+                android:contentDescription="Esewa"
+                tools:ignore="ButtonStyle"
+                android:id="@+id/button_esewa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Khalti" />
+                android:src="@drawable/esewa_logo" />
 
         </LinearLayout>
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="start">
-
-        <Button
-            tools:ignore="ButtonStyle"
-            android:id="@+id/order_cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel" />
 
     </LinearLayout>
 

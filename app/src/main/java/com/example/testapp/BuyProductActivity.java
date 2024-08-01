@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -139,12 +140,9 @@ public class BuyProductActivity extends BaseActivity {
             }
         });
 
-        Button cancelButton = findViewById(R.id.order_cancel_button);
-        cancelButton.setOnClickListener(v -> this.finish());
-
         EditText deliveryLocationEditText = findViewById(R.id.delivery_location_et);
 
-        Button esewaButton = findViewById(R.id.button_esewa);
+        ImageButton esewaButton = findViewById(R.id.button_esewa);
         esewaButton.setOnClickListener(v -> {
             double quantity = getQuantity(quantityTextView);
             String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
@@ -156,7 +154,7 @@ public class BuyProductActivity extends BaseActivity {
 
         });
 
-        Button khaltiButton = findViewById(R.id.button_khalti);
+        ImageButton khaltiButton = findViewById(R.id.button_khalti);
         khaltiButton.setOnClickListener(v -> {
             double quantity = getQuantity(quantityTextView);
             String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
@@ -235,6 +233,7 @@ public class BuyProductActivity extends BaseActivity {
             registerActivity.launch(intent);
         } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
             //call backend to get pidx
+
             Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
         }
 
