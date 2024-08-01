@@ -21,12 +21,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
 import com.example.testapp.basetypes.PaymentMethod;
+import com.example.testapp.interfaces.KhaltiAPI;
 import com.example.testapp.models.Customer;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
+import com.example.testapp.paymentgateway.KhaltiPaymentGateway;
+import com.example.testapp.responses.KhaltiResponses;
 import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
 import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
@@ -35,6 +38,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BuyProductActivity extends BaseActivity {
 
@@ -232,8 +239,21 @@ public class BuyProductActivity extends BaseActivity {
             Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
             registerActivity.launch(intent);
         } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
+            final String[] khaltiPidx = {null};
             //call backend to get pidx
+            KhaltiAPI khaltiAPI = RetrofitClient.getClient().create(KhaltiAPI.class);
+            khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
+                @Override
+                public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
+                    khaltiPidx[0] = response.body().getPidx();
+                }
 
+                @Override
+                public void onFailure(Call<KhaltiResponses.KhaltiPidxResponse> call, Throwable t) {
+
+                }
+            });
+            KhaltiPaymentGateway.makeKhaltiPayment(getApplicationContext(), khaltiPidx[0]);
             Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
         }
 
