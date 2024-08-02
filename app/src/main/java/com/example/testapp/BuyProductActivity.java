@@ -245,7 +245,9 @@ public class BuyProductActivity extends BaseActivity {
             khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
                 @Override
                 public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
-                    khaltiPidx[0] = response.body().getPidx();
+                    if(response.isSuccessful())
+                        khaltiPidx[0] = response.body().getPidx();
+                    else Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

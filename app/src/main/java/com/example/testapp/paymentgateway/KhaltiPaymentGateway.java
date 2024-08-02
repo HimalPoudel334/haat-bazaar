@@ -19,7 +19,7 @@ public class KhaltiPaymentGateway {
 
     private static KhaltiPayConfig getKhaltiPayConfig(String pidx) {
         if(config != null) return config;
-        config = new KhaltiPayConfig(TEST_PUBLIC_KEY, pidx, true, Environment.TEST);
+        config = new KhaltiPayConfig(LIVE_PUBLIC_KEY, pidx, true, Environment.TEST);
         return config;
     }
 

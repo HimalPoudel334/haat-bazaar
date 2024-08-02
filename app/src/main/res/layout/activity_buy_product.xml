@@ -10,340 +10,355 @@
     <include
         android:id="@+id/custom_toolbar"
         layout="@layout/activity_base" />
-
-    <RelativeLayout
-        android:id="@+id/buy_now_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    
+    <ScrollView
         android:layout_below="@+id/custom_toolbar"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:id="@+id/buy_now_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/buy_now"
-            android:textSize="35sp"/>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/buy_now_tv">
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:id="@+id/close_fragment_icon"
-                android:contentDescription="@string/close_icon"
-                android:src="@drawable/baseline_close_24"
-                android:layout_alignParentEnd="true"
-                />
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-    <Space
-        android:id="@+id/space_layout"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/buy_now_layout"
-        android:background="?android:attr/listDivider" />
-
-    <RelativeLayout
-        android:id="@+id/main_product_details"
-        android:layout_below="@+id/space_layout"
-        android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:contentDescription="@string/main_product_image"
-            android:scaleType="centerCrop"
-            android:id="@+id/product_iv"
-            android:src="@drawable/ic_launcher_background" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/product_iv"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/product_name_tv"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/buy_now_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/product_name"
-                android:textSize="20sp" />
+                android:layout_below="@+id/custom_toolbar"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/product_price_tv"
-                android:textSize="20sp"
+                <TextView
+                    android:id="@+id/buy_now_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/buy_now"
+                    android:textSize="30sp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/buy_now_tv">
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:id="@+id/close_fragment_icon"
+                        android:contentDescription="@string/close_icon"
+                        android:src="@drawable/baseline_close_24"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <Space
+                android:id="@+id/space_layout"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/rs_100" />
+                android:layout_below="@+id/buy_now_layout"
+                android:background="?android:attr/listDivider" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/product_prev_price"
-                android:textSize="18sp"
+            <RelativeLayout
+                android:id="@+id/main_product_details"
+                android:layout_below="@+id/space_layout"
+                android:layout_width="match_parent"
+                android:padding="10dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/rs_100" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="20% off" />
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:contentDescription="@string/main_product_image"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/product_iv"
+                    android:src="@drawable/ic_launcher_background" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/product_iv"
+                    android:orientation="vertical">
 
-    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/product_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/product_name"
+                        android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/quantity_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_below="@+id/main_product_details"
-        android:layout_marginTop="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/product_price_tv"
+                        android:textSize="20sp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/rs_100" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/quantity_text_tv"
-            android:textSize="20sp"
-            android:gravity="end"
-            android:layout_weight="1"
-            android:text="Quantity:" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/product_prev_price"
+                        android:textSize="18sp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/rs_100" />
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/quantity_minus"
-            android:layout_weight="1"
-            android:src="@drawable/baseline_minus_24" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="20% off" />
 
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:text="1.0 KG"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:background="@drawable/black_border"
-            android:id="@+id/quantity_tv"/>
+                </LinearLayout>
 
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/quantity_plus"
-            android:layout_weight="1"
-            android:src="@drawable/baseline_plus_24" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/delivery_details_tv_layout"
-        android:layout_below="@+id/quantity_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:id="@+id/delivery_details_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delivery Details"
-            android:gravity="center"
-            android:textSize="20sp" />
-
-        <Space
-            android:id="@+id/space_layout2"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_below="@+id/delivery_details_tv"
-            android:background="?android:attr/listDivider" />
-
-        <RelativeLayout
-            android:id="@+id/delivery_details_inner_relative_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:padding="5dp"
-            android:layout_below="@+id/delivery_details_tv">
+            </RelativeLayout>
 
             <LinearLayout
-                android:id="@id/delivery_details_tv_lct"
-                android:layout_width="wrap_content"
+                android:id="@+id/quantity_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:layout_alignBottom="@+id/delivery_details_tv_lct"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:textSize="20sp"
-                    android:layout_gravity="end"
-                    android:gravity="center_vertical"
-                    android:text="Location:" />
+                android:layout_below="@+id/main_product_details"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:id="@+id/quantity_text_tv"
                     android:textSize="20sp"
-                    android:layout_gravity="end"
-                    android:text="Charge:" />
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:text="Quantity:" />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/quantity_minus"
+                    android:layout_weight="1"
+                    android:src="@drawable/baseline_minus_24" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:text="1.0 KG"
+                    android:textAlignment="center"
                     android:textSize="20sp"
-                    android:layout_gravity="end"
-                    android:text="Time:" />
+                    android:layout_weight="1"
+                    android:background="@drawable/black_border"
+                    android:id="@+id/quantity_tv"/>
+
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:id="@+id/quantity_plus"
+                    android:layout_weight="1"
+                    android:src="@drawable/baseline_plus_24" />
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/delivery_details_tv_layout"
+                android:layout_below="@+id/quantity_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/delivery_details_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery Details"
+                    android:gravity="center"
+                    android:textSize="20sp" />
+
+                <Space
+                    android:id="@+id/space_layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/delivery_details_tv"
+                    android:background="?android:attr/listDivider" />
+
+                <RelativeLayout
+                    android:id="@+id/delivery_details_inner_relative_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_below="@+id/delivery_details_tv">
+
+                    <LinearLayout
+                        android:id="@id/delivery_details_tv_lct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_alignBottom="@+id/delivery_details_tv_lct"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:textSize="20sp"
+                            android:layout_gravity="end"
+                            android:gravity="center_vertical"
+                            android:text="Location:" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textSize="20sp"
+                            android:layout_gravity="end"
+                            android:text="Charge:" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textSize="20sp"
+                            android:layout_gravity="end"
+                            android:text="Time:" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="5dp"
+                        android:layout_toEndOf="@+id/delivery_details_tv_lct">
+
+                        <EditText
+                            android:id="@+id/delivery_location_et"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:hint="@string/enter_your_full_location" />
+
+                        <TextView
+                            android:id="@+id/delivery_charge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textSize="20sp"
+                            android:text="Rs 100" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textSize="20sp"
+                            android:text="1 day" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <Space
+                android:id="@+id/space_layout3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/delivery_details_tv_layout"
+                android:background="?android:attr/listDivider" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/total_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/space_layout3"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/total_tv" />
+
+                <TextView
+                    android:id="@+id/total_with_dc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/including_delivery_charge"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toStartOf="@+id/total_tv"
+                    app:layout_constraintTop_toBottomOf="@id/total_tv" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs 200"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:id="@+id/total_amount"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/total_tv"
+                    app:layout_constraintBottom_toBottomOf="@+id/total_with_dc_tv"
+                    android:layout_marginEnd="5dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp"
-                android:layout_toEndOf="@+id/delivery_details_tv_lct">
-
-                <EditText
-                    android:id="@+id/delivery_location_et"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:hint="@string/enter_your_full_location" />
-
-                <TextView
-                    android:id="@+id/delivery_charge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp"
-                    android:text="Rs 100" />
-
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/total_layout"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal"
                     android:textSize="20sp"
-                    android:text="1 day" />
+                    android:text="Payment Options" />
+
+                <LinearLayout
+                    android:id="@+id/payment_options_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:gravity="center_horizontal">
+
+                    <ImageButton
+                        android:contentDescription="Khalti"
+                        tools:ignore="ButtonStyle"
+                        android:id="@+id/button_khalti"
+                        android:layout_width="180dp"
+                        android:layout_height="80dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/khalti_logo" />
+
+                    <ImageButton
+                        android:contentDescription="Esewa"
+                        tools:ignore="ButtonStyle"
+                        android:id="@+id/button_esewa"
+                        android:layout_width="180dp"
+                        android:layout_height="80dp"
+                        android:layout_marginStart="10dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/esewa_logo" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-    <Space
-        android:id="@+id/space_layout3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/delivery_details_tv_layout"
-        android:background="?android:attr/listDivider" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/total_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/space_layout3"
-        android:padding="5dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/total"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/total_tv" />
-
-        <TextView
-            android:id="@+id/total_with_dc_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/including_delivery_charge"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="@+id/total_tv"
-            app:layout_constraintTop_toBottomOf="@id/total_tv" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rs 200"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:id="@+id/total_amount"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/total_tv"
-            app:layout_constraintBottom_toBottomOf="@+id/total_with_dc_tv"
-            android:layout_marginEnd="5dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/total_layout"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20sp"
-            android:text="Payment Options" />
-
-        <LinearLayout
-            android:id="@+id/payment_options_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:gravity="center_horizontal">
-
-            <ImageButton
-                android:contentDescription="Khalti"
-                tools:ignore="ButtonStyle"
-                android:id="@+id/button_khalti"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/khalti_logo" />
-
-            <ImageButton
-                android:contentDescription="Esewa"
-                tools:ignore="ButtonStyle"
-                android:id="@+id/button_esewa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/esewa_logo" />
-
         </LinearLayout>
 
-    </LinearLayout>
-
+    </ScrollView>
 </RelativeLayout>
