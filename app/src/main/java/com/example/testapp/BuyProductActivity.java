@@ -1,6 +1,9 @@
 package com.example.testapp;
 
+import static com.example.testapp.paymentgateway.KhaltiPaymentGateway.getKhaltiPayConfig;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
 import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.gson.Gson;
+import com.khalti.checkout.Khalti;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -244,11 +248,8 @@ public class BuyProductActivity extends BaseActivity {
             khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
                 @Override
                 public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
-                    Log.d("TAG", "onResponse: Khalti "+ response.isSuccessful());
-                    Log.d("TAG", "onResponse: "+gson.toJson(response.body()));
-                    Log.d("khalti response", "onResponse: khalti " + response.body().getPidx());
 
-                    KhaltiPaymentGateway.makeKhaltiPayment(getApplicationContext(), response.body().getPidx());
+                    KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, response.body().getPidx()).open();
                     //Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
                 }
 
@@ -280,7 +281,6 @@ public class BuyProductActivity extends BaseActivity {
         });
 */
         Log.d("Create Order", "inside createOrder: api call done:");
-
 
     }
 }

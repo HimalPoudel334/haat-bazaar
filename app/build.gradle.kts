@@ -47,4 +47,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.viewbinding)
     implementation(libs.checkout.android)
+
+    // Kotlin
+    implementation(libs.activity.ktx)
+
 }
