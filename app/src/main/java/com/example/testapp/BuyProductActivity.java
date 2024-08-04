@@ -239,20 +239,17 @@ public class BuyProductActivity extends BaseActivity {
             Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
             registerActivity.launch(intent);
         } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
-            final String[] khaltiPidx = {null};
             //call backend to get pidx
             KhaltiAPI khaltiAPI = RetrofitClient.getClient().create(KhaltiAPI.class);
             khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
                 @Override
                 public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
                     Log.d("TAG", "onResponse: Khalti "+ response.isSuccessful());
-                    if(response.isSuccessful()) {
-                        Log.d("TAG", "onResponse: "+gson.toJson(response.body()));
-                        khaltiPidx[0] = response.body().getPidx();
-                        Log.d("khalti response", "onResponse: khalti " + response.body().getPidx());
-                    }
+                    Log.d("TAG", "onResponse: "+gson.toJson(response.body()));
+                    Log.d("khalti response", "onResponse: khalti " + response.body().getPidx());
 
-                    else Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
+                    KhaltiPaymentGateway.makeKhaltiPayment(getApplicationContext(), response.body().getPidx());
+                    //Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -260,8 +257,6 @@ public class BuyProductActivity extends BaseActivity {
                     Log.d("TAG", "onFailure: "+t.getMessage());
                 }
             });
-            Log.d("Khalti", "createOrder: "+khaltiPidx[0]);
-            KhaltiPaymentGateway.makeKhaltiPayment(getApplicationContext(), khaltiPidx[0]);
             Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
         }
 

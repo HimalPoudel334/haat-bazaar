@@ -19,11 +19,12 @@ public class KhaltiPaymentGateway {
 
     private static KhaltiPayConfig getKhaltiPayConfig(String pidx) {
         if(config != null) return config;
-        config = new KhaltiPayConfig(LIVE_PUBLIC_KEY, pidx, true, Environment.TEST);
+        config = new KhaltiPayConfig(LIVE_PUBLIC_KEY, pidx, false, Environment.TEST);
         return config;
     }
 
     public static void makeKhaltiPayment(Context context, String pidx) {
+        Log.d("TAG", "makeKhaltiPayment: "+pidx);
         Khalti.Companion.init(context, getKhaltiPayConfig(pidx),
             (paymentResult, khalti) -> {
                 Log.i("Demo | onPaymentResult", paymentResult.toString());

@@ -1,7 +1,7 @@
 package com.example.testapp.responses;
 
 public class KhaltiResponses {
-    public static class KhaltiPidxResponse {
+    public class KhaltiPidxResponse {
         private String pidx;
         private String paymentUrl;
         private String expiresAt;
