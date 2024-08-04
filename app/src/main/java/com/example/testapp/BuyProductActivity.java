@@ -245,16 +245,22 @@ public class BuyProductActivity extends BaseActivity {
             khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
                 @Override
                 public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
-                    if(response.isSuccessful())
+                    Log.d("TAG", "onResponse: Khalti "+ response.isSuccessful());
+                    if(response.isSuccessful()) {
+                        Log.d("TAG", "onResponse: "+gson.toJson(response.body()));
                         khaltiPidx[0] = response.body().getPidx();
+                        Log.d("khalti response", "onResponse: khalti " + response.body().getPidx());
+                    }
+
                     else Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(Call<KhaltiResponses.KhaltiPidxResponse> call, Throwable t) {
-
+                    Log.d("TAG", "onFailure: "+t.getMessage());
                 }
             });
+            Log.d("Khalti", "createOrder: "+khaltiPidx[0]);
             KhaltiPaymentGateway.makeKhaltiPayment(getApplicationContext(), khaltiPidx[0]);
             Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
         }
