@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("org.jetbrains.kotlin.android") version "2.0.0"
 }
 
 android {
@@ -26,6 +27,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
 }
 
 dependencies {
@@ -47,8 +56,6 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.viewbinding)
     implementation(libs.checkout.android)
-
-    // Kotlin
-    implementation(libs.activity.ktx)
+    implementation(libs.ui)
 
 }
