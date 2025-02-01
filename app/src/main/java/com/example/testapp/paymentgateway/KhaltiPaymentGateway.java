@@ -15,16 +15,17 @@ public class KhaltiPaymentGateway {
     public static final String LIVE_SECRET_KEY = "6c30a9d14b5043149df573925be9c52a";
     public static final String LIVE_PUBLIC_KEY = "3f6fe11cefbd499faa0de6d68d76785b";
 
-    public static KhaltiPayConfig config = null;
+    private static KhaltiPayConfig config = null;
 
     public static KhaltiPayConfig getKhaltiPayConfig(String pidx) {
         if(config != null) return config;
-        config = new KhaltiPayConfig(TEST_PUBLIC_KEY, pidx, true, Environment.TEST);
+        config = new KhaltiPayConfig(String.format("live_public_key_%s", LIVE_PUBLIC_KEY), pidx, true, Environment.TEST);
         return config;
     }
 
-    public static void makeKhaltiPayment(Context context, String pidx) {
-        Khalti.Companion.init(context, getKhaltiPayConfig(pidx),
+    public static Khalti makeKhaltiPayment(Context context, String pidx) {
+        Log.d("TAG", "makeKhaltiPayment: "+pidx);
+        return Khalti.Companion.init(context, getKhaltiPayConfig(pidx),
             (paymentResult, khalti) -> {
                 Log.i("Demo | onPaymentResult", paymentResult.toString());
                 khalti.close();
@@ -41,10 +42,11 @@ public class KhaltiPaymentGateway {
 
                 Log.i("Demo | onMessage", logMessage);
                 khalti.close();
-                Toast.makeText(context, "Khalti Payment failed: " + payload.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "onMessage Khalti Payment failed: " + logMessage, Toast.LENGTH_LONG).show();
             },
             khalti -> {
                 Log.i("Demo | onReturn", "OnReturn");
+                Toast.makeText(context, "onReturn Khalti Payment failed: ", Toast.LENGTH_SHORT).show();
             }
         );
     }

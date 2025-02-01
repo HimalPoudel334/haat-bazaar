@@ -1,6 +1,9 @@
 package com.example.testapp;
 
+import static com.example.testapp.paymentgateway.KhaltiPaymentGateway.getKhaltiPayConfig;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,20 +23,31 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
+import com.example.testapp.basetypes.PaymentMethod;
+import com.example.testapp.interfaces.KhaltiAPI;
 import com.example.testapp.models.Customer;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
+import com.example.testapp.paymentgateway.KhaltiPaymentGateway;
+import com.example.testapp.responses.KhaltiResponses;
 import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
 import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.khalti.checkout.Khalti;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BuyProductActivity extends BaseActivity {
 
@@ -100,6 +115,9 @@ public class BuyProductActivity extends BaseActivity {
                 //.placeholder(R.drawable.loading_spinner)
                 .into(productImage);
 
+        TextView productName = findViewById(R.id.product_name_tv);
+        productName.setText(product.getName());
+
         TextView productPrice = findViewById(R.id.product_price_tv);
         productPrice.setText(String.format("%s per %s", product.getPrice(), product.getUnit()));
 
@@ -138,23 +156,49 @@ public class BuyProductActivity extends BaseActivity {
             }
         });
 
-        Button cancelButton = findViewById(R.id.order_cancel_button);
-        cancelButton.setOnClickListener(v -> this.finish());
-
         EditText deliveryLocationEditText = findViewById(R.id.delivery_location_et);
 
-        Button placeOrderButton = findViewById(R.id.place_order_button);
-        placeOrderButton.setOnClickListener(v -> {
-            double quantity = Double.parseDouble(quantityTextView.getText().toString().trim().split(" ")[0]);
-            Log.d("Place Order button", "onViewCreated: " + quantity);
-            String deliveryLocation = deliveryLocationEditText.getText().toString().trim();
+        ImageButton esewaButton = findViewById(R.id.button_esewa);
+        esewaButton.setOnClickListener(v -> {
+            double quantity = getQuantity(quantityTextView);
+            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
             if(deliveryLocation.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
             } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge);
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
             }
 
         });
+
+        ImageButton khaltiButton = findViewById(R.id.button_khalti);
+        khaltiButton.setOnClickListener(v -> {
+            double quantity = getQuantity(quantityTextView);
+            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
+            if(deliveryLocation.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            } else {
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.KHALTI);
+            }
+        });
+    }
+
+    private String getDeliveryLocation(EditText deliveryLocationEditText) {
+        return deliveryLocationEditText.getText().toString().trim();
+    }
+
+    private double getQuantity(TextView quantityTV) {
+        return Double.parseDouble(quantityTV.getText().toString().trim().split(" ")[0]);
+    }
+
+    private String setupOrder(EditText deliveryLocation, TextView quantityTV) {
+        double quantity = getQuantity(quantityTV);
+        Log.d("Place Order button", "onViewCreated: " + quantity);
+        String deliveryLoc = getDeliveryLocation(deliveryLocation);
+        if(deliveryLoc.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            return "";
+        }
+        return String.format("%s %s", quantity, deliveryLoc);
     }
 
     private void setTotalPrice(TextView quantityTV, TextView priceTV, double deliveryCharge) {
@@ -177,12 +221,12 @@ public class BuyProductActivity extends BaseActivity {
         }
     }
 
-    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
+    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
         Log.d("Create Order", "inside createOrder:");
 
         //TODO: get customer id from db or current logged in user
         //lets hardcode the customerId here for now
-        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
+        final String customerId = "5a726e56-bf47-42be-a260-57e0e842533d";
         Customer customer = new Customer();
         customer.setId(customerId);
 
@@ -198,11 +242,66 @@ public class BuyProductActivity extends BaseActivity {
         Log.d("Place order", "createOrder: "+gson.toJson(order));
 
         //make payment to esewa
-        //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
-        String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
-        Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
-        registerActivity.launch(intent);
+        if(paymentMethod.equals(PaymentMethod.ESEWA)) {
+            //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
+            String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
+            Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
+            registerActivity.launch(intent);
 
+        } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
+            //call backend to get pidx
+            KhaltiAPI khaltiAPI = RetrofitClient.getClient().create(KhaltiAPI.class);
+            khaltiAPI.getKhaltiPayload(order).enqueue(new Callback<JsonElement>() {
+                @Override
+                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                    Log.d("KhaltiPayResponse", "onResponse: "+response.body().toString());
+                    if(!response.isSuccessful() || response.body() == null) return;
+
+                    JsonElement jsonElement = response.body();
+                    if (!jsonElement.isJsonObject()) return;
+
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    JsonObject payload = jsonObject.get("payload").getAsJsonObject();
+                    if(payload == null)  return;
+
+                    Log.d("KhaltiPayloadResponse", "onResponse: "+payload);
+                    // make api call to khalti to get pidx
+                    String authorization = "key " + KhaltiPaymentGateway.LIVE_SECRET_KEY;
+                    String contentType = "application/json";
+
+                    khaltiAPI.initiatePayment(authorization, contentType, payload).enqueue(new Callback<JsonElement>() {
+                        @Override
+                        public void onResponse(Call<JsonElement> c, Response<JsonElement> res) {
+                            Log.d("KhaltiPidxResponse", "onResponse: "+res.body());
+                            if(!res.isSuccessful() && res.body() == null) return;
+
+                            JsonElement jsonElement = res.body();
+                            if (!jsonElement.isJsonObject()) return;
+
+                            JsonObject khaltiRes = jsonElement.getAsJsonObject();
+                            if(khaltiRes == null)  return;
+                            Log.d("KhaltiPayloadResponse", "onResponse: "+khaltiRes);
+
+                            String pidx = khaltiRes.get("pidx").getAsString();
+                            if(pidx.isEmpty()) return;
+
+                            // make api call to khalti to get pidx
+                            KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, pidx).open();
+                        }
+                        @Override
+                        public void onFailure(Call<JsonElement> c, Throwable th) {
+                                Log.d("TAG", "onFailure: Khalti pidx"+ th.getMessage());
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<JsonElement> call, Throwable t) {
+                    Log.d("TAG", "onFailure: Khalti "+t.getMessage());
+                }
+            });
+            Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
+        }
 
         /*OrderAPI orderAPI = RetrofitClient.getClient().create(OrderAPI.class);
         orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
@@ -224,7 +323,6 @@ public class BuyProductActivity extends BaseActivity {
         });
 */
         Log.d("Create Order", "inside createOrder: api call done:");
-
 
     }
 }
