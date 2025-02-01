@@ -42,10 +42,11 @@ public class KhaltiPaymentGateway {
 
                 Log.i("Demo | onMessage", logMessage);
                 khalti.close();
-                Toast.makeText(context, "Khalti Payment failed: " + payload.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "onMessage Khalti Payment failed: " + logMessage, Toast.LENGTH_LONG).show();
             },
             khalti -> {
                 Log.i("Demo | onReturn", "OnReturn");
+                Toast.makeText(context, "onReturn Khalti Payment failed: ", Toast.LENGTH_SHORT).show();
             }
         );
     }

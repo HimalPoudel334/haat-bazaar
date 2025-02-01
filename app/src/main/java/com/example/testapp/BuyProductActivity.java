@@ -37,6 +37,8 @@ import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
 import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.khalti.checkout.Khalti;
 
 import java.util.ArrayList;
@@ -112,6 +114,9 @@ public class BuyProductActivity extends BaseActivity {
                 .centerCrop()
                 //.placeholder(R.drawable.loading_spinner)
                 .into(productImage);
+
+        TextView productName = findViewById(R.id.product_name_tv);
+        productName.setText(product.getName());
 
         TextView productPrice = findViewById(R.id.product_price_tv);
         productPrice.setText(String.format("%s per %s", product.getPrice(), product.getUnit()));
@@ -221,7 +226,7 @@ public class BuyProductActivity extends BaseActivity {
 
         //TODO: get customer id from db or current logged in user
         //lets hardcode the customerId here for now
-        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
+        final String customerId = "5a726e56-bf47-42be-a260-57e0e842533d";
         Customer customer = new Customer();
         customer.setId(customerId);
 
@@ -242,20 +247,57 @@ public class BuyProductActivity extends BaseActivity {
             String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
             Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
             registerActivity.launch(intent);
+
         } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
             //call backend to get pidx
             KhaltiAPI khaltiAPI = RetrofitClient.getClient().create(KhaltiAPI.class);
-            khaltiAPI.getPidx().enqueue(new Callback<KhaltiResponses.KhaltiPidxResponse>() {
+            khaltiAPI.getKhaltiPayload(order).enqueue(new Callback<JsonElement>() {
                 @Override
-                public void onResponse(Call<KhaltiResponses.KhaltiPidxResponse> call, Response<KhaltiResponses.KhaltiPidxResponse> response) {
+                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                    Log.d("KhaltiPayResponse", "onResponse: "+response.body().toString());
+                    if(!response.isSuccessful() || response.body() == null) return;
 
-                    KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, response.body().getPidx()).open();
-                    //Toast.makeText(getApplicationContext(), "Error getting pidx from server", Toast.LENGTH_SHORT).show();
+                    JsonElement jsonElement = response.body();
+                    if (!jsonElement.isJsonObject()) return;
+
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    JsonObject payload = jsonObject.get("payload").getAsJsonObject();
+                    if(payload == null)  return;
+
+                    Log.d("KhaltiPayloadResponse", "onResponse: "+payload);
+                    // make api call to khalti to get pidx
+                    String authorization = "key " + KhaltiPaymentGateway.LIVE_SECRET_KEY;
+                    String contentType = "application/json";
+
+                    khaltiAPI.initiatePayment(authorization, contentType, payload).enqueue(new Callback<JsonElement>() {
+                        @Override
+                        public void onResponse(Call<JsonElement> c, Response<JsonElement> res) {
+                            Log.d("KhaltiPidxResponse", "onResponse: "+res.body());
+                            if(!res.isSuccessful() && res.body() == null) return;
+
+                            JsonElement jsonElement = res.body();
+                            if (!jsonElement.isJsonObject()) return;
+
+                            JsonObject khaltiRes = jsonElement.getAsJsonObject();
+                            if(khaltiRes == null)  return;
+                            Log.d("KhaltiPayloadResponse", "onResponse: "+khaltiRes);
+
+                            String pidx = khaltiRes.get("pidx").getAsString();
+                            if(pidx.isEmpty()) return;
+
+                            // make api call to khalti to get pidx
+                            KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, pidx).open();
+                        }
+                        @Override
+                        public void onFailure(Call<JsonElement> c, Throwable th) {
+                                Log.d("TAG", "onFailure: Khalti pidx"+ th.getMessage());
+                        }
+                    });
                 }
 
                 @Override
-                public void onFailure(Call<KhaltiResponses.KhaltiPidxResponse> call, Throwable t) {
-                    Log.d("TAG", "onFailure: "+t.getMessage());
+                public void onFailure(Call<JsonElement> call, Throwable t) {
+                    Log.d("TAG", "onFailure: Khalti "+t.getMessage());
                 }
             });
             Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
