@@ -223,11 +223,8 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
         Log.d("Create Order", "inside createOrder:");
 
-        //TODO: get customer id from db or current logged in user
-        //lets hardcode the customerId here for now
-        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
         Customer customer = new Customer();
-        customer.setId(customerId);
+        customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
 
         Order order = new Order(customer, deliveryLocation, deliveryCharge);
         List<OrderDetail> orderDetails = new ArrayList<>();

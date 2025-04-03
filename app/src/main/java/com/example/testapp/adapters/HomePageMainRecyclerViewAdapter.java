@@ -103,9 +103,6 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 NormalProductViewHolder normalProductViewHolder = (NormalProductViewHolder) holder;
                 //get current normal product
                 Product normalProduct = homePageModel.getNormalProductsList().get(position - NO_OF_CUSTOM_LAYOUT);
-                if(Objects.equals(normalProduct.getName(), "Mango")) {
-                    normalProduct.setImage(RetrofitClient.BASE_URL+"/"+normalProduct.getImage());
-                }
                 Log.d("ProductImage", "onBindViewHolder: Current Product image is: "+normalProduct.getImage());
                 //load images
                 Glide.with(homePageContext)
@@ -116,8 +113,8 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
                 normalProductViewHolder.productTitle.setText(normalProduct.getName());
                 normalProductViewHolder.productDescription.setText(normalProduct.getDescription());
-                normalProductViewHolder.productPrice.setText(String.format("%s per %s", normalProduct.getPrice(), normalProduct.getUnit()));
-                normalProductViewHolder.productPreviousPrice.setText(String.format("%s per %s", normalProduct.getPreviousPrice(), normalProduct.getUnit()));
+                normalProductViewHolder.productPrice.setText(String.format("Rs %s per %s", normalProduct.getPrice(), normalProduct.getUnit()));
+                normalProductViewHolder.productPreviousPrice.setText(String.format("Rs %s per %s", normalProduct.getPreviousPrice(), normalProduct.getUnit()));
                 normalProductViewHolder.productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
                 //set onclick listener for the product card

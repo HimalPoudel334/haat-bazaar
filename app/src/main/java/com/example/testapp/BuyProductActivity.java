@@ -226,9 +226,9 @@ public class BuyProductActivity extends BaseActivity {
 
         //TODO: get customer id from db or current logged in user
         //lets hardcode the customerId here for now
-        final String customerId = "5a726e56-bf47-42be-a260-57e0e842533d";
+
         Customer customer = new Customer();
-        customer.setId(customerId);
+        customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
 
         Order order = new Order(customer, deliveryLocation, deliveryCharge);
         List<OrderDetail> orderDetails = new ArrayList<>();

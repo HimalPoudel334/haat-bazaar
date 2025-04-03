@@ -67,11 +67,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Cart currentCart = cartList.get(position);
-        if (Objects.equals(currentCart.getProductName(), "Mango")) {
-            currentCart.setImage(RetrofitClient.BASE_URL + "/" + currentCart.getImage());
-        }
         holder.productName.setText(currentCart.getProductName());
-        holder.productPrice.setText(String.format("%s", currentCart.getRate()));
+        holder.productPrice.setText(String.format("Rs %s per %s", currentCart.getRate(), currentCart.getSku()));
         holder.createdOn.setText(String.format("%s %s", "On", currentCart.getCreatedOn()));
         Glide.with(cartContext)
                 .load(currentCart.getImage())

@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.testapp.network.RetrofitClient;
+
 public class Product implements Parcelable {
     private String id;
     private String name;
@@ -50,7 +52,7 @@ public class Product implements Parcelable {
     }
 
     public String getImage() {
-        return image;
+        return RetrofitClient.BASE_URL + image;
     }
 
     public void setImage(String image) {

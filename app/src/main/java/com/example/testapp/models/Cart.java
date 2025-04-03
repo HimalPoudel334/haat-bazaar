@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.testapp.network.RetrofitClient;
+
 public class Cart {
     private String id;
     private String productId;
@@ -50,7 +52,7 @@ public class Cart {
     }
 
     public String getImage() {
-        return image;
+        return RetrofitClient.BASE_URL + image;
     }
 
     public void setImage(String image) {

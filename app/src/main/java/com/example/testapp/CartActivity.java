@@ -42,7 +42,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
     private final List<Cart> carts = new ArrayList<>();
     private CartRecyclerViewAdapter adapter;
     Button buttonRemove, buttonCheckout;
-    TextView totalChargeTv, deliveryChargeTv;
+    TextView productPriceTv, totalChargeTv, deliveryChargeTv, emptyCartTextView;
+
+    private final double DELIVERY_CHARGE = 100.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,10 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
 
         buttonCheckout = findViewById(R.id.button_checkout);
         buttonRemove = findViewById(R.id.button_remove);
+        productPriceTv = findViewById(R.id.product_price_tv);
         totalChargeTv = findViewById(R.id.total_charge_tv);
         deliveryChargeTv = findViewById(R.id.delivery_charge_tv);
+        emptyCartTextView = findViewById(R.id.emptyCartTextView);
 
         // Initialize the RecyclerView and its adapter
         RecyclerView cartRecyclerView = findViewById(R.id.cart_rv);
@@ -71,7 +75,13 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("Cart", "onResponse: success cart " + response.body().getCarts().get(1).getRate());
+                    if(response.body().getCarts().isEmpty()) {
+                        cartRecyclerView.setVisibility(View.GONE);
+                        emptyCartTextView.setVisibility(View.VISIBLE);
+                        return;
+                    }
+
+                    Log.d("Cart", "onResponse: success cart " + response.body().getCarts().get(0).getRate());
                     int startPosition = carts.size();
                     carts.addAll(response.body().getCarts());
                     // Notify the adapter about the new items
@@ -125,8 +135,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                 }
             });
 
-            totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0]+100));
-            deliveryChargeTv.setText(String.format("Delivery charge: Rs %s", 100));
+            productPriceTv.setText(String.format(": Rs %s", totalCharge[0]));
+            deliveryChargeTv.setText(String.format(": Rs %s", DELIVERY_CHARGE));
+            totalChargeTv.setText(String.format(": Rs %s", totalCharge[0] + DELIVERY_CHARGE));
 
             //TODO: get customer id from db or current logged in user
             //lets hardcode the customerId here for now
@@ -181,8 +192,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         } else {
             buttonCheckout.setEnabled(false);
             buttonRemove.setEnabled(false);
-            totalChargeTv.setText(String.format("Total: Rs %s", 0.0));
-            deliveryChargeTv.setText(String.format("Delivery charge: Rs %s", 0.0));
+            productPriceTv.setText("");
+            totalChargeTv.setText("");
+            deliveryChargeTv.setText("");
         }
     }
 

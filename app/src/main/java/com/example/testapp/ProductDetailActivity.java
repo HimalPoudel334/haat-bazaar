@@ -1,6 +1,5 @@
 package com.example.testapp;
 
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.graphics.Paint;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.example.testapp.fragments.BuyProductFragment;
 import com.example.testapp.interfaces.CartAPI;
 import com.example.testapp.interfaces.ProductImagesAPI;
 import com.example.testapp.models.Cart;
@@ -37,16 +35,20 @@ import retrofit2.Retrofit;
 public class ProductDetailActivity extends BaseActivity {
 
     private Product selectedProduct;
+    private ImageSlider imageSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        selectedProduct = (Product) getIntent().getExtras().getParcelable("selectedProduct");
-        Log.d("ProductDetail", "onCreate: "+selectedProduct.getName());
         //setup toolbar
         activateToolbar(true);
+
+        selectedProduct = (Product) getIntent().getExtras().getParcelable("selectedProduct");
+        Log.d("ProductDetail", "onCreate: "+selectedProduct.getName());
+
+        imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
 
         setupMainContent();
     }
@@ -59,7 +61,6 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     private void setupMainContent() {
-        showSelectedProductImageSlider();
 
         TextView productName = (TextView) findViewById(R.id.selected_product_name);
         TextView productDescription = (TextView) findViewById(R.id.selected_product_description);
@@ -70,8 +71,8 @@ public class ProductDetailActivity extends BaseActivity {
 
         productName.setText(selectedProduct.getName());
         productDescription.setText(selectedProduct.getDescription());
-        productPrice.setText(String.format("%s %s", selectedProduct.getPrice(), selectedProduct.getUnit()));
-        productPreviousPrice.setText(String.format("%s %s", selectedProduct.getPrice(), selectedProduct.getUnit()));
+        productPrice.setText(String.format("Rs %s per %s", selectedProduct.getPrice(), selectedProduct.getUnit()));
+        productPreviousPrice.setText(String.format("Rs %s per %s", selectedProduct.getPreviousPrice(), selectedProduct.getUnit()));
         productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
         addToCart.setOnClickListener(view ->
@@ -88,6 +89,8 @@ public class ProductDetailActivity extends BaseActivity {
             intent.putExtras(bundle);
             startActivity(intent);
         });
+
+        showSelectedProductImageSlider();
     }
 
     private void showSelectedProductImageSlider() {
@@ -102,14 +105,10 @@ public class ProductDetailActivity extends BaseActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     for (ProductImage img : response.body().getProductExtraImages()) {
                         String imageUrl = img.getImageName();
-                        if(!img.getImageName().contains(RetrofitClient.BASE_URL)) {
-                            imageUrl = RetrofitClient.BASE_URL + "/" + img.getImageName();
-                        }
+                        Log.d("product extra image URL", imageUrl); // Add this line
                         productImagesModel.add(new SlideModel(imageUrl, ScaleTypes.FIT));
                     }
                 }
-
-                ImageSlider imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
                 imageSlider.setImageList(productImagesModel);
             }
 
@@ -119,12 +118,11 @@ public class ProductDetailActivity extends BaseActivity {
             }
         });
 
+
     }
 
 
     private void addToCart() {
-        final String customerId = "56d543ef-e4d4-462c-a37a-3f45c1335cb5";
-        //somehow i need to get the quantity
         double quantity = 1.0;
         Date cartCreatedDate = GregorianCalendar.getInstance().getTime();
         String createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cartCreatedDate);
@@ -133,7 +131,7 @@ public class ProductDetailActivity extends BaseActivity {
 
 
         CartAPI cartAPI = RetrofitClient.getClient().create(CartAPI.class);
-        cartAPI.createCart(customerId, cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
+        cartAPI.createCart(RetrofitClient.CURRENT_CUSTOMER_ID, cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.SingleCartResponse> call, Response<CartResponses.SingleCartResponse> response) {
                 if(response.isSuccessful())

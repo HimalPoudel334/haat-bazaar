@@ -10,6 +10,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.testapp.network.RetrofitClient;
+
 public class BaseActivity extends AppCompatActivity {
 
     public void activateToolbar(boolean enableHome) {
@@ -44,7 +46,7 @@ public class BaseActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Cart clicked", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(BaseActivity.this, CartActivity.class);
-            // intent.putExtra("customerId", "customerIdHere");
+             intent.putExtra("customerId", RetrofitClient.CURRENT_CUSTOMER_ID);
             startActivity(intent);
 
             return true;
