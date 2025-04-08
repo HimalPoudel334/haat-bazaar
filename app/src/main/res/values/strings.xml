@@ -64,4 +64,25 @@
     <string name="each_product_description">Each product description</string>
     <string name="price_summary">Price Summary</string>
     <string name="product_image">Product Image</string>
+    <string name="product_management">Product Management</string>
+    <string name="entity_name">Entity Name</string>
+    <string name="search">Search</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
+    <string name="password">Password</string>
+    <string name="domain_email_com">domain@email.com</string>
+    <string name="email_or_phone">Email or phone number</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="already_a_member">Already a member?</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="enter_your_password_again">Enter your password again</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
+    <string name="address">Address</string>
+    <string name="enter_your_full_address">Enter your full address</string>
+    <string name="phone_number">Phone number</string>
+    <string name="login_failed_invalid_username_or_password">Login failed: Invalid username or password</string>
 </resources>

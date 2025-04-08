@@ -17,15 +17,15 @@ public interface CartAPI {
     @GET("/carts")
     Call<CartResponses.MultiCartResponse> getCarts();
 
-    @GET("/carts/{customerId}")
-    Call<CartResponses.MultiCartResponse> getCustomerCart(@Path("customerId") String customerId);
+    @GET("/carts/{UserId}")
+    Call<CartResponses.MultiCartResponse> getUserCart(@Path("UserId") String UserId);
 
-    @POST("/carts/{customerId}")
-    Call<CartResponses.SingleCartResponse> createCart(@Path("customerId") String customerId, @Body Cart cart);
+    @POST("/carts/{UserId}")
+    Call<CartResponses.SingleCartResponse> createCart(@Path("UserId") String UserId, @Body Cart cart);
 
     @DELETE("/carts/{cartId}")
     Call<Void> deleteCart(@Path("cartId") String cartId);
 
-    @DELETE("/carts/delete-carts/{customerId}")
-    Call<Void> deleteCustomerCart(@Path("customerId") String customerId);
+    @DELETE("/carts/delete-carts/{UserId}")
+    Call<Void> deleteUserCart(@Path("UserId") String UserId);
 }

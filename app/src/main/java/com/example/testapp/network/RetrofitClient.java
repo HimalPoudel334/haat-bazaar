@@ -8,8 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     public static final String BASE_URL = "http://192.168.18.50:8080";
-    public static final String CURRENT_CUSTOMER_ID = "352051cc-d689-4445-9ef0-d27c6c69d3dd";  //john doe
-//    public static final String CURRENT_CUSTOMER_ID = "e39f60d3-ba0d-4d08-b867-2ff932fc2209"; //Himal Poudel
+    public static final String CURRENT_USER_ID = "352051cc-d689-4445-9ef0-d27c6c69d3dd";  //john doe
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
