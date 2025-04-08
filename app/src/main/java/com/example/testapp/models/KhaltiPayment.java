@@ -13,7 +13,7 @@ public class KhaltiPayment {
         this.paymentInfo = paymentInfo;
     }
 
-    public static class CustomerInfo {
+    public static class UserInfo {
         private String name;
         private String email;
         private String phone;
@@ -121,7 +121,7 @@ public class KhaltiPayment {
         private int amount;
         private String purchaseOrderId;
         private String purchaseOrderName;
-        private CustomerInfo customerInfo;
+        private UserInfo UserInfo;
         private List<AmountBreakdown> amountBreakdown;
         private List<ProductDetail> productDetails;
         private String merchantUsername;
@@ -168,12 +168,12 @@ public class KhaltiPayment {
             this.purchaseOrderName = purchaseOrderName;
         }
 
-        public CustomerInfo getCustomerInfo() {
-            return customerInfo;
+        public UserInfo getUserInfo() {
+            return UserInfo;
         }
 
-        public void setCustomerInfo(CustomerInfo customerInfo) {
-            this.customerInfo = customerInfo;
+        public void setUserInfo(UserInfo UserInfo) {
+            this.UserInfo = UserInfo;
         }
 
         public List<AmountBreakdown> getAmountBreakdown() {

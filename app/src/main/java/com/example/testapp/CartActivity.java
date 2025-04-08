@@ -15,15 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.testapp.adapters.CartRecyclerViewAdapter;
 import com.example.testapp.basetypes.Location;
 import com.example.testapp.interfaces.CartAPI;
-import com.example.testapp.interfaces.CustomerAPI;
+import com.example.testapp.interfaces.UserAPI;
 import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
-import com.example.testapp.models.Customer;
+import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
-import com.example.testapp.responses.CustomerResponses;
+import com.example.testapp.responses.UserResponses;
 import com.example.testapp.responses.OrderResponses;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,8 +42,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
 
     private final List<Cart> carts = new ArrayList<>();
     private CartRecyclerViewAdapter adapter;
-    Button buttonRemove, buttonCheckout;
-    TextView productPriceTv, totalChargeTv, deliveryChargeTv, emptyCartTextView;
+    private Button buttonRemove, buttonCheckout;
+    private TextView productPriceTv, totalChargeTv, deliveryChargeTv, emptyCartTextView;
+    private User user;
 
     private final double DELIVERY_CHARGE = 100.0;
 
@@ -54,6 +56,8 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
 
         //setup toolbar
         activateToolbar(true);
+
+        user = AuthManager.getInstance().getCurrentUser();
 
         buttonCheckout = findViewById(R.id.button_checkout);
         buttonRemove = findViewById(R.id.button_remove);
@@ -71,7 +75,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         // Make the API call
         Retrofit retrofit = RetrofitClient.getClient();
         CartAPI cartAPI = retrofit.create(CartAPI.class);
-        cartAPI.getCustomerCart(RetrofitClient.CURRENT_CUSTOMER_ID).enqueue(new Callback<CartResponses.MultiCartResponse>() {
+        cartAPI.getUserCart(user.getId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -81,13 +85,11 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                         return;
                     }
 
-                    Log.d("Cart", "onResponse: success cart " + response.body().getCarts().get(0).getRate());
                     int startPosition = carts.size();
                     carts.addAll(response.body().getCarts());
                     // Notify the adapter about the new items
                     adapter.notifyItemRangeInserted(startPosition, response.body().getCarts().size());
                     adapter.setBackupCartList(response.body().getCarts());
-                    Log.d("Cart", "onCreate: " + carts.size());
                 }
             }
 
@@ -139,15 +141,11 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             deliveryChargeTv.setText(String.format(": Rs %s", DELIVERY_CHARGE));
             totalChargeTv.setText(String.format(": Rs %s", totalCharge[0] + DELIVERY_CHARGE));
 
-            //TODO: get customer id from db or current logged in user
-            //lets hardcode the customerId here for now
-            Customer customer = new Customer();
-            customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
-            customer.setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
+            user.setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
 
             buttonCheckout.setOnClickListener(v -> {
                 List<OrderDetail> orderDetails = new ArrayList<>();
-                Order order = new Order(customer, customer.getLocation(), 100);
+                Order order = new Order(user, user.getLocation(), 100);
                 for(Cart c : selectedCarts) {
                     OrderDetail detail = new OrderDetail(order, c.getProductId(), c.getQuantity());
                     detail.setPrice(c.getQuantity() * c.getRate());
@@ -163,7 +161,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                     public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
                         if(response.isSuccessful() && response.body().getOrder() != null) {
                             Toast.makeText(getApplicationContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
-                            cartAPI.deleteCustomerCart(RetrofitClient.CURRENT_CUSTOMER_ID).enqueue(new Callback<Void>() {
+                            cartAPI.deleteUserCart(RetrofitClient.CURRENT_USER_ID).enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     for(Cart c : selectedCarts) {

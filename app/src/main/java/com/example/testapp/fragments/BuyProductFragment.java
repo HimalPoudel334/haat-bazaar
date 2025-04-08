@@ -28,7 +28,7 @@ import com.example.testapp.CartActivity;
 import com.example.testapp.R;
 import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.models.Cart;
-import com.example.testapp.models.Customer;
+import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
@@ -223,10 +223,10 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
         Log.d("Create Order", "inside createOrder:");
 
-        Customer customer = new Customer();
-        customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
+        User User = new User();
+        User.setId(RetrofitClient.CURRENT_USER_ID);
 
-        Order order = new Order(customer, deliveryLocation, deliveryCharge);
+        Order order = new Order(User, deliveryLocation, deliveryCharge);
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         OrderDetail detail = new OrderDetail(order, product, quantity);

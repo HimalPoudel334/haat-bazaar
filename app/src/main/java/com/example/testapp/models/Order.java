@@ -13,17 +13,17 @@ import java.util.Locale;
 public class Order {
     private String createdOn;
     private String fulfilledOn;
-    private Customer customer;
-    private String customerId;
+    private User User;
+    private String UserId;
     private String deliveryLocation;
     private String deliveryStatus;
     private double totalPrice = 0.0;
     private double deliveryCharge;
     private List<OrderDetail> orderDetails;
 
-    public Order(Customer customer, String location, double deliveryCharge) {
-        this.customer = customer;
-        customerId = customer.getId();
+    public Order(User User, String location, double deliveryCharge) {
+        this.User = User;
+        UserId = User.getId();
         deliveryStatus = "Pending";
         deliveryLocation = location;
         this.deliveryCharge = deliveryCharge;
@@ -48,20 +48,20 @@ public class Order {
         this.fulfilledOn = fulfilledOn;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return User;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User User) {
+        this.User = User;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public String getUserId() {
+        return UserId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setUserId(String UserId) {
+        this.UserId = UserId;
     }
 
     public String getDeliveryLocation() {

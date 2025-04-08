@@ -25,7 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.bumptech.glide.Glide;
 import com.example.testapp.basetypes.PaymentMethod;
 import com.example.testapp.interfaces.KhaltiAPI;
-import com.example.testapp.models.Customer;
+import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
@@ -224,13 +224,13 @@ public class BuyProductActivity extends BaseActivity {
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
         Log.d("Create Order", "inside createOrder:");
 
-        //TODO: get customer id from db or current logged in user
-        //lets hardcode the customerId here for now
+        //TODO: get User id from db or current logged in user
+        //lets hardcode the UserId here for now
 
-        Customer customer = new Customer();
-        customer.setId(RetrofitClient.CURRENT_CUSTOMER_ID);
+        User User = new User();
+        User.setId(RetrofitClient.CURRENT_USER_ID);
 
-        Order order = new Order(customer, deliveryLocation, deliveryCharge);
+        Order order = new Order(User, deliveryLocation, deliveryCharge);
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         OrderDetail detail = new OrderDetail(order, product, quantity);

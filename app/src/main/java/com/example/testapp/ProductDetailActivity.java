@@ -131,7 +131,7 @@ public class ProductDetailActivity extends BaseActivity {
 
 
         CartAPI cartAPI = RetrofitClient.getClient().create(CartAPI.class);
-        cartAPI.createCart(RetrofitClient.CURRENT_CUSTOMER_ID, cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
+        cartAPI.createCart(RetrofitClient.CURRENT_USER_ID, cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.SingleCartResponse> call, Response<CartResponses.SingleCartResponse> response) {
                 if(response.isSuccessful())
