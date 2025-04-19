@@ -42,11 +42,33 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isUserLoggedIn() {
+        return currentUser.isLoggedIn();
+    }
+
+    public boolean isUserAdmin() {
+        return currentUser.isAdmin();
+    }
+
+    public String getUserToken() {
+        return AuthManager.getInstance().getToken();
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void redirectToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         MenuItem profileMenu = menu.findItem(R.id.menu_item_profile);
-        if(currentUser.isAdmin() && profileMenu != null) {
+        if(isUserAdmin()) {
             profileMenu.setVisible(true);
         }
         return true;
@@ -67,6 +89,15 @@ public class BaseActivity extends AppCompatActivity {
                 intent = new Intent(BaseActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
+            return true;
+        }
+        if(itemId == R.id.menu_item_profile){
+            Intent intent;
+            if(isUserAdmin())
+                intent = new Intent(BaseActivity.this, ProfileActivity.class);
+            else
+                intent = new Intent(BaseActivity.this, AdminPanelActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

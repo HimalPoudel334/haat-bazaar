@@ -44,7 +44,6 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
     private CartRecyclerViewAdapter adapter;
     private Button buttonRemove, buttonCheckout;
     private TextView productPriceTv, totalChargeTv, deliveryChargeTv, emptyCartTextView;
-    private User user;
 
     private final double DELIVERY_CHARGE = 100.0;
 
@@ -57,7 +56,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         //setup toolbar
         activateToolbar(true);
 
-        user = AuthManager.getInstance().getCurrentUser();
+        Log.d("Cart", "onCreate: User id " + getCurrentUser().getId());
 
         buttonCheckout = findViewById(R.id.button_checkout);
         buttonRemove = findViewById(R.id.button_remove);
@@ -73,9 +72,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         cartRecyclerView.setAdapter(adapter);
 
         // Make the API call
-        Retrofit retrofit = RetrofitClient.getClient();
+        Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken());
         CartAPI cartAPI = retrofit.create(CartAPI.class);
-        cartAPI.getUserCart(user.getId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
+        cartAPI.getUserCart(getCurrentUser().getId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -112,7 +111,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                 Log.d("Cart Activity", "onCheckBoxStateChanged: cart price: "+c.getPrice());
                 totalCharge[0] += c.getPrice();
             }
-            Retrofit retrofit = RetrofitClient.getClient();
+            Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken());
             CartAPI cartAPI = retrofit.create(CartAPI.class);
             buttonRemove.setOnClickListener(view -> {
 
@@ -126,7 +125,6 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                                 // Update total charge display here
                                 totalChargeTv.setText(String.format("Total: Rs %s", totalCharge[0] - c.getPrice()));
                             }
-
                         }
 
                         @Override
@@ -141,11 +139,11 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             deliveryChargeTv.setText(String.format(": Rs %s", DELIVERY_CHARGE));
             totalChargeTv.setText(String.format(": Rs %s", totalCharge[0] + DELIVERY_CHARGE));
 
-            user.setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
+            getCurrentUser().setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
 
             buttonCheckout.setOnClickListener(v -> {
                 List<OrderDetail> orderDetails = new ArrayList<>();
-                Order order = new Order(user, user.getLocation(), 100);
+                Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100);
                 for(Cart c : selectedCarts) {
                     OrderDetail detail = new OrderDetail(order, c.getProductId(), c.getQuantity());
                     detail.setPrice(c.getQuantity() * c.getRate());
@@ -218,6 +216,13 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("YourActivity", "onResume() called");
+        invalidateOptionsMenu();
     }
 
 }

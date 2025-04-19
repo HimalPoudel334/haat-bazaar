@@ -25,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.bumptech.glide.Glide;
 import com.example.testapp.basetypes.PaymentMethod;
 import com.example.testapp.interfaces.KhaltiAPI;
+import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderDetail;
@@ -103,6 +104,13 @@ public class BuyProductActivity extends BaseActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("YourActivity", "onResume() called");
+        invalidateOptionsMenu();
+    }
+
     private void setupMainContent() {
         findViewById(R.id.close_fragment_icon).setOnClickListener(v -> {
             this.finish();
@@ -164,6 +172,8 @@ public class BuyProductActivity extends BaseActivity {
             String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
             if(deliveryLocation.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            } else if(!isUserLoggedIn()) {
+                    redirectToLogin();
             } else {
                 createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
             }
@@ -176,8 +186,10 @@ public class BuyProductActivity extends BaseActivity {
             String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
             if(deliveryLocation.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+            } else if(!isUserLoggedIn()) {
+                redirectToLogin();
             } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.KHALTI);
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
             }
         });
     }
@@ -250,7 +262,7 @@ public class BuyProductActivity extends BaseActivity {
 
         } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
             //call backend to get pidx
-            KhaltiAPI khaltiAPI = RetrofitClient.getClient().create(KhaltiAPI.class);
+            KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(getUserToken()).create(KhaltiAPI.class);
             khaltiAPI.getKhaltiPayload(order).enqueue(new Callback<JsonElement>() {
                 @Override
                 public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {

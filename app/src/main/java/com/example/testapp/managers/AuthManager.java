@@ -60,9 +60,7 @@ public class AuthManager {
         String username = prefs.getString(KEY_USERNAME, "");
         String userType = prefs.getString(KEY_USER_TYPE, "GUEST");
 
-       // PhoneNumber phoneNumber = new PhoneNumber(phone);
-
-        return new User(id, firstName, lastName, null, email, username, userType);
+        return new User(id, firstName, lastName, phone, email, username, userType);
     }
 
     // Save after login
@@ -77,7 +75,7 @@ public class AuthManager {
         editor.putString(KEY_FIRST_NAME, user.getFirstName());
         editor.putString(KEY_LAST_NAME, user.getLastName());
         editor.putString(KEY_EMAIL, user.getEmail());
-        editor.putString(KEY_PHONE, user.getPhoneNumber().getValue());
+        editor.putString(KEY_PHONE, user.getPhoneNumber());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_USER_TYPE, user.getUserType());
         editor.apply();

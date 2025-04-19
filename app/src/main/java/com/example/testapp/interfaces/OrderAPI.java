@@ -16,6 +16,6 @@ public interface OrderAPI {
     @GET("/orders/{orderId}")
     Call<OrderResponses.SingleOrderResponse> getOrder(@Path("orderId") String orderId);
 
-    @GET("/orders")
-    Call<OrderResponses.MultiOrderResponses> getOrders();
+    @GET("/orders/user/{userId}")
+    Call<OrderResponses.MultiOrderResponses> getOrders(@Path("userId") String userId);
 }
