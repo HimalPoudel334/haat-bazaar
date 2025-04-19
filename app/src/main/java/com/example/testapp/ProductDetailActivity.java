@@ -62,12 +62,12 @@ public class ProductDetailActivity extends BaseActivity {
 
     private void setupMainContent() {
 
-        TextView productName = (TextView) findViewById(R.id.selected_product_name);
-        TextView productDescription = (TextView) findViewById(R.id.selected_product_description);
-        TextView productPrice = (TextView) findViewById(R.id.selected_product_price);
-        TextView productPreviousPrice = (TextView) findViewById(R.id.selected_product_previous_price);
-        Button addToCart = (Button) findViewById(R.id.add_to_cart);
-        Button buyNow = (Button) findViewById(R.id.buy_now);
+        TextView productName = findViewById(R.id.selected_product_name);
+        TextView productDescription = findViewById(R.id.selected_product_description);
+        TextView productPrice = findViewById(R.id.selected_product_price);
+        TextView productPreviousPrice = findViewById(R.id.selected_product_previous_price);
+        Button addToCart = findViewById(R.id.add_to_cart);
+        Button buyNow = findViewById(R.id.buy_now);
 
         productName.setText(selectedProduct.getName());
         productDescription.setText(selectedProduct.getDescription());
@@ -75,14 +75,9 @@ public class ProductDetailActivity extends BaseActivity {
         productPreviousPrice.setText(String.format("Rs %s per %s", selectedProduct.getPreviousPrice(), selectedProduct.getUnit()));
         productPreviousPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 
-        addToCart.setOnClickListener(view ->
-                        addToCart()
-                //Toast.makeText(ProductDetailActivity.this, "Add to cart button clicked", Toast.LENGTH_SHORT).show()
-        );
+        addToCart.setOnClickListener(view -> addToCart());
 
         buyNow.setOnClickListener(view -> {
-            /*BuyProductFragment fragment = BuyProductFragment.newInstance(selectedProduct);
-            fragment.show(getSupportFragmentManager(), fragment.getTag());*/
             Intent intent = new Intent(ProductDetailActivity.this, BuyProductActivity.class);
             Bundle bundle = new Bundle();
             bundle.putParcelable("productAboutToBuy", selectedProduct);

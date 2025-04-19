@@ -7,13 +7,13 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
-    private PhoneNumber phoneNumber;
+    private String phoneNumber;
     private String email;
     private String username;
     private String userType;
-    private Location location;
+    private String location;
 
-    public User(String id, String firstName, String lastName, PhoneNumber phoneNumber, String email, String username, String userType) {
+    public User(String id, String firstName, String lastName, String phoneNumber, String email, String username, String userType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,14 +33,13 @@ public class User {
         this.userType = "GUEST";
     }
 
-    public PhoneNumber getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber.getValue();
     }
-
     public String getEmail() {
         return email;
     }
@@ -62,7 +61,7 @@ public class User {
     }
 
     public boolean isAdmin() {
-        return userType.equals("ADMIN");
+        return userType != null && userType.equalsIgnoreCase("ADMIN");
     }
 
     public boolean isLoggedIn() {
@@ -98,10 +97,10 @@ public class User {
     }
 
     public String getLocation() {
-        return location.toString();
+        return location;
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.location = location.toString();
     }
 }

@@ -54,9 +54,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void drawMainRecyclerView() {
-        //create the vars
-        //carousel
-        List<SlideModel> dealsList = new ArrayList<>(); // Create image list
+        List<SlideModel> dealsList = new ArrayList<>();
 
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango1.jpg", ScaleTypes.CENTER_CROP));
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango2.jpg", ScaleTypes.CENTER_CROP));
@@ -64,7 +62,6 @@ public class MainActivity extends BaseActivity {
         dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango4.jpg", ScaleTypes.CENTER_CROP));
 
 
-        //popular products
         List<PopularProduct> popularProducts = new ArrayList<>();
         popularProducts.add(new PopularProduct("https://bit.ly/2YoJ77H", "An Animal"));
         popularProducts.add(new PopularProduct("https://bit.ly/2BteuF2", "An Elephant"));
@@ -74,7 +71,6 @@ public class MainActivity extends BaseActivity {
         popularProducts.add(new PopularProduct("https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80", "An Animal"));
         popularProducts.add(new PopularProduct("https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80", "from flutter 3"));
 
-        //normal products
         ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
         productAPI.getProducts().enqueue(new Callback<ProductResponses.MultipleProductResonse>() {
             @Override
@@ -90,7 +86,6 @@ public class MainActivity extends BaseActivity {
         });
 
         homePageModel = new HomePageModel(productList, popularProducts, dealsList);
-        //init recycler view
         HomePageMainRecyclerViewAdapter adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
         GridLayoutManager gridLayoutManager = getGridLayoutManager(adapter);
         RecyclerView productRecyclerView = findViewById(R.id.home_page_main_rv);
@@ -174,18 +169,11 @@ public class MainActivity extends BaseActivity {
                             }
                         }
 
-                        //later when connected to api, we will just pass the string query to new intent and
-                        // will call the api with that query on the activity itself.
-                        //be sure to remove the Parcelable interface from Product model.
                         Intent intent = new Intent(MainActivity.this, FilteredProductActivity.class);
-                        //Create the bundle
                         Bundle bundle = new Bundle();
-                        //Add your data to bundle
                         bundle.putParcelableArrayList("filteredProductList", filteredList);
                         bundle.putString("SEARCH_QUERY", query.trim());
-                        //Add the bundle to the intent
                         intent.putExtras(bundle);
-                        //Fire that second activity
                         startActivity(intent);
                         return true;
                     }
@@ -199,6 +187,12 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu();
     }
 
 }

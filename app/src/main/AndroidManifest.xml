@@ -18,13 +18,17 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".ProfileActivity"
+            android:launchMode="singleTop"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminPanel"
+            android:name=".AdminPanelActivity"
             android:exported="false" />
         <activity
             android:name=".ResultActivity"
@@ -46,9 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".ProductDetailActivity"
-            android:exported="false"
-            android:label="@string/title_activity_product_detail"
-            android:theme="@style/Theme.TestApp" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
