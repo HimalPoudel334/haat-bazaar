@@ -18,6 +18,7 @@ public class Order {
     private String deliveryLocation;
     private String deliveryStatus;
     private double totalPrice = 0.0;
+    private double totalQuantity = 0.0;
     private double deliveryCharge;
     private List<OrderDetail> orderDetails;
 
@@ -96,7 +97,12 @@ public class Order {
         this.orderDetails = orderDetails;
         orderDetails.forEach(od -> {
             totalPrice += od.getPrice();
+            totalQuantity += od.getQuantity();
         });
+    }
+
+    public double getTotalQuantity() {
+        return totalQuantity;
     }
 
     public double getTotalPrice() {

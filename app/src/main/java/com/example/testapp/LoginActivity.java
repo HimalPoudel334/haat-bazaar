@@ -19,12 +19,14 @@ import com.example.testapp.managers.AuthManager;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.AuthResponses;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private EditText emailET;
     private EditText passwordET;
@@ -56,9 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login.setOnClickListener(v -> {
-            String email = emailET.getText().toString().trim();
+            String username = emailET.getText().toString().trim();
             String password = passwordET.getText().toString().trim();
-            performLogin(email, password);
+            performLogin(username, password);
         });
 
         registerTv.setOnClickListener(v -> {
@@ -68,10 +70,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void performLogin(String email, String password) {
+    private void performLogin(String username, String password) {
         Retrofit retrofitClient = RetrofitClient.getClient();
         AuthAPI authAPI = retrofitClient.create(AuthAPI.class);
-        LoginRequest request = new LoginRequest(email, password);
+        LoginRequest request = new LoginRequest(username, password);
 
         authAPI.login(request).enqueue(new Callback<AuthResponses.LoginResponse>() {
             @Override
@@ -81,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (loginResponse.getUser() != null && loginResponse.getToken() != null) {
                         AuthManager.getInstance().setFullUser(loginResponse.getUser());
                         AuthManager.getInstance().saveUser(loginResponse.getToken());
+                        Log.d("Login", "onResponse: Token " +loginResponse.getToken());
+                        finish();
                     } else {
                         loginResponseTv.setVisibility(View.VISIBLE);
                         loginResponseTv.setText(R.string.login_failed_invalid_username_or_password);
@@ -91,7 +95,12 @@ public class LoginActivity extends AppCompatActivity {
                         loginResponseTv.setVisibility(View.VISIBLE);
                         loginResponseTv.setText(R.string.login_failed_invalid_username_or_password);
                     } else {
-                        Log.d("Login", "onResponse: "+response.errorBody());
+                        try {
+                            Log.d("Login", "onResponse: "+response.errorBody().string());
+                        } catch (IOException e) {
+                            Log.d("Login", "onResponse: Exc "+e.getMessage());
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
