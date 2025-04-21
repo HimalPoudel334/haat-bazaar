@@ -217,12 +217,4 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("YourActivity", "onResume() called");
-        invalidateOptionsMenu();
-    }
-
 }

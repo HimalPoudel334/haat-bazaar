@@ -2,6 +2,7 @@ package com.example.testapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,7 +16,6 @@ import com.example.testapp.models.User;
 import com.example.testapp.network.RetrofitClient;
 
 public class BaseActivity extends AppCompatActivity {
-    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,6 @@ public class BaseActivity extends AppCompatActivity {
 
         // Initialize AuthManager and get current user
         AuthManager.init(this);
-        currentUser = AuthManager.getInstance().getCurrentUser();
     }
 
     public void activateToolbar(boolean enableHome) {
@@ -43,19 +42,19 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public boolean isUserLoggedIn() {
-        return currentUser.isLoggedIn();
+        return AuthManager.getInstance().getCurrentUser().isLoggedIn();
     }
 
     public boolean isUserAdmin() {
-        return currentUser.isAdmin();
+        return AuthManager.getInstance().getCurrentUser().isAdmin();
+    }
+
+    public User getCurrentUser() {
+        return AuthManager.getInstance().getCurrentUser();
     }
 
     public String getUserToken() {
         return AuthManager.getInstance().getToken();
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
     }
 
     public void redirectToLogin() {
@@ -67,12 +66,18 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem profileMenu = menu.findItem(R.id.menu_item_profile);
-        if(isUserAdmin()) {
-            profileMenu.setVisible(true);
-        }
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem profileMenu = menu.findItem(R.id.menu_item_profile);
+        if (profileMenu != null) {
+            profileMenu.setVisible(isUserLoggedIn());
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,7 +86,7 @@ public class BaseActivity extends AppCompatActivity {
         if(itemId == android.R.id.home) finish();
         if (itemId == R.id.menu_item_cart) {
             Intent intent;
-            if(currentUser.isLoggedIn()) {
+            if(isUserLoggedIn()) {
                 intent = new Intent(BaseActivity.this, CartActivity.class);
                 startActivity(intent);
             }
@@ -92,14 +97,22 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         }
         if(itemId == R.id.menu_item_profile){
-            Intent intent;
-            if(isUserAdmin())
-                intent = new Intent(BaseActivity.this, ProfileActivity.class);
-            else
-                intent = new Intent(BaseActivity.this, AdminPanelActivity.class);
-            startActivity(intent);
-            return true;
+            if(isUserLoggedIn()) {
+                Intent intent;
+                if(isUserAdmin())
+                    intent = new Intent(BaseActivity.this, ProfileActivity.class);
+                else
+                    intent = new Intent(BaseActivity.this, AdminPanelActivity.class);
+                startActivity(intent);
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invalidateOptionsMenu(); // Ensures menu updates when activity comes back to foreground
     }
 }

@@ -56,6 +56,7 @@ public class ProfileActivity extends BaseActivity {
 
         emptyOrdersTv.setOnClickListener( v -> {
             Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         });
@@ -70,6 +71,7 @@ public class ProfileActivity extends BaseActivity {
         logout.setOnClickListener(v -> {
             AuthManager.getInstance().logout();
             Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         });

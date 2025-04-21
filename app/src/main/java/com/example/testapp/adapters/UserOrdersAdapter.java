@@ -1,6 +1,7 @@
 package com.example.testapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,9 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
         holder.orderDetailsButton.setOnClickListener(v -> {
 
         });
+
+        holder.itemView.setOnClickListener(v -> Log.d("User Order", "onBindViewHolder: clicked" ));
+
     }
 
     @Override
