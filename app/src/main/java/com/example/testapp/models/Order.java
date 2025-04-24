@@ -11,26 +11,35 @@ import java.util.List;
 import java.util.Locale;
 
 public class Order {
+    private String id;
     private String createdOn;
     private String fulfilledOn;
-    private User User;
-    private String UserId;
+    private User user;
+    private String userId;
     private String deliveryLocation;
     private String deliveryStatus;
     private double totalPrice = 0.0;
     private double totalQuantity = 0.0;
     private double deliveryCharge;
-    private List<OrderDetail> orderDetails;
+    private List<OrderItem> orderItems;
 
-    public Order(User User, String location, double deliveryCharge) {
-        this.User = User;
-        UserId = User.getId();
+    public Order(User user, String location, double deliveryCharge) {
+        this.user = user;
+        userId = user.getId();
         deliveryStatus = "Pending";
         deliveryLocation = location;
         this.deliveryCharge = deliveryCharge;
         totalPrice += deliveryCharge;
         Date orderDate = GregorianCalendar.getInstance().getTime();
         createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(orderDate);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getOrderCreationDate() {
@@ -50,19 +59,19 @@ public class Order {
     }
 
     public User getUser() {
-        return User;
+        return user;
     }
 
     public void setUser(User User) {
-        this.User = User;
+        this.user = User;
     }
 
     public String getUserId() {
-        return UserId;
+        return userId;
     }
 
     public void setUserId(String UserId) {
-        this.UserId = UserId;
+        this.userId = UserId;
     }
 
     public String getDeliveryLocation() {
@@ -89,13 +98,13 @@ public class Order {
         this.deliveryCharge = deliveryCharge;
     }
 
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-        orderDetails.forEach(od -> {
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+        orderItems.forEach(od -> {
             totalPrice += od.getPrice();
             totalQuantity += od.getQuantity();
         });
@@ -113,12 +122,12 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public void addOrderDetail(OrderDetail detail) {
-        if(orderDetails == null) {
-            orderDetails = new ArrayList<OrderDetail>();
-            orderDetails.add(detail);
+    public void addOrderItem(OrderItem detail) {
+        if(orderItems == null) {
+            orderItems = new ArrayList<OrderItem>();
+            orderItems.add(detail);
         }else {
-            orderDetails.add(detail);
+            orderItems.add(detail);
         }
         totalPrice += detail.getPrice();
     }

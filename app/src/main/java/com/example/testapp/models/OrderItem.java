@@ -1,6 +1,6 @@
 package com.example.testapp.models;
 
-public class OrderDetail {
+public class OrderItem {
     private String id;
     private double quantity;
     private String productId;
@@ -8,7 +8,7 @@ public class OrderDetail {
     //private Order order;
     private double price;
 
-    public OrderDetail(Order order, Product product, double quantity) {
+    public OrderItem(Order order, Product product, double quantity) {
         this.quantity = quantity;
         this.product = product;
         productId = product.getId();
@@ -16,7 +16,7 @@ public class OrderDetail {
         price = quantity * product.getPrice();
     }
 
-    public OrderDetail(Order order, String productId, double quantity) {
+    public OrderItem(Order order, String productId, double quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
