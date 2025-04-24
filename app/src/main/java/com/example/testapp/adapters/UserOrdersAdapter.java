@@ -36,7 +36,7 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull UserOrdersAdapter.ViewHolder holder, int position) {
         holder.orderDateTv.setText(orderList.get(position).getOrderCreationDate());
-        holder.orderProductNameTv.setText(orderList.get(position).getOrderDetails().get(0).getProduct().getName());
+        holder.orderProductNameTv.setText(orderList.get(position).getOrderItems().get(0).getProduct().getName());
         holder.orderPriceTv.setText(String.valueOf(orderList.get(position).getTotalPrice()));
         holder.orderQuantityTv.setText(String.valueOf(orderList.get(position).getTotalQuantity()));
         holder.orderStatusTv.setText(orderList.get(position).getDeliveryStatus());
@@ -47,7 +47,7 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
 
         });
 
-        holder.orderDetailsButton.setOnClickListener(v -> {
+        holder.OrderItemsButton.setOnClickListener(v -> {
 
         });
 
@@ -62,7 +62,7 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView orderDateTv, orderProductNameTv, orderPriceTv, orderQuantityTv, orderStatusTv, orderDeliveryDateTv, orderDeliveryLocationTv;
-        Button orderCancelButton, orderDetailsButton;
+        Button orderCancelButton, OrderItemsButton;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -75,7 +75,7 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
             orderDeliveryLocationTv = itemView.findViewById(R.id.order_delivery_location);
 
             orderCancelButton = itemView.findViewById(R.id.order_cancel_button);
-            orderDetailsButton = itemView.findViewById(R.id.order_details_button);
+            OrderItemsButton = itemView.findViewById(R.id.order_details_button);
         }
     }
 }

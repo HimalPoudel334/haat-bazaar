@@ -30,7 +30,7 @@ import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.models.Cart;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
-import com.example.testapp.models.OrderDetail;
+import com.example.testapp.models.OrderItem;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
@@ -227,12 +227,12 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         User.setId(RetrofitClient.CURRENT_USER_ID);
 
         Order order = new Order(User, deliveryLocation, deliveryCharge);
-        List<OrderDetail> orderDetails = new ArrayList<>();
+        List<OrderItem> OrderItems = new ArrayList<>();
 
-        OrderDetail detail = new OrderDetail(order, product, quantity);
-        orderDetails.add(detail);
+        OrderItem detail = new OrderItem(order, product, quantity);
+        OrderItems.add(detail);
 
-        order.setOrderDetails(orderDetails);
+        order.setOrderItems(OrderItems);
         Log.d("Create Order", "inside createOrder: order with order detail created:");
         Gson gson = RetrofitClient.getGson();
         Log.d("Place order", "createOrder: "+gson.toJson(order));

@@ -1,9 +1,7 @@
 package com.example.testapp;
 
-import static com.example.testapp.paymentgateway.KhaltiPaymentGateway.getKhaltiPayConfig;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,9 +24,9 @@ import com.example.testapp.basetypes.PaymentMethod;
 import com.example.testapp.interfaces.KhaltiAPI;
 import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.managers.AuthManager;
+import com.example.testapp.models.OrderItem;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
-import com.example.testapp.models.OrderDetail;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
@@ -185,7 +182,7 @@ public class BuyProductActivity extends BaseActivity {
             } else if(!isUserLoggedIn()) {
                 redirectToLogin();
             } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
+                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.KHALTI);
             }
         });
     }
@@ -196,17 +193,6 @@ public class BuyProductActivity extends BaseActivity {
 
     private double getQuantity(TextView quantityTV) {
         return Double.parseDouble(quantityTV.getText().toString().trim().split(" ")[0]);
-    }
-
-    private String setupOrder(EditText deliveryLocation, TextView quantityTV) {
-        double quantity = getQuantity(quantityTV);
-        Log.d("Place Order button", "onViewCreated: " + quantity);
-        String deliveryLoc = getDeliveryLocation(deliveryLocation);
-        if(deliveryLoc.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
-            return "";
-        }
-        return String.format("%s %s", quantity, deliveryLoc);
     }
 
     private void setTotalPrice(TextView quantityTV, TextView priceTV, double deliveryCharge) {
@@ -232,87 +218,36 @@ public class BuyProductActivity extends BaseActivity {
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
 
         Order order = new Order(getCurrentUser(), deliveryLocation, deliveryCharge);
-        List<OrderDetail> orderDetails = new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
 
-        OrderDetail detail = new OrderDetail(order, product, quantity);
-        orderDetails.add(detail);
+        OrderItem detail = new OrderItem(order, product, quantity);
+        orderItems.add(detail);
 
-        order.setOrderDetails(orderDetails);
+        order.setOrderItems(orderItems);
         Gson gson = RetrofitClient.getGson();
         Log.d("Place order", "createOrder: "+gson.toJson(order));
 
-//        //make payment to esewa
-//        if(paymentMethod.equals(PaymentMethod.ESEWA)) {
-//            //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
-//            String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
-//            Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, ""+order.getTotalPrice(), product.getName(), product.getId(), callBackUrl, new HashMap<>());
-//            registerActivity.launch(intent);
-//
-//        } else if(paymentMethod.equals(PaymentMethod.KHALTI)) {
-//            //call backend to get pidx
-//            KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(getUserToken()).create(KhaltiAPI.class);
-//            khaltiAPI.getKhaltiPayload(order).enqueue(new Callback<JsonElement>() {
-//                @Override
-//                public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-//                    Log.d("KhaltiPayResponse", "onResponse: "+response.body().toString());
-//                    if(!response.isSuccessful() || response.body() == null) return;
-//
-//                    JsonElement jsonElement = response.body();
-//                    if (!jsonElement.isJsonObject()) return;
-//
-//                    JsonObject jsonObject = jsonElement.getAsJsonObject();
-//                    JsonObject payload = jsonObject.get("payload").getAsJsonObject();
-//                    if(payload == null)  return;
-//
-//                    Log.d("KhaltiPayloadResponse", "onResponse: "+payload);
-//                    // make api call to khalti to get pidx
-//                    String authorization = "key " + KhaltiPaymentGateway.LIVE_SECRET_KEY;
-//                    String contentType = "application/json";
-//
-//                    khaltiAPI.initiatePayment(authorization, contentType, payload).enqueue(new Callback<JsonElement>() {
-//                        @Override
-//                        public void onResponse(Call<JsonElement> c, Response<JsonElement> res) {
-//                            Log.d("KhaltiPidxResponse", "onResponse: "+res.body());
-//                            if(!res.isSuccessful() && res.body() == null) return;
-//
-//                            JsonElement jsonElement = res.body();
-//                            if (!jsonElement.isJsonObject()) return;
-//
-//                            JsonObject khaltiRes = jsonElement.getAsJsonObject();
-//                            if(khaltiRes == null)  return;
-//                            Log.d("KhaltiPayloadResponse", "onResponse: "+khaltiRes);
-//
-//                            String pidx = khaltiRes.get("pidx").getAsString();
-//                            if(pidx.isEmpty()) return;
-//
-//                            // make api call to khalti to get pidx
-//                            KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, pidx).open();
-//                        }
-//                        @Override
-//                        public void onFailure(Call<JsonElement> c, Throwable th) {
-//                                Log.d("TAG", "onFailure: Khalti pidx"+ th.getMessage());
-//                        }
-//                    });
-//                }
-//
-//                @Override
-//                public void onFailure(Call<JsonElement> call, Throwable t) {
-//                    Log.d("TAG", "onFailure: Khalti "+t.getMessage());
-//                }
-//            });
-//            Toast.makeText(getApplicationContext(), "Khalti Payment clicked", Toast.LENGTH_SHORT).show();
-//        }
-
-        OrderAPI orderAPI = RetrofitClient.getClient().create(OrderAPI.class);
+        OrderAPI orderAPI = RetrofitClient.getAuthClient(getUserToken()).create(OrderAPI.class);
         orderAPI.createOrder(order).enqueue(new Callback<OrderResponses.SingleOrderResponse>() {
             @Override
             public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
-                if(response.body() != null)
+                if(response.isSuccessful() && response.body() != null) {
                     Log.d("Create Order", "onResponse: " + response.body().getOrder().getOrderFulfilledDate());
-                try {
-                    Log.d("Create Order", "onResponse: "+response.errorBody().string());
-                } catch (IOException | NullPointerException e) {
-                    throw new RuntimeException(e);
+                    Order orderResp = response.body().getOrder();
+                    if (paymentMethod.equals(PaymentMethod.ESEWA)) {
+                        createEsewaPayment(orderResp);
+                    } else if (paymentMethod.equals(PaymentMethod.KHALTI)) {
+                        createKhaltiPayment(orderResp);
+                    }
+                }
+                else {
+                    try {
+                        Log.d("Create Order", "onResponse: "+response.errorBody().string());
+                    } catch (IOException | NullPointerException e) {
+                        Intent intent = new Intent(BuyProductActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
 
@@ -322,6 +257,42 @@ public class BuyProductActivity extends BaseActivity {
             }
         });
         Log.d("Create Order", "inside createOrder: api call done:");
+    }
 
+    private void createEsewaPayment(Order orderRes) {
+        //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
+        String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
+        Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, "" + orderRes.getTotalPrice(), product.getName(), orderRes.getUserId(), callBackUrl, new HashMap<>());
+        registerActivity.launch(intent);
+    }
+
+    private void createKhaltiPayment(Order orderRes) {
+        KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(getUserToken()).create(KhaltiAPI.class);
+        khaltiAPI.getKhaltiPidx(orderRes.getId()).enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    JsonObject responseBody = response.body().getAsJsonObject();
+                    String khaltiPidx = responseBody.get("pidx").getAsString();
+                    Log.d("Khalti Payment", "onResponse: khaltiPidx " + khaltiPidx);
+
+                    Khalti khalti = KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, khaltiPidx);
+                    khalti.open();
+                } else {
+                    try {
+                        Log.d("Create Payment Khalti", "onResponse: "+response.errorBody().string());
+                    } catch (IOException | NullPointerException e) {
+                        Intent intent = new Intent(BuyProductActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+
+            }
+        });
     }
 }

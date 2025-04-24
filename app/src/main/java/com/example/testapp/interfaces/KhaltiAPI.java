@@ -6,12 +6,14 @@ import com.google.gson.JsonElement;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface KhaltiAPI {
-    @POST("/payments/khalti")
-    Call<JsonElement> getKhaltiPayload(@Body Order order);
+    @GET("/payments/khalti")
+    Call<JsonElement> getKhaltiPidx(@Query("orderId") String orderId);
 
     @POST("https://dev.khalti.com/api/v2/epayment/initiate/")
     Call<JsonElement> initiatePayment(

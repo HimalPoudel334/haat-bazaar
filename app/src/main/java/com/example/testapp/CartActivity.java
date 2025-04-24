@@ -21,7 +21,7 @@ import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
-import com.example.testapp.models.OrderDetail;
+import com.example.testapp.models.OrderItem;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
 import com.example.testapp.responses.UserResponses;
@@ -142,14 +142,14 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             getCurrentUser().setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
 
             buttonCheckout.setOnClickListener(v -> {
-                List<OrderDetail> orderDetails = new ArrayList<>();
+                List<OrderItem> OrderItems = new ArrayList<>();
                 Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100);
                 for(Cart c : selectedCarts) {
-                    OrderDetail detail = new OrderDetail(order, c.getProductId(), c.getQuantity());
+                    OrderItem detail = new OrderItem(order, c.getProductId(), c.getQuantity());
                     detail.setPrice(c.getQuantity() * c.getRate());
-                    orderDetails.add(detail);
+                    OrderItems.add(detail);
                 }
-                order.setOrderDetails(orderDetails);
+                order.setOrderItems(OrderItems);
 
                 OrderAPI orderAPI = retrofit.create(OrderAPI.class);
                 Gson gson = RetrofitClient.getGson();
