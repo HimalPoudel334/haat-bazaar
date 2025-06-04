@@ -22,6 +22,7 @@ public class AuthManager {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PHONE = "phone";
     private static final String KEY_USERNAME = "username";
+    private static final String KEY_USER_LOCATION = "user_location";
     private static final String KEY_USER_TYPE = "user_type";
 
     private static AuthManager instance;
@@ -58,9 +59,10 @@ public class AuthManager {
         String email = prefs.getString(KEY_EMAIL, "");
         String phone = prefs.getString(KEY_PHONE, "");
         String username = prefs.getString(KEY_USERNAME, "");
+        String userLocation = prefs.getString(KEY_USER_LOCATION, "");
         String userType = prefs.getString(KEY_USER_TYPE, "GUEST");
 
-        return new User(id, firstName, lastName, phone, email, username, userType);
+        return new User(id, firstName, lastName, phone, email, username, userLocation, userType);
     }
 
     // Save after login
@@ -78,6 +80,7 @@ public class AuthManager {
         editor.putString(KEY_PHONE, user.getPhoneNumber());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_USER_TYPE, user.getUserType());
+        editor.putString(KEY_USER_LOCATION, user.getUserType());
         editor.apply();
 
         this.currentUser = user;
@@ -101,6 +104,6 @@ public class AuthManager {
     }
 
     public User getGuestUser() {
-        return new User(null, "", "", null, "", "", "GUEST");
+        return new User(null, "", "", null, "", "", "", "GUEST");
     }
 }

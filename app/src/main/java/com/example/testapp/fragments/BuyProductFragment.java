@@ -24,9 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.testapp.BaseActivity;
 import com.example.testapp.CartActivity;
 import com.example.testapp.R;
 import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
@@ -223,10 +225,9 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge) {
         Log.d("Create Order", "inside createOrder:");
 
-        User User = new User();
-        User.setId(RetrofitClient.CURRENT_USER_ID);
+        User user = AuthManager.getInstance().getCurrentUser();
 
-        Order order = new Order(User, deliveryLocation, deliveryCharge);
+        Order order = new Order(user, deliveryLocation, deliveryCharge);
         List<OrderItem> OrderItems = new ArrayList<>();
 
         OrderItem detail = new OrderItem(order, product, quantity);

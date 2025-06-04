@@ -209,6 +209,32 @@ public class KhaltiPayment {
         }
     }
 
+    public static class KhaltiPaymentConfirmPayload {
+        private String pidx;
+        private String orderId;
+
+        public KhaltiPaymentConfirmPayload(String pidx, String orderId) {
+            this.pidx = pidx;
+            this.orderId = orderId;
+        }
+
+        public String getPidx() {
+            return pidx;
+        }
+
+        public void setPidx(String pidx) {
+            this.pidx = pidx;
+        }
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public void setOrderId(String orderId) {
+            this.orderId = orderId;
+        }
+    }
+
 }
 
 

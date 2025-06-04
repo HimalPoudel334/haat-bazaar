@@ -21,6 +21,7 @@ public class Order {
     private double totalPrice = 0.0;
     private double totalQuantity = 0.0;
     private double deliveryCharge;
+    private String paymentMethod = "Cash";
     private List<OrderItem> orderItems;
 
     public Order(User user, String location, double deliveryCharge) {
@@ -120,6 +121,14 @@ public class Order {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public void addOrderItem(OrderItem detail) {

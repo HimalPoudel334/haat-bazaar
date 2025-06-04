@@ -9,49 +9,54 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    public static final String BASE_URL = "http://192.168.18.14:8080";
-    public static final String CURRENT_USER_ID = "352051cc-d689-4445-9ef0-d27c6c69d3dd";  //john doe
-    private static Retrofit publicClient = null;
-    private static Retrofit authClient = null;
+    public static final String BASE_URL = "http://159.13.37.218";
+    private static volatile Retrofit publicClient = null;
+    private static volatile Retrofit authClient = null;
+    private static volatile String currentToken = null;
 
     // Public client (no token)
     public static Retrofit getClient() {
-        if (publicClient == null) {
-            publicClient = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        Retrofit client = publicClient;
+        if (client == null) {
+            synchronized (RetrofitClient.class) {
+                client = publicClient;
+                if (client == null) {
+                    publicClient = client = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                }
+            }
         }
         return publicClient;
     }
 
     // Authenticated client (with token)
     public static Retrofit getAuthClient(String token) {
-        if (authClient == null || tokenChanged(token)) {
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(chain -> {
-                        Request newRequest = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " + token)
-                                .build();
-                        return chain.proceed(newRequest);
-                    })
-                    .build();
+        Retrofit client = authClient;
+        if (client == null || !token.equals(currentToken)) {
+            synchronized (RetrofitClient.class) {
+                if (authClient == null || !token.equals(currentToken)) {
+                    OkHttpClient c = new OkHttpClient.Builder()
+                            .addInterceptor(chain -> {
+                                Request newRequest = chain.request().newBuilder()
+                                        .addHeader("Authorization", "Bearer " + token)
+                                        .build();
+                                return chain.proceed(newRequest);
+                            })
+                            .build();
 
-            authClient = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                    authClient = client = new Retrofit.Builder()
+                            .baseUrl(BASE_URL)
+                            .client(c)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    currentToken = token;
+                }
+            }
         }
         return authClient;
-    }
-
-    // Optional: helper to invalidate authClient if token changes
-    private static String lastToken = null;
-    private static boolean tokenChanged(String token) {
-        boolean changed = !token.equals(lastToken);
-        lastToken = token;
-        return changed;
     }
 
     private static Gson gson = null;

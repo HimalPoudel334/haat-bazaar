@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -112,8 +113,6 @@ public class ProductDetailActivity extends BaseActivity {
                 Log.d("product extra", "onFailure: "+t.getMessage());
             }
         });
-
-
     }
 
 
@@ -124,13 +123,12 @@ public class ProductDetailActivity extends BaseActivity {
 
         Cart cart = new Cart(selectedProduct.getId(), quantity, createdOn);
 
-
-        CartAPI cartAPI = RetrofitClient.getClient().create(CartAPI.class);
-        cartAPI.createCart(RetrofitClient.CURRENT_USER_ID, cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
+        CartAPI cartAPI = RetrofitClient.getAuthClient(getUserToken()).create(CartAPI.class);
+        cartAPI.createCart(getCurrentUserId(), cart).enqueue(new Callback<CartResponses.SingleCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.SingleCartResponse> call, Response<CartResponses.SingleCartResponse> response) {
                 if(response.isSuccessful())
-                    Log.d("Create cart", "onResponse: " + response.body().getCart().getProductName());
+                    Toast.makeText(getApplicationContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
                 Log.d("Create cart", "onResponse: (try) "+response.message());
             }
 

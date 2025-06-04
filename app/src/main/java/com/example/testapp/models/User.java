@@ -13,13 +13,14 @@ public class User {
     private String userType;
     private String location;
 
-    public User(String id, String firstName, String lastName, String phoneNumber, String email, String username, String userType) {
+    public User(String id, String firstName, String lastName, String phoneNumber, String email, String username, String location, String userType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.username = username;
+        this.location = location;
         this.userType = userType;
     }
 
@@ -30,6 +31,7 @@ public class User {
         this.phoneNumber = null;
         this.email = null;
         this.username = null;
+        this.location = null;
         this.userType = "GUEST";
     }
 

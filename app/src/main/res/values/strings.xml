@@ -49,7 +49,7 @@
     <string name="product_name">Product Name</string>
     <string name="rs_100">Rs 100</string>
     <string name="buy_now">Buy Now</string>
-    <string name="enter_your_full_location">Enter your full location</string>
+    <string name="full_location">City - Ward Tole, Zip Code, District, Province, Country</string>
     <string name="time">Time:</string>
     <string name="charge">Charge:</string>
     <string name="location">Location:</string>

@@ -56,6 +56,9 @@ public class BaseActivity extends AppCompatActivity {
     public String getUserToken() {
         return AuthManager.getInstance().getToken();
     }
+    public String getCurrentUserId() {
+        return getCurrentUser().getId();
+    }
 
     public void redirectToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);

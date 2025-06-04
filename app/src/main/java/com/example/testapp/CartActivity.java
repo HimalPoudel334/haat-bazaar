@@ -74,7 +74,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         // Make the API call
         Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken());
         CartAPI cartAPI = retrofit.create(CartAPI.class);
-        cartAPI.getUserCart(getCurrentUser().getId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
+        cartAPI.getUserCart(getCurrentUserId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
             @Override
             public void onResponse(Call<CartResponses.MultiCartResponse> call, Response<CartResponses.MultiCartResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -139,11 +139,9 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             deliveryChargeTv.setText(String.format(": Rs %s", DELIVERY_CHARGE));
             totalChargeTv.setText(String.format(": Rs %s", totalCharge[0] + DELIVERY_CHARGE));
 
-            getCurrentUser().setLocation(new Location("Jhapa", "Birtamod", "Birtamod", 9, "Khamtelbaari"));
-
             buttonCheckout.setOnClickListener(v -> {
                 List<OrderItem> OrderItems = new ArrayList<>();
-                Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100);
+                Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100.0);
                 for(Cart c : selectedCarts) {
                     OrderItem detail = new OrderItem(order, c.getProductId(), c.getQuantity());
                     detail.setPrice(c.getQuantity() * c.getRate());
@@ -159,7 +157,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                     public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
                         if(response.isSuccessful() && response.body().getOrder() != null) {
                             Toast.makeText(getApplicationContext(), "Order created successfully", Toast.LENGTH_SHORT).show();
-                            cartAPI.deleteUserCart(RetrofitClient.CURRENT_USER_ID).enqueue(new Callback<Void>() {
+                            cartAPI.deleteUserCart(getCurrentUserId()).enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     for(Cart c : selectedCarts) {
@@ -174,7 +172,8 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                                 }
                             });
                         } else {
-                            Toast.makeText(getApplicationContext(), response.raw().message(), Toast.LENGTH_SHORT).show();
+                            Log.d("Cart checkout", "onResponse: " + response.errorBody());
+                            Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

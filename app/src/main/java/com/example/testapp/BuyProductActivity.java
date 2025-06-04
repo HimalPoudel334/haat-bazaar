@@ -76,6 +76,8 @@ public class BuyProductActivity extends BaseActivity {
                         }
                         Toast.makeText(getApplicationContext(), "SUCCESSFUL PAYMENT", Toast.LENGTH_SHORT).show();
 
+                        // call payment api to create a payment
+                                                
 
                         break;
                     case Activity.RESULT_CANCELED:
@@ -262,7 +264,12 @@ public class BuyProductActivity extends BaseActivity {
     private void createEsewaPayment(Order orderRes) {
         //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
         String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
-        Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this, "" + orderRes.getTotalPrice(), product.getName(), orderRes.getUserId(), callBackUrl, new HashMap<>());
+        Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this,
+                "" + orderRes.getTotalPrice(),
+                product.getName(),
+                orderRes.getId(),
+                callBackUrl,
+                new HashMap<>()); //sending order id instead of product id so that i could create payment on success response with that id
         registerActivity.launch(intent);
     }
 

@@ -225,7 +225,7 @@
                     android:id="@+id/delivery_location_et"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:hint="@string/enter_your_full_location" />
+                    android:hint="@string/full_location" />
 
                 <TextView
                     android:id="@+id/delivery_charge"

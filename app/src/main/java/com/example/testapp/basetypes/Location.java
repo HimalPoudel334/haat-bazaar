@@ -2,64 +2,84 @@ package com.example.testapp.basetypes;
 
 import androidx.annotation.NonNull;
 
+import java.util.Locale;
+
 public class Location {
-    private String District;
-    private String City;
-    private String Municipality;
-    private int wardNo;
-    private String toleName;
+    private final String country;
+    private final String province;
+    private final String district;
+    private final String municipality;
+    private final String toleName;
+    private final int wardNo;
+    private String zipCode;
 
-    public Location(String district, String city, String municipality, int wardNo, String toleName) {
-        District = district;
-        City = city;
-        Municipality = municipality;
-        this.wardNo = wardNo;
-        this.toleName = toleName;
+    private Location(LocationBuilder builder) {
+        this.country = builder.country;
+        this.province = builder.province;
+        this.district = builder.district;
+        this.municipality = builder.municipality;
+        this.toleName = builder.toleName;
+        this.wardNo = builder.wardNo;
+        this.zipCode = builder.zipCode;
     }
 
-    public String getDistrict() {
-        return District;
-    }
+    public static class LocationBuilder {
+        private String country = "Nepal";
+        private String province;
+        private String district;
+        private String municipality;
+        private String toleName;
+        private int wardNo;
+        private String zipCode;
 
-    public void setDistrict(String district) {
-        District = district;
-    }
 
-    public String getCity() {
-        return City;
-    }
+        public LocationBuilder province(String province) {
+            this.province = province;
+            return this;
+        }
 
-    public void setCity(String city) {
-        City = city;
-    }
+        public LocationBuilder district(String district) {
+            this.district = district;
+            return this;
+        }
 
-    public String getMunicipality() {
-        return Municipality;
-    }
+        public LocationBuilder municipality(String municipality) {
+            this.municipality = municipality;
+            return this;
+        }
 
-    public void setMunicipality(String municipality) {
-        Municipality = municipality;
-    }
+        public LocationBuilder wardNo(int wardNo) {
+            this.wardNo = wardNo;
+            return this;
+        }
 
-    public int getWardNo() {
-        return wardNo;
-    }
+        public LocationBuilder toleName(String toleName) {
+            this.toleName = toleName;
+            return this;
+        }
 
-    public void setWardNo(int wardNo) {
-        this.wardNo = wardNo;
-    }
+        public LocationBuilder country(String country) {
+            this.country = country;
+            return this;
+        }
 
-    public String getToleName() {
-        return toleName;
-    }
+        public LocationBuilder zipCode(String zipCode) {
+            this.zipCode = zipCode;
+            return this;
+        }
 
-    public void setToleName(String toleName) {
-        this.toleName = toleName;
+        public Location build() {
+            if (province == null || district == null || municipality == null || toleName == null || wardNo <= 0) {
+                throw new IllegalStateException("All fields except country must be set.");
+            }
+            return new Location(this);
+        }
     }
 
     @NonNull
     @Override
     public String toString() {
-        return String.format("%s, %s, %s, %s, %s", this.District, this.City, this.Municipality, this.wardNo, this.toleName);
+        return String.format(Locale.ENGLISH, "%s - %d - %s, %s, %s, %s, %s",
+                municipality, wardNo, toleName, zipCode, district, province, country);
     }
 }

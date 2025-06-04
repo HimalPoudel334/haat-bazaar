@@ -1,5 +1,6 @@
 package com.example.testapp.interfaces;
 
+import com.example.testapp.models.KhaltiPayment;
 import com.example.testapp.models.Order;
 import com.example.testapp.responses.KhaltiResponses;
 import com.google.gson.JsonElement;
@@ -21,4 +22,7 @@ public interface KhaltiAPI {
             @Header("Content-Type") String contentType,
             @Body JsonElement payload
     );
+
+    @POST("/payments/khalti/confirmation")
+    Call<JsonElement> verifyPayment(@Body KhaltiPayment.KhaltiPaymentConfirmPayload payload);
 }
