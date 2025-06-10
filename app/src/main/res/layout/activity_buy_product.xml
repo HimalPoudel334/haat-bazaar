@@ -21,51 +21,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/buy_now_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/custom_toolbar"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/buy_now_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/buy_now"
-                    android:textSize="30sp"/>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/buy_now_tv">
-
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/close_fragment_icon"
-                        android:contentDescription="@string/close_icon"
-                        android:src="@drawable/baseline_close_24"
-                        android:layout_alignParentEnd="true"
-                        />
-                </RelativeLayout>
-
-            </RelativeLayout>
-
             <Space
                 android:id="@+id/space_layout"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/buy_now_layout"
                 android:background="?android:attr/listDivider" />
 
             <RelativeLayout
                 android:id="@+id/main_product_details"
-                android:layout_below="@+id/space_layout"
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_marginTop="5dp"
@@ -240,7 +204,7 @@
                         <EditText
                             android:id="@+id/delivery_location_et"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="80dp"
                             android:hint="@string/full_location" />
 
                         <TextView

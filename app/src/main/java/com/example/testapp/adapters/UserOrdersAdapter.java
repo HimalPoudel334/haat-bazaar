@@ -1,6 +1,7 @@
 package com.example.testapp.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,10 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
         holder.orderProductNameTv.setText(orderList.get(position).getOrderItems().get(0).getProduct().getName());
         holder.orderPriceTv.setText(String.valueOf(orderList.get(position).getTotalPrice()));
         holder.orderQuantityTv.setText(String.valueOf(orderList.get(position).getTotalQuantity()));
+
         holder.orderStatusTv.setText(orderList.get(position).getDeliveryStatus());
+        holder.orderStatusTv.setBackgroundColor(Color.parseColor(orderList.get(position).getOrderStatusBgColor()));
+
         holder.orderDeliveryDateTv.setText(orderList.get(position).getOrderFulfilledDate());
         holder.orderDeliveryLocationTv.setText(orderList.get(position).getDeliveryLocation());
 

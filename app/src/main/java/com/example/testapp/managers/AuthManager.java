@@ -80,7 +80,7 @@ public class AuthManager {
         editor.putString(KEY_PHONE, user.getPhoneNumber());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_USER_TYPE, user.getUserType());
-        editor.putString(KEY_USER_LOCATION, user.getUserType());
+        editor.putString(KEY_USER_LOCATION, user.getLocation());
         editor.apply();
 
         this.currentUser = user;

@@ -43,11 +43,10 @@ public class ProductDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        //setup toolbar
-        activateToolbar(true);
-
         selectedProduct = (Product) getIntent().getExtras().getParcelable("selectedProduct");
-        Log.d("ProductDetail", "onCreate: "+selectedProduct.getName());
+
+        //setup toolbar
+        activateToolbar(true, selectedProduct.getName());
 
         imageSlider = (ImageSlider) findViewById(R.id.selected_product_images_slider);
 

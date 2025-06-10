@@ -26,7 +26,7 @@ public class FilteredProductActivity extends BaseActivity {
         filteredProductList = getIntent().getExtras().getParcelableArrayList("filteredProductList");
 
         //setup toolbar
-        activateToolbar(true);
+        activateToolbar(true, "Search");
 
         showFilteredProductRecyclerView();
     }

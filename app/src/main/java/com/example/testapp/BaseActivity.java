@@ -25,11 +25,10 @@ public class BaseActivity extends AppCompatActivity {
         AuthManager.init(this);
     }
 
-    public void activateToolbar(boolean enableHome) {
+    public void activateToolbar(boolean enableHome, String title) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar == null) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.custom_toolbar);
-
             if (toolbar != null) {
                 setSupportActionBar(toolbar);
                 actionBar = getSupportActionBar();
@@ -38,6 +37,9 @@ public class BaseActivity extends AppCompatActivity {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(enableHome);
+            if (title != null) {
+                actionBar.setTitle(title);
+            }
         }
     }
 
@@ -103,9 +105,9 @@ public class BaseActivity extends AppCompatActivity {
             if(isUserLoggedIn()) {
                 Intent intent;
                 if(isUserAdmin())
-                    intent = new Intent(BaseActivity.this, ProfileActivity.class);
-                else
                     intent = new Intent(BaseActivity.this, AdminPanelActivity.class);
+                else
+                    intent = new Intent(BaseActivity.this, BaseActivity.class);
                 startActivity(intent);
                 return true;
             }

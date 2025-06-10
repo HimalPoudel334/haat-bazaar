@@ -1,5 +1,9 @@
 package com.example.testapp.models;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.testapp.basetypes.Location;
 
@@ -139,5 +143,28 @@ public class Order {
             orderItems.add(detail);
         }
         totalPrice += detail.getPrice();
+    }
+
+    public String getOrderStatusBgColor() {
+        if (deliveryStatus == null) {
+            return "#FFFFFF"; // default white for null
+        }
+
+        switch (deliveryStatus.trim().toLowerCase()) {
+            case "payment pending":
+                return "#FFA500"; // orange
+            case "pending":
+                return "#FFFF00"; // yellow
+            case "processed":
+                return "#87CEEB"; // sky blue
+            case "out for delivery":
+                return "#00BFFF"; // deep sky blue
+            case "delivered":
+                return "#32CD32"; // lime green
+            case "canceled":
+                return "#FF6347"; // tomato red
+            default:
+                return "#D3D3D3"; // light gray for unknown status
+        }
     }
 }

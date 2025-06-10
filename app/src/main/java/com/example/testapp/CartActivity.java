@@ -54,7 +54,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         setContentView(R.layout.activity_cart);
 
         //setup toolbar
-        activateToolbar(true);
+        activateToolbar(true, "My Cart");
 
         Log.d("Cart", "onCreate: User id " + getCurrentUser().getId());
 

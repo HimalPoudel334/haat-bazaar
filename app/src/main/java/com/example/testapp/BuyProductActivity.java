@@ -59,7 +59,7 @@ public class BuyProductActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buy_product);
-        activateToolbar(true);
+        activateToolbar(true, "Buy Now");
 
         product = (Product) getIntent().getExtras().getParcelable("productAboutToBuy");
         Log.d("Fragment", "onCreate: product is " + product.getName());
@@ -107,10 +107,6 @@ public class BuyProductActivity extends BaseActivity {
     }
 
     private void setupMainContent() {
-        findViewById(R.id.close_fragment_icon).setOnClickListener(v -> {
-            this.finish();
-        });
-
         ImageView productImage = findViewById(R.id.product_iv);
         Glide.with(getApplicationContext())
                 .load(product.getImage())
@@ -160,6 +156,7 @@ public class BuyProductActivity extends BaseActivity {
         });
 
         EditText deliveryLocationEditText = findViewById(R.id.delivery_location_et);
+        deliveryLocationEditText.setText(getCurrentUser().getLocation());
 
         ImageButton esewaButton = findViewById(R.id.button_esewa);
         esewaButton.setOnClickListener(v -> {
@@ -262,8 +259,7 @@ public class BuyProductActivity extends BaseActivity {
     }
 
     private void createEsewaPayment(Order orderRes) {
-        //String callBackUrl =  String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
-        String callBackUrl = "https://6df2-2405-acc0-169-325d-512a-3994-40cd-14b1.ngrok-free.app/payments/esewa";
+        String callBackUrl = String.format("%s/payments/esewa", RetrofitClient.BASE_URL);
         Intent intent = EsewaPaymentGateway.makeEsewaPayment(BuyProductActivity.this,
                 "" + orderRes.getTotalPrice(),
                 product.getName(),

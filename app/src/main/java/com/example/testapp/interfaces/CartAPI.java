@@ -14,18 +14,18 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface CartAPI {
-    @GET("/carts")
+    @GET("carts")
     Call<CartResponses.MultiCartResponse> getCarts();
 
-    @GET("/carts/{UserId}")
+    @GET("carts/{UserId}")
     Call<CartResponses.MultiCartResponse> getUserCart(@Path("UserId") String UserId);
 
-    @POST("/carts/{UserId}")
+    @POST("carts/{UserId}")
     Call<CartResponses.SingleCartResponse> createCart(@Path("UserId") String UserId, @Body Cart cart);
 
-    @DELETE("/carts/{cartId}")
+    @DELETE("carts/{cartId}")
     Call<Void> deleteCart(@Path("cartId") String cartId);
 
-    @DELETE("/carts/delete-carts/{UserId}")
+    @DELETE("carts/delete-carts/{UserId}")
     Call<Void> deleteUserCart(@Path("UserId") String UserId);
 }

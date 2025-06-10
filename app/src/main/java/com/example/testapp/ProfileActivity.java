@@ -44,7 +44,7 @@ public class ProfileActivity extends BaseActivity {
             return insets;
         });
 
-        activateToolbar(true);
+        activateToolbar(true, "My Profile");
 
         fullName = findViewById(R.id.full_name);
         mobileNumber = findViewById(R.id.mobile_number);
@@ -86,7 +86,7 @@ public class ProfileActivity extends BaseActivity {
         // call api
         Retrofit retrofit = RetrofitClient.getAuthClient(getUserToken());
         OrderAPI orderAPI = retrofit.create(OrderAPI.class);
-        orderAPI.getOrders(currentUser.getId()).enqueue(new Callback<OrderResponses.MultiOrderResponses>() {
+        orderAPI.getUserOrders(currentUser.getId()).enqueue(new Callback<OrderResponses.MultiOrderResponses>() {
             @Override
             public void onResponse(Call<OrderResponses.MultiOrderResponses> call, Response<OrderResponses.MultiOrderResponses> response) {
                 if (response.isSuccessful() && response.body() != null) {

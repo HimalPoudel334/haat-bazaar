@@ -8,6 +8,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface AuthAPI {
-    @POST("/auth/login")
+    @POST("auth/login")
     Call<AuthResponses.LoginResponse> login(@Body LoginRequest loginRequest);
 }

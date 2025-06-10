@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderListActivity">
+
+    <include
+        layout="@layout/activity_base"
+        android:id="@+id/custom_toolbar"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:id="@+id/emptyOrdersTextView"
+        android:text="@string/no_new_orders"
+        android:visibility="gone"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_toolbar"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:id="@+id/orders_list_rv"
+        />
+
+</RelativeLayout>

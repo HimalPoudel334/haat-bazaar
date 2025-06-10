@@ -7,10 +7,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface UserAPI {
-    @GET("/users")
+    @GET("users")
     Call<UserResponses.MultiUserResponse> getUsers();
 
-    @GET("/users/{userId}")
+    @GET("users/{userId}")
     Call<UserResponses.SingleUserResponse> getUser(@Path("userId") String userId);
 
 }

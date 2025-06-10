@@ -7,10 +7,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface CategoryAPI {
-    @GET("/categories")
+    @GET("categories")
     Call<CategoryResponses.MultiCategoryResponse> getCategories();
 
-    @GET("/category/{categoryId}")
+    @GET("category/{categoryId}")
     Call<CategoryResponses.SingleCategoryResponse> getCategory(@Path("categoryId") String categoryId);
 
 }

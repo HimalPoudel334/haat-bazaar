@@ -10,9 +10,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ProductImagesAPI {
-    @GET("/products/{productId}/images")
+    @GET("products/{productId}/images")
     Call<ProductImageResponse> getProductExtraImages(@Path("productId") String productId);
 
-    @POST("/products/{productId}/images")
+    @POST("products/{productId}/images")
     Call<ProductImageResponse> createProductExtraImage(@Path("productId") String productId, @Body ProductImage productImage);
 }

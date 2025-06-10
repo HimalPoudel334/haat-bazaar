@@ -52,7 +52,13 @@ public class Product implements Parcelable {
     }
 
     public String getImage() {
-        return RetrofitClient.BASE_URL + image;
+        String processedImage = image;
+
+        if (processedImage != null && processedImage.startsWith("/")) {
+            processedImage = processedImage.substring(1);
+        }
+
+        return RetrofitClient.BASE_URL + processedImage;
     }
 
     public void setImage(String image) {

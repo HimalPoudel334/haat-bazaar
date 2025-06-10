@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface KhaltiAPI {
-    @GET("/payments/khalti")
+    @GET("payments/khalti")
     Call<JsonElement> getKhaltiPidx(@Query("orderId") String orderId);
 
     @POST("https://dev.khalti.com/api/v2/epayment/initiate/")
@@ -23,6 +23,6 @@ public interface KhaltiAPI {
             @Body JsonElement payload
     );
 
-    @POST("/payments/khalti/confirmation")
+    @POST("payments/khalti/confirmation")
     Call<JsonElement> verifyPayment(@Body KhaltiPayment.KhaltiPaymentConfirmPayload payload);
 }

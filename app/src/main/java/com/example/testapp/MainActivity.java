@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         //setup the toolbar
-        activateToolbar(false);
+        activateToolbar(false, "Haatbazar");
 
         initCategoriesRecyclerView();
         drawMainRecyclerView();
@@ -56,10 +56,10 @@ public class MainActivity extends BaseActivity {
     private void drawMainRecyclerView() {
         List<SlideModel> dealsList = new ArrayList<>();
 
-        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango1.jpg", ScaleTypes.CENTER_CROP));
-        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango2.jpg", ScaleTypes.CENTER_CROP));
-        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango3.jpg", ScaleTypes.CENTER_CROP));
-        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"/images/products/extra/mango4.jpg", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"images/products/extra/mango1.jpg", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"images/products/extra/mango2.jpg", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"images/products/extra/mango3.jpg", ScaleTypes.CENTER_CROP));
+        dealsList.add(new SlideModel(RetrofitClient.BASE_URL+"images/products/extra/mango4.jpg", ScaleTypes.CENTER_CROP));
 
 
         List<PopularProduct> popularProducts = new ArrayList<>();
