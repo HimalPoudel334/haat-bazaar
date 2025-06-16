@@ -11,6 +11,14 @@ import com.example.testapp.models.User;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+import androidx.security.crypto.MasterKeys;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class AuthManager {
 
@@ -45,7 +53,23 @@ public class AuthManager {
     }
 
     private AuthManager(Context context) {
-        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        try {
+            MasterKey masterKey = new MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+
+
+            prefs = EncryptedSharedPreferences.create(
+                    context,
+                    PREF_NAME,
+                    masterKey,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                );
+        } catch (GeneralSecurityException | IOException e) {
+            Log.d("Encrypted Shared Prefs", "AuthManager: " + e.getMessage());
+            prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        }
         editor = prefs.edit();
         this.currentUser = loadUserFromPrefs();
     }

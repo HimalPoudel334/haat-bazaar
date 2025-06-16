@@ -1,10 +1,14 @@
 package com.example.testapp.network;
 
+import com.example.testapp.managers.AuthManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.net.HttpURLConnection;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -42,7 +46,11 @@ public class RetrofitClient {
                                 Request newRequest = chain.request().newBuilder()
                                         .addHeader("Authorization", "Bearer " + token)
                                         .build();
-                                return chain.proceed(newRequest);
+                                Response response = chain.proceed(newRequest);
+                                if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                                    AuthManager.getInstance().logout();
+                                }
+                                return response;
                             })
                             .build();
 

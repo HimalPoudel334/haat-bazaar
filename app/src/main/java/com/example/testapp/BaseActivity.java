@@ -90,24 +90,18 @@ public class BaseActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if(itemId == android.R.id.home) finish();
         if (itemId == R.id.menu_item_cart) {
-            Intent intent;
-            if(isUserLoggedIn()) {
-                intent = new Intent(BaseActivity.this, CartActivity.class);
-                startActivity(intent);
-            }
-            else {
+            Intent intent = new Intent(BaseActivity.this, CartActivity.class);;
+            if(!isUserLoggedIn()) {
                 intent = new Intent(BaseActivity.this, LoginActivity.class);
-                startActivity(intent);
             }
+            startActivity(intent);
             return true;
         }
         if(itemId == R.id.menu_item_profile){
             if(isUserLoggedIn()) {
-                Intent intent;
+                Intent intent = new Intent(BaseActivity.this, ProfileActivity.class);
                 if(isUserAdmin())
                     intent = new Intent(BaseActivity.this, AdminPanelActivity.class);
-                else
-                    intent = new Intent(BaseActivity.this, BaseActivity.class);
                 startActivity(intent);
                 return true;
             }

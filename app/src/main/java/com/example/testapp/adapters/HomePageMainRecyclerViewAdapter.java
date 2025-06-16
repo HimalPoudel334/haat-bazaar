@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.example.testapp.ProductDetailActivity;
 import com.example.testapp.R;
@@ -103,12 +104,11 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 NormalProductViewHolder normalProductViewHolder = (NormalProductViewHolder) holder;
                 //get current normal product
                 Product normalProduct = homePageModel.getNormalProductsList().get(position - NO_OF_CUSTOM_LAYOUT);
-                Log.d("ProductImage", "onBindViewHolder: Current Product image is: "+normalProduct.getImage());
                 //load images
                 Glide.with(homePageContext)
                         .load(normalProduct.getImage())
                         .centerCrop()
-                        //.placeholder(R.drawable.loading_spinner)
+                        .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
                         .into(normalProductViewHolder.productImageView);
 
                 normalProductViewHolder.productTitle.setText(normalProduct.getName());
@@ -157,12 +157,12 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     public static class NormalProductViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView productImageView;
-        private final TextView productTitle;
-        private final TextView productDescription;
-        private final TextView productPrice;
-        private final TextView productPreviousPrice;
-        private final CardView productCardView;
+        final ImageView productImageView;
+        final TextView productTitle;
+        final TextView productDescription;
+        final TextView productPrice;
+        final TextView productPreviousPrice;
+        final CardView productCardView;
 
         public NormalProductViewHolder(@NonNull View itemView) {
             super(itemView);

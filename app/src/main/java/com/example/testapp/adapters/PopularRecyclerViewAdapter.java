@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.testapp.R;
 import com.example.testapp.models.PopularProduct;
 
@@ -39,12 +40,11 @@ public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecy
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        Toast.makeText(popularImageContext, "Inside recycler view", Toast.LENGTH_SHORT);
         //load images
         Glide.with(popularImageContext)
                 .load(popularProducts.get(position).getImageUrl())
                 .centerCrop()
-                //.placeholder(R.drawable.loading_spinner)
+                .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
                 .into(holder.popularImage);
 
         //load titles

@@ -57,5 +57,6 @@ dependencies {
     implementation(libs.viewbinding)
     implementation(libs.checkout.android)
     implementation(libs.ui)
+    implementation(libs.androidx.security.crypto)
 
 }

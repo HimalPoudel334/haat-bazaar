@@ -31,6 +31,7 @@ public class Product implements Parcelable {
         this.unit = unit;
         this.unitChange = unitChange;
         this.stock = stock;
+        this.category = category;
         this.categoryId=category.getId();
         Log.d("ProductModel", "Product category id is: "+category.getId());
     }
@@ -139,8 +140,9 @@ public class Product implements Parcelable {
         unit = in.readString();
         unitChange = in.readDouble();
         stock = in.readDouble();
+        categoryId = in.readString();
+        category = in.readParcelable(Category.class.getClassLoader());
     }
-
 
     @Override
     public int describeContents() {
@@ -158,6 +160,9 @@ public class Product implements Parcelable {
         parcel.writeString(unit);
         parcel.writeDouble(unitChange);
         parcel.writeDouble(stock);
+        parcel.writeString(categoryId);
+        parcel.writeParcelable(category, i);
+
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -171,5 +176,4 @@ public class Product implements Parcelable {
             return new Product[size];
         }
     };
-
 }

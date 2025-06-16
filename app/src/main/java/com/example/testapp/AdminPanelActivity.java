@@ -16,6 +16,7 @@ import com.example.testapp.models.Order;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.OrderResponses;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -78,6 +79,13 @@ public class AdminPanelActivity extends BaseActivity {
                     int newOrdersCount = response.body().getCount();
                     entityRecyclerView.setLayoutManager(new GridLayoutManager(AdminPanelActivity.this, 2));
                     entityRecyclerView.setAdapter(new EntityAdapter(AdminPanelActivity.this, entityList, newOrdersCount));
+                }
+                else {
+                    try {
+                        Log.d("Admin Panel", "onResponse: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

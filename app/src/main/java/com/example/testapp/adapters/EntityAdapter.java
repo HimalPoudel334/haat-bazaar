@@ -15,8 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.testapp.CategoryActivity;
 import com.example.testapp.MainActivity;
 import com.example.testapp.OrderListActivity;
+import com.example.testapp.ProductActivity;
 import com.example.testapp.R;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Entity;
@@ -27,8 +29,8 @@ import java.util.List;
 
 public class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.EntityViewHolder> {
 
-    private Context context;
-    private List<Entity> entityList;
+    private final Context context;
+    private final List<Entity> entityList;
     private final int newOrdersCount;
 
     public EntityAdapter(Context context, List<Entity> entityList, int newOrdersCount) {
@@ -60,6 +62,18 @@ public class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.EntityView
             switch (holder.entityTitleTextView.getText().toString().toLowerCase()) {
                 case "orders":
                     intent = new Intent(context, OrderListActivity.class);
+                    context.startActivity(intent);
+                    break;
+                case "categories":
+                    intent = new Intent(context, CategoryActivity.class);
+                    context.startActivity(intent);
+                    break;
+                case "products":
+                    intent = new Intent(context, ProductActivity.class);
+                    context.startActivity(intent);
+                    break;
+                case "payment":
+                    intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                     break;
                 case "logout":

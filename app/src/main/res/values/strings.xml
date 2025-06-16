@@ -94,4 +94,18 @@
     <string name="details">Details</string>
     <string name="you_haven_t_ordered_anything_yet_click_here_to_buy_something">You haven\'t ordered anything yet. Click here to buy something</string>
     <string name="no_new_orders">No new orders ☹️</string>
+    <string name="add_new">Add new</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="select_image">Select Image</string>
+    <string name="name">Name</string>
+    <string name="category">Category</string>
+    <string name="description">Description</string>
+    <string name="previous_price">Previous Price</string>
+    <string name="stock">Stock</string>
+    <string name="sku">SKU</string>
+    <string name="unit_change">Unit Change</string>
+    <string name="select_extra_images">Select Extra Images</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="cancel_icon">Cancel Icon</string>
 </resources>
