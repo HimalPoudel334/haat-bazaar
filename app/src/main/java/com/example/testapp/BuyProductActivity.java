@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.testapp.basetypes.PaymentMethod;
 import com.example.testapp.interfaces.KhaltiAPI;
 import com.example.testapp.interfaces.OrderAPI;
@@ -109,10 +110,10 @@ public class BuyProductActivity extends BaseActivity {
     private void setupMainContent() {
         ImageView productImage = findViewById(R.id.product_iv);
         Glide.with(getApplicationContext())
-                .load(product.getImage())
-                .centerCrop()
-                //.placeholder(R.drawable.loading_spinner)
-                .into(productImage);
+            .load(product.getImage())
+            .centerCrop()
+            .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
+            .into(productImage);
 
         TextView productName = findViewById(R.id.product_name_tv);
         productName.setText(product.getName());

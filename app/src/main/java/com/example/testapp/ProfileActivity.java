@@ -93,7 +93,6 @@ public class ProfileActivity extends BaseActivity {
                     if (response.body().getOrders().isEmpty()) {
                         ordersRecyclerView.setVisibility(View.GONE);
                         emptyOrdersTv.setVisibility(View.VISIBLE);
-                        return;
                     }
                     UserOrdersAdapter adapter = new UserOrdersAdapter(ProfileActivity.this, response.body().getOrders());
                     ordersRecyclerView.setAdapter(adapter);

@@ -21,7 +21,7 @@ public interface OrderAPI {
     Call<OrderResponses.MultiOrderResponses> getUserOrders(@Path("userId") String userId);
 
     @GET("admin/orders")
-    Call<OrderResponses.MultiOrderResponses> getAllOrders(@Query("initDate") String initDate, @Query("finalDate") String finalDate);
+    Call<OrderResponses.AllOrderResponse> getAllOrders(@Query("initDate") String initDate, @Query("finalDate") String finalDate);
 
     @GET("admin/orders/count")
     Call<OrderResponses.NewOrderCountResponse> getNewOrdersCount(@Query("initDate") String initDate, @Query("finalDate") String finalDate);

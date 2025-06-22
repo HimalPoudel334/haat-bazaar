@@ -69,10 +69,12 @@ public class AdminPanelActivity extends BaseActivity {
     private void fetchNewOrders() {
 
         Calendar calendar = GregorianCalendar.getInstance(); // Or just Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -1);
 
-        String initDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(calendar.getTime()); // before 10 days
-        RetrofitClient.getAuthClient(getUserToken()).create(OrderAPI.class).getNewOrdersCount(initDate, initDate).enqueue(new Callback<OrderResponses.NewOrderCountResponse>() {
+        String finalDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(calendar.getTime());
+        calendar.add(Calendar.MONTH, -1);
+        String initDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(calendar.getTime()); // before 1 months
+
+        RetrofitClient.getAuthClient(getUserToken()).create(OrderAPI.class).getNewOrdersCount(initDate, finalDate).enqueue(new Callback<OrderResponses.NewOrderCountResponse>() {
             @Override
             public void onResponse(Call<OrderResponses.NewOrderCountResponse> call, Response<OrderResponses.NewOrderCountResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

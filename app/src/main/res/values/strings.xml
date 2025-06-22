@@ -108,4 +108,10 @@
     <string name="select_extra_images">Select Extra Images</string>
     <string name="selected_image">Selected Image</string>
     <string name="cancel_icon">Cancel Icon</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="billing_details">Billing Details</string>
+    <string name="order_items">Order Items</string>
+    <string name="price_information">Price Information</string>
+    <string name="fulfill_order">Fulfill Order</string>
+    <string name="shipment_details">Shipment Details</string>
 </resources>

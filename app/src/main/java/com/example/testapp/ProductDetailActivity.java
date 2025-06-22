@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,7 +119,7 @@ public class ProductDetailActivity extends BaseActivity {
     private void addToCart() {
         double quantity = 1.0;
         Date cartCreatedDate = GregorianCalendar.getInstance().getTime();
-        String createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cartCreatedDate);
+        String createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(cartCreatedDate);
 
         Cart cart = new Cart(selectedProduct.getId(), quantity, createdOn);
 

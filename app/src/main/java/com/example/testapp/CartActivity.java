@@ -81,7 +81,6 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                     if(response.body().getCarts().isEmpty()) {
                         cartRecyclerView.setVisibility(View.GONE);
                         emptyCartTextView.setVisibility(View.VISIBLE);
-                        return;
                     }
 
                     int startPosition = carts.size();
