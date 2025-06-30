@@ -26,6 +26,7 @@ import com.example.testapp.interfaces.KhaltiAPI;
 import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.OrderItem;
+import com.example.testapp.models.Payment;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.Product;
@@ -112,7 +113,6 @@ public class BuyProductActivity extends BaseActivity {
         Glide.with(getApplicationContext())
             .load(product.getImage())
             .centerCrop()
-            .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
             .into(productImage);
 
         TextView productName = findViewById(R.id.product_name_tv);
@@ -217,10 +217,14 @@ public class BuyProductActivity extends BaseActivity {
 
     private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
 
-        Order order = new Order(getCurrentUser(), deliveryLocation, deliveryCharge);
+        Payment payment = new Payment(paymentMethod);
+
+        Order order = new Order(getCurrentUser(), deliveryLocation, deliveryCharge, payment);
+        order.setPaymentMethod(paymentMethod);
+
         List<OrderItem> orderItems = new ArrayList<>();
 
-        OrderItem detail = new OrderItem(order, product, quantity);
+        OrderItem detail = new OrderItem(order, product, quantity, 0.0); // discount 0 for now
         orderItems.add(detail);
 
         order.setOrderItems(orderItems);
@@ -232,7 +236,7 @@ public class BuyProductActivity extends BaseActivity {
             @Override
             public void onResponse(Call<OrderResponses.SingleOrderResponse> call, Response<OrderResponses.SingleOrderResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    Log.d("Create Order", "onResponse: " + response.body().getOrder().getOrderFulfilledDate());
+                    Log.d("Create Order", "onResponse: " + response.body().getOrder().getId());
                     Order orderResp = response.body().getOrder();
                     if (paymentMethod.equals(PaymentMethod.ESEWA)) {
                         createEsewaPayment(orderResp);
@@ -256,7 +260,6 @@ public class BuyProductActivity extends BaseActivity {
                 Log.d("Create Order", "onFailure: " + t.getMessage());
             }
         });
-        Log.d("Create Order", "inside createOrder: api call done:");
     }
 
     private void createEsewaPayment(Order orderRes) {
@@ -280,15 +283,16 @@ public class BuyProductActivity extends BaseActivity {
                     String khaltiPidx = responseBody.get("pidx").getAsString();
                     Log.d("Khalti Payment", "onResponse: khaltiPidx " + khaltiPidx);
 
-                    Khalti khalti = KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, khaltiPidx);
+                    Khalti khalti = KhaltiPaymentGateway.makeKhaltiPayment(BuyProductActivity.this, khaltiPidx, getUserToken());
                     khalti.open();
                 } else {
                     try {
                         Log.d("Create Payment Khalti", "onResponse: "+response.errorBody().string());
                     } catch (IOException | NullPointerException e) {
-                        Intent intent = new Intent(BuyProductActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(BuyProductActivity.this, ProfileActivity.class);
+//                        startActivity(intent);
+//                        finish();
+                        Log.d("Khalti Payment", "onResponse: " + e.getMessage());
                     }
                 }
             }

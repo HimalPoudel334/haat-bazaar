@@ -30,6 +30,7 @@ import com.example.testapp.R;
 import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
+import com.example.testapp.models.Payment;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderItem;
@@ -226,11 +227,11 @@ public class BuyProductFragment extends BottomSheetDialogFragment {
         Log.d("Create Order", "inside createOrder:");
 
         User user = AuthManager.getInstance().getCurrentUser();
-
-        Order order = new Order(user, deliveryLocation, deliveryCharge);
+        Payment payment = new Payment("Cash"); //for now
+        Order order = new Order(user, deliveryLocation, deliveryCharge, payment);
         List<OrderItem> OrderItems = new ArrayList<>();
 
-        OrderItem detail = new OrderItem(order, product, quantity);
+        OrderItem detail = new OrderItem(order, product, quantity, 0.0);
         OrderItems.add(detail);
 
         order.setOrderItems(OrderItems);

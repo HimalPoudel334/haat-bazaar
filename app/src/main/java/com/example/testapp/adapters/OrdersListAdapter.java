@@ -61,6 +61,7 @@ public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.Vi
 
         holder.orderDetailsButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, OrderDetailActivity.class);
+            Log.d("OrderListAdapter", "onBindViewHolder: order id: " + newOrderList.get(position).getId());
             intent.putExtra("orderId", newOrderList.get(position).getId());
             context.startActivity(intent);
         });

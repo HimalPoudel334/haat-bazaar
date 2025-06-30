@@ -55,8 +55,8 @@ public class OrderListActivity extends BaseActivity {
 
     private void fetchNewOrders() {
         Calendar calendar = GregorianCalendar.getInstance(); // Or just Calendar.getInstance();
+        calendar.add(Calendar.DATE, 1);
         String finalDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(calendar.getTime());
-
         calendar.add(Calendar.MONTH, -1);
         String initDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(calendar.getTime()); // before 1 months
 

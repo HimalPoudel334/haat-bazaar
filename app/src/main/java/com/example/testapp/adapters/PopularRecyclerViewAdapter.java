@@ -44,7 +44,7 @@ public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecy
         Glide.with(popularImageContext)
                 .load(popularProducts.get(position).getImageUrl())
                 .centerCrop()
-                .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
+//                .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
                 .into(holder.popularImage);
 
         //load titles

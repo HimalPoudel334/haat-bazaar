@@ -44,7 +44,7 @@
             android:name=".OrderListActivity"
             android:exported="false" />
         <activity
-            android:name=".OrderItemActivity"
+            android:name=".OrderDetailActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity

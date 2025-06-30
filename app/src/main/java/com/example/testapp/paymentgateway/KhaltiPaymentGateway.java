@@ -35,17 +35,17 @@ public class KhaltiPaymentGateway {
         return config;
     }
 
-    public static Khalti makeKhaltiPayment(Context context, String pidx) {
+    public static Khalti makeKhaltiPayment(Context context, String pidx, String userToken) {
         Log.d("TAG", "makeKhaltiPayment: "+pidx);
         return Khalti.Companion.init(context, getKhaltiPayConfig(pidx),
             (paymentResult, khalti) -> {
                 Log.i("Demo | onPaymentResult", paymentResult.toString());
 
                 //call backed api to once again confirm payment and create payment
-                confirmPayment(paymentResult.getPayload().getPidx(), paymentResult.getPayload().getPurchaseOrderId()); //purchaseOrderId is actually OrderId
+                confirmPayment(paymentResult.getPayload().getPidx(), paymentResult.getPayload().getPurchaseOrderId(), userToken); //purchaseOrderId is actually OrderId
 
                 khalti.close();
-                Toast.makeText(context, "Khalti Payment Successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Khalti Payment Successful", Toast.LENGTH_LONG).show();
             },
             (payload, khalti) -> {
                 String logMessage = "Demo | onMessage " +
@@ -67,9 +67,9 @@ public class KhaltiPaymentGateway {
         );
     }
 
-    private static void confirmPayment(String pidx, String orderId) {
+    private static void confirmPayment(String pidx, String orderId, String userToken) {
         KhaltiPayment.KhaltiPaymentConfirmPayload payload = new KhaltiPayment.KhaltiPaymentConfirmPayload(pidx, orderId);
-        KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken()).create(KhaltiAPI.class);
+        KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(userToken).create(KhaltiAPI.class);
         khaltiAPI.verifyPayment(payload).enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {

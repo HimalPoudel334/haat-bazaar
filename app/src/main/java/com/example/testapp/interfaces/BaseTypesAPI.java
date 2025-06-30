@@ -15,6 +15,9 @@ public interface BaseTypesAPI {
     @GET("base-types/shipment-status")
     Call<List<String>> getShipmentStatus();
 
+    @GET("base-types/payment-status")
+    Call<List<String>> getPaymentStatus();
+
     @GET("base-types/payment-method")
     Call<List<String>> getPaymentMethods();
 

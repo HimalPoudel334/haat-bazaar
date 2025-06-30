@@ -46,7 +46,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<HomePageMainRecycle
         Glide.with(context)
             .load(product.getImage())
             .centerCrop()
-            .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
             .into(holder.productImageView);
 
         holder.productTitle.setText(product.getName());

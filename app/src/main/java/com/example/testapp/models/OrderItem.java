@@ -7,13 +7,17 @@ public class OrderItem {
     private Product product;
     //private Order order;
     private double price;
+    private double discount;
+    private double amount;
 
-    public OrderItem(Order order, Product product, double quantity) {
+    public OrderItem(Order order, Product product, double quantity, double discount) {
         this.quantity = quantity;
         this.product = product;
         productId = product.getId();
         //this.order = order;
         price = quantity * product.getPrice();
+        this.discount = discount;
+        this.amount = price - discount;
     }
 
     public OrderItem(Order order, String productId, double quantity) {
@@ -50,5 +54,29 @@ public class OrderItem {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

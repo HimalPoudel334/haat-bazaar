@@ -22,21 +22,30 @@ public class Order {
     private String userId;
     private String deliveryLocation;
     private String deliveryStatus;
+    private String status;
     private double totalPrice = 0.0;
     private double totalQuantity = 0.0;
+    private double totalDiscount = 0.0;
     private double deliveryCharge;
     private String paymentMethod = "Cash";
     private List<OrderItem> orderItems;
+    private Payment payment;
 
-    public Order(User user, String location, double deliveryCharge) {
+    private Shipment shipment;
+    private String invoiceId;
+    private User customer;
+
+    public Order(User user, String location, double deliveryCharge, Payment payment) {
         this.user = user;
         userId = user.getId();
         deliveryStatus = "Pending";
+        status = "Pending";
         deliveryLocation = location;
         this.deliveryCharge = deliveryCharge;
         totalPrice += deliveryCharge;
         Date orderDate = GregorianCalendar.getInstance().getTime();
         createdOn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(orderDate);
+        this.payment = payment;
     }
 
     public String getId() {
@@ -95,6 +104,14 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public double getDeliveryCharge() {
         return deliveryCharge;
     }
@@ -112,6 +129,7 @@ public class Order {
         orderItems.forEach(od -> {
             totalPrice += od.getPrice();
             totalQuantity += od.getQuantity();
+            totalDiscount += od.getDiscount();
         });
     }
 
@@ -121,6 +139,15 @@ public class Order {
 
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    public double getDiscount() {
+        return this.totalDiscount;
+    }
+
+
+    public double getTotalAmount() {
+        return totalPrice - totalDiscount;
     }
 
     public void setTotalPrice(double totalPrice) {
@@ -143,6 +170,34 @@ public class Order {
             orderItems.add(detail);
         }
         totalPrice += detail.getPrice();
+    }
+
+    public Shipment getShipment() {
+        return shipment;
+    }
+
+    public void setShipment(Shipment shipment) {
+        this.shipment = shipment;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public User getCustomer() {
+        return customer;
     }
 
     public String getOrderStatusBgColor() {

@@ -108,7 +108,6 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 Glide.with(homePageContext)
                         .load(normalProduct.getImage())
                         .centerCrop()
-                        .signature(new ObjectKey(System.currentTimeMillis())) // unique key to break cache
                         .into(normalProductViewHolder.productImageView);
 
                 normalProductViewHolder.productTitle.setText(normalProduct.getName());

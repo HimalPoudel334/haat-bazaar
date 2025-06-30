@@ -6,8 +6,13 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class Payment implements Parcelable {
-    private String id, paymentMethod, paymentDate, userId, orderId, transactionId;
+    private String id, paymentMethod, paymentDate, userId, orderId, transactionId, status;
     private double amount, tendered, change;
+
+    public Payment(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+        this.status = "Pending";
+    }
 
     protected Payment(Parcel in) {
         id = in.readString();
@@ -19,6 +24,7 @@ public class Payment implements Parcelable {
         amount = in.readDouble();
         tendered = in.readDouble();
         change = in.readDouble();
+        status = in.readString();
     }
 
     public static final Creator<Payment> CREATOR = new Creator<Payment>() {
@@ -69,6 +75,9 @@ public class Payment implements Parcelable {
         return change;
     }
 
+    public String getStatus() {
+        return status;
+    }
 
     @Override
     public int describeContents() {
@@ -86,5 +95,6 @@ public class Payment implements Parcelable {
         parcel.writeDouble(amount);
         parcel.writeDouble(tendered);
         parcel.writeDouble(change);
+        parcel.writeString(status);
     }
 }

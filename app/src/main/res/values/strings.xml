@@ -114,4 +114,15 @@
     <string name="price_information">Price Information</string>
     <string name="fulfill_order">Fulfill Order</string>
     <string name="shipment_details">Shipment Details</string>
+    <string name="transaction_id_n_a">Transaction Id: N/A</string>
+    <string name="payment_status_n_a">Payment Status: N/A</string>
+    <string name="pay_amount_n_a">Pay Amount: N/A</string>
+    <string name="shipment_id_n_a">Shipment Id: N/A</string>
+    <string name="shipment_status_n_a">Shipment Status: N/A</string>
+    <string name="shipment_date_n_a">Shipment Date: N/A</string>
+    <string name="shipmentaddress_n_a">ShipmentAddress: N/A</string>
+    <string name="delivery_status">"Delivery Status: "</string>
+    <string name="order_status">"Order Status: "</string>
+    <string name="shipment_status">"Shipment Status: "</string>
+    <string name="payment_status">"Payment Status: "</string>
 </resources>

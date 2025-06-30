@@ -19,6 +19,7 @@ import com.example.testapp.interfaces.UserAPI;
 import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
+import com.example.testapp.models.Payment;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderItem;
@@ -139,8 +140,11 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
             totalChargeTv.setText(String.format(": Rs %s", totalCharge[0] + DELIVERY_CHARGE));
 
             buttonCheckout.setOnClickListener(v -> {
+
+                Payment payment = new Payment("Cash"); //for now
+
                 List<OrderItem> OrderItems = new ArrayList<>();
-                Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100.0);
+                Order order = new Order(getCurrentUser(), getCurrentUser().getLocation(), 100.0, payment);
                 for(Cart c : selectedCarts) {
                     OrderItem detail = new OrderItem(order, c.getProductId(), c.getQuantity());
                     detail.setPrice(c.getQuantity() * c.getRate());

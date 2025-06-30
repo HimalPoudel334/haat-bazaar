@@ -63,8 +63,8 @@ public class OrderResponses {
         private String deliveryLocation;
         private double deliveryCharge;
         private String deliveryStatus;
-        private String productName;
-        private String productImage;
+        private String name;
+        private String image;
         private double quantity;
         private String unit;
         private String status;
@@ -119,15 +119,15 @@ public class OrderResponses {
         }
 
         public String getProductName() {
-            return productName;
+            return name;
         }
 
         public void setProductName(String productName) {
-            this.productName = productName;
+            this.name = productName;
         }
 
         public String getProductImage() {
-            String processedImage = productImage;
+            String processedImage = image;
 
             if (processedImage != null && processedImage.startsWith("/")) {
                 processedImage = processedImage.substring(1);
@@ -136,7 +136,7 @@ public class OrderResponses {
             return RetrofitClient.BASE_URL + processedImage;
         }
         public void setProductImage(String productImage) {
-            this.productImage = productImage;
+            this.image = productImage;
         }
 
         public double getQuantity() {
