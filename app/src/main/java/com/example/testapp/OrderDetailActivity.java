@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,13 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.OrderItemListAdapter;
 import com.example.testapp.helpers.BaseTypeHelper;
-import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.models.Order;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.OrderResponses;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,8 +155,10 @@ public class OrderDetailActivity extends BaseActivity {
                             fetchShipmentStatuses(
                                     order.getShipment() != null ? order.getShipment().getStatus() : null
                             );
-                            if (order.getPayment() != null) {
+                            if (order.getPayment() != null && Objects.equals(order.getPayment().getStatus(), "Completed")) {
                                 paymentStatusSpinner.setSelection(paymentStatusAdapter.getPosition(order.getPayment().getStatus()));
+                                paymentStatusSpinner.setEnabled(false);
+                                paymentStatusSaveBtn.setEnabled(false);
                             }
 
 
@@ -184,8 +186,8 @@ public class OrderDetailActivity extends BaseActivity {
         deliveryLocationTv.setText(String.format(Locale.ENGLISH, "Delivery Location: %s", order.getDeliveryLocation()));
         deliveryStatusTv.setText(R.string.delivery_status);
         orderStatusTv.setText(R.string.order_status);
-        paymentMethodTv.setText(String.format(Locale.ENGLISH, "Payment Method: %s", order.getPaymentMethod() == null ? "N/A" : order.getPaymentMethod()));
         if (order.getPayment() != null) {
+            paymentMethodTv.setText(String.format(Locale.ENGLISH, "Payment Method: %s", order.getPayment().getPaymentMethod()));
             transactionIdTv.setText(String.format(Locale.ENGLISH, "Transaction Id: %s", order.getPayment().getTransactionId()));
             paymentStatusTv.setText(R.string.payment_status);
             payAmountTv.setText(String.format(Locale.ENGLISH, "Pay Amount: %s", order.getPayment().getAmount()));

@@ -1,16 +1,15 @@
 package com.example.testapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.R;
+import com.example.testapp.interfaces.CategoryChipClickListener;
 import com.example.testapp.models.Category;
 import com.google.android.material.chip.Chip;
 
@@ -19,12 +18,11 @@ import java.util.List;
 public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<CategoriesRecyclerViewAdapter.ViewHolder> {
 
     private final List<Category> categories;
-    private final Context categoriesContext;
+    private final CategoryChipClickListener listener;
 
-    public CategoriesRecyclerViewAdapter(List<Category> categories, Context categoriesContext) {
+    public CategoriesRecyclerViewAdapter(List<Category> categories, Context context, CategoryChipClickListener listener) {
         this.categories = categories;
-        Log.d("Inside adapter", "CategoriesRecyclerViewAdapter: "+categories.size());
-        this.categoriesContext = categoriesContext;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,7 +40,8 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<Categori
 
         //set click listener
         holder.categoryChip.setOnClickListener(view -> {
-            Toast.makeText(categoriesContext, String.format("%s clicked", categories.get(position).getName()), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(categoriesContext, String.format("%s clicked", categories.get(position).getName()), Toast.LENGTH_SHORT).show();
+            listener.onCategoryClick(categories.get(position).getId());
         });
     }
 

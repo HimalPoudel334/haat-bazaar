@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.OrdersListAdapter;
-import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.OrderResponses;
 
@@ -27,7 +26,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class OrderListActivity extends BaseActivity {
 

@@ -2,7 +2,8 @@ package com.example.testapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +17,10 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.testapp.adapters.CategoriesRecyclerViewAdapter;
 import com.example.testapp.adapters.HomePageMainRecyclerViewAdapter;
-import com.example.testapp.interfaces.CategoryAPI;
-import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.apis.CategoryAPI;
+import com.example.testapp.apis.ProductAPI;
+import com.example.testapp.helpers.ProductDiffCallback;
+import com.example.testapp.interfaces.CategoryChipClickListener;
 import com.example.testapp.models.Category;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.PopularProduct;
@@ -26,6 +29,7 @@ import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CategoryResponses;
 import com.example.testapp.responses.ProductResponses;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +38,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CategoryChipClickListener {
 
     HomePageModel homePageModel;
     private final List<Category> categoryList = new ArrayList<>();
     private final List<Product> productList = new ArrayList<>();
+    HomePageMainRecyclerViewAdapter adapter;
+    RecyclerView productRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +77,12 @@ public class MainActivity extends BaseActivity {
         popularProducts.add(new PopularProduct("https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80", "An Animal"));
         popularProducts.add(new PopularProduct("https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80", "from flutter 3"));
 
-        ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
-        productAPI.getProducts().enqueue(new Callback<ProductResponses.MultipleProductResonse>() {
-            @Override
-            public void onResponse(Call<ProductResponses.MultipleProductResonse> call, Response<ProductResponses.MultipleProductResonse> response) {
-                if(response.body() != null)
-                    productList.addAll(response.body().getProducts());
-            }
-
-            @Override
-            public void onFailure(Call<ProductResponses.MultipleProductResonse> call, Throwable t) {
-                Log.e("ProductsGet", "Error while reading products", t);
-            }
-        });
+        getAllProducts(null);
 
         homePageModel = new HomePageModel(productList, popularProducts, dealsList);
-        HomePageMainRecyclerViewAdapter adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
+        adapter = new HomePageMainRecyclerViewAdapter(homePageModel, this);
         GridLayoutManager gridLayoutManager = getGridLayoutManager(adapter);
-        RecyclerView productRecyclerView = findViewById(R.id.home_page_main_rv);
+        productRecyclerView = findViewById(R.id.home_page_main_rv);
         productRecyclerView.setLayoutManager(gridLayoutManager);
         productRecyclerView.setAdapter(adapter);
     }
@@ -112,7 +106,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initCategoriesRecyclerView() {
-        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoryList, this);
+        CategoriesRecyclerViewAdapter adapter = new CategoriesRecyclerViewAdapter(categoryList, this, this);
 
 
         Retrofit retrofit = RetrofitClient.getClient();
@@ -121,8 +115,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onResponse(Call<CategoryResponses.MultiCategoryResponse> call, Response<CategoryResponses.MultiCategoryResponse> response) {
                 if (response.body() != null) {
+                    // clear the list first
+                    categoryList.clear();
+
                     // Add "Home" category to the list at position 0
-                    categoryList.add(0, new Category("home", "Home"));
+                    categoryList.add(0, new Category(null, "Home"));
                     adapter.notifyItemInserted(0);
 
                     // Add remaining categories from the response
@@ -147,6 +144,33 @@ public class MainActivity extends BaseActivity {
         categoriesRecyclerView.setAdapter(adapter);
 
     }
+
+    private void getAllProducts(String categoryId) {
+        Log.d("Main Activity", "onCategoryClick: category id is " + categoryId);
+
+        ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
+        productAPI.getProducts(categoryId).enqueue(new Callback<ProductResponses.MultipleProductResonse>() {
+            @Override
+            public void onResponse(Call<ProductResponses.MultipleProductResonse> call, Response<ProductResponses.MultipleProductResonse> response) {
+                if(response.body() != null) {
+                    adapter.updateNormalProducts(response.body().getProducts());
+                } else {
+                    try {
+                        Log.e("ProductsGet", "Error while reading products" + response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponses.MultipleProductResonse> call, Throwable t) {
+                Log.e("ProductsGet", "Error while reading products", t);
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -187,5 +211,10 @@ public class MainActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCategoryClick(String categoryId) {
+        getAllProducts(categoryId);
     }
 }

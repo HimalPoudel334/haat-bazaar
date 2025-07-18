@@ -4,24 +4,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.EntityAdapter;
-import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.models.Entity;
-import com.example.testapp.models.Order;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.OrderResponses;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;

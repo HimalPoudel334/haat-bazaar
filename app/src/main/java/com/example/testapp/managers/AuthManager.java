@@ -24,7 +24,8 @@ public class AuthManager {
 
     private static final String PREF_NAME = "auth_prefs";
     private static final String KEY_ID = "user_id";
-    private static final String KEY_TOKEN = "auth_token";
+    private static final String KEY_ACCESS_TOKEN = "access_token";
+    private static final String KEY_REFRESH_TOKEN = "refresh_token";
     private static final String KEY_FIRST_NAME = "first_name";
     private static final String KEY_LAST_NAME = "last_name";
     private static final String KEY_EMAIL = "email";
@@ -32,10 +33,11 @@ public class AuthManager {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_USER_LOCATION = "user_location";
     private static final String KEY_USER_TYPE = "user_type";
+    private static final String KEY_NEAREST_LANDMARK = "nearest_landmark";
 
     private static AuthManager instance;
     private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences.Editor editor;
 
     private User currentUser;
 
@@ -85,13 +87,15 @@ public class AuthManager {
         String username = prefs.getString(KEY_USERNAME, "");
         String userLocation = prefs.getString(KEY_USER_LOCATION, "");
         String userType = prefs.getString(KEY_USER_TYPE, "GUEST");
+        String nearestLandmark = prefs.getString(KEY_NEAREST_LANDMARK, "");
 
-        return new User(id, firstName, lastName, phone, email, username, userLocation, userType);
+        return new User(id, firstName, lastName, phone, email, username, userLocation, userType, nearestLandmark);
     }
 
     // Save after login
-    public void saveUser(String token) {
-        editor.putString(KEY_TOKEN, token);
+    public void saveUserTokens(String accessToken, String refreshToken) {
+        editor.putString(KEY_ACCESS_TOKEN, accessToken);
+        editor.putString(KEY_REFRESH_TOKEN, refreshToken);
         editor.apply();
     }
 
@@ -105,6 +109,7 @@ public class AuthManager {
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putString(KEY_USER_TYPE, user.getUserType());
         editor.putString(KEY_USER_LOCATION, user.getLocation());
+        editor.putString(KEY_NEAREST_LANDMARK, user.getNearestLandmark());
         editor.apply();
 
         this.currentUser = user;
@@ -117,8 +122,11 @@ public class AuthManager {
         return currentUser;
     }
 
-    public String getToken() {
-        return prefs.getString(KEY_TOKEN, null);
+    public String getAccessToken() {
+        return prefs.getString(KEY_ACCESS_TOKEN, null);
+    }
+    public String getRefreshToken() {
+        return prefs.getString(KEY_REFRESH_TOKEN, null);
     }
 
     public void logout() {
@@ -128,6 +136,6 @@ public class AuthManager {
     }
 
     public User getGuestUser() {
-        return new User(null, "", "", null, "", "", "", "GUEST");
+        return new User(null, "", "", null, "", "", "", "GUEST", "");
     }
 }

@@ -18,8 +18,8 @@ import com.example.testapp.models.Product;
 import java.util.List;
 
 public class FilteredProductRecyclerViewAdapter extends RecyclerView.Adapter<FilteredProductRecyclerViewAdapter.FilteredProductViewHolder> {
-    private Context context;
-    private List<Product> filteredProductList;
+    private final Context context;
+    private final List<Product> filteredProductList;
 
     public FilteredProductRecyclerViewAdapter(Context context, List<Product> filteredProductList) {
         this.context = context;
@@ -54,7 +54,7 @@ public class FilteredProductRecyclerViewAdapter extends RecyclerView.Adapter<Fil
         return filteredProductList.size();
     }
 
-    public class FilteredProductViewHolder extends RecyclerView.ViewHolder {
+    public static class FilteredProductViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView filteredProductImageView;
         private final TextView filteredProductTitle;

@@ -10,11 +10,10 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.example.testapp.authrequests.LoginRequest;
-import com.example.testapp.interfaces.AuthAPI;
+import com.example.testapp.apis.AuthAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.AuthResponses;
@@ -80,10 +79,9 @@ public class LoginActivity extends BaseActivity {
             public void onResponse(@NonNull Call<AuthResponses.LoginResponse> call, @NonNull Response<AuthResponses.LoginResponse> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     AuthResponses.LoginResponse loginResponse = response.body();
-                    if (loginResponse.getUser() != null && loginResponse.getToken() != null) {
+                    if (loginResponse.getUser() != null && loginResponse.getAccessToken() != null && loginResponse.getRefreshToken() != null) {
                         AuthManager.getInstance().setFullUser(loginResponse.getUser());
-                        AuthManager.getInstance().saveUser(loginResponse.getToken());
-                        Log.d("Login", "onResponse: Token " +loginResponse.getToken());
+                        AuthManager.getInstance().saveUserTokens(loginResponse.getAccessToken(), loginResponse.getRefreshToken());
                         finish();
                     } else {
                         loginResponseTv.setVisibility(View.VISIBLE);

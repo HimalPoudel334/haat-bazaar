@@ -265,7 +265,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs 200"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:id="@+id/total_amount"
@@ -288,7 +287,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:textSize="20sp"
-                    android:text="Payment Options" />
+                    android:text="@string/payment_options" />
 
                 <LinearLayout
                     android:id="@+id/payment_options_layout"
@@ -299,25 +298,39 @@
                     android:gravity="center_horizontal">
 
                     <ImageButton
-                        android:contentDescription="Khalti"
+                        android:contentDescription="@string/khalti"
                         tools:ignore="ButtonStyle"
                         android:id="@+id/button_khalti"
-                        android:layout_width="180dp"
+                        android:layout_width="0dp"
                         android:layout_height="80dp"
+                        android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/khalti_logo" />
 
                     <ImageButton
-                        android:contentDescription="Esewa"
+                        android:contentDescription="@string/esewa"
                         tools:ignore="ButtonStyle"
                         android:id="@+id/button_esewa"
-                        android:layout_width="180dp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="80dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="5dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/esewa_logo" />
+
+                    <ImageButton
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/button_cod"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/cod"
+                        android:contentDescription="Cash On Delivery"
+                        />
 
                 </LinearLayout>
 

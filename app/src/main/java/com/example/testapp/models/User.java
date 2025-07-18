@@ -12,8 +12,9 @@ public class User {
     private String username;
     private String userType;
     private String location;
+    private String nearestLandmark;
 
-    public User(String id, String firstName, String lastName, String phoneNumber, String email, String username, String location, String userType) {
+    public User(String id, String firstName, String lastName, String phoneNumber, String email, String username, String location, String userType, String nearestLandmark) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,6 +23,7 @@ public class User {
         this.username = username;
         this.location = location;
         this.userType = userType;
+        this.nearestLandmark = nearestLandmark;
     }
 
     public User() {
@@ -33,6 +35,7 @@ public class User {
         this.username = null;
         this.location = null;
         this.userType = "GUEST";
+        this.nearestLandmark = null;
     }
 
     public String getPhoneNumber() {
@@ -104,5 +107,17 @@ public class User {
 
     public void setLocation(Location location) {
         this.location = location.toString();
+    }
+
+    public String getNearestLandmark() {
+        return nearestLandmark;
+    }
+
+    public void setNearestLandmark(String nearestLandmark) {
+        this.nearestLandmark = nearestLandmark;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

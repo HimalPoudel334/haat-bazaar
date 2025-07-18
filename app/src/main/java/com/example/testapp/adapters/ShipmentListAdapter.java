@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class ShipmentListAdapter extends RecyclerView.Adapter<ShipmentListAdapter.ViewHolder> {
 
-    private List<Shipment> shipments;
+    private final List<Shipment> shipments;
     private final Context context;
     public ShipmentListAdapter(Context context, List<Shipment> shipments) {
         this.shipments = shipments;
@@ -42,9 +42,7 @@ public class ShipmentListAdapter extends RecyclerView.Adapter<ShipmentListAdapte
         holder.deliveryAssignedTv.setText(String.format(Locale.ENGLISH, "Assigned to: %s", shipment.getAssignedUserName()));
         holder.statusTv.setText(String.format(Locale.ENGLISH, "Status: %s", shipment.getStatus()));
 
-        holder.editButton.setOnClickListener(v -> {
-            Toast.makeText(context,"Edit button clicked", Toast.LENGTH_SHORT).show();
-        });
+        holder.editButton.setOnClickListener(v -> Toast.makeText(context,"Edit button clicked", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -54,8 +52,8 @@ public class ShipmentListAdapter extends RecyclerView.Adapter<ShipmentListAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView deliveryLocationTv, shpDateTv, deliveryAssignedTv, statusTv;
-        private Button editButton;
+        private final TextView deliveryLocationTv, shpDateTv, deliveryAssignedTv, statusTv;
+        private final Button editButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

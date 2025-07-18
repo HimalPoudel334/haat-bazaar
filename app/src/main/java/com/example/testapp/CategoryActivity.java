@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.CategoryListAdapter;
-import com.example.testapp.interfaces.CategoryAPI;
+import com.example.testapp.apis.CategoryAPI;
 import com.example.testapp.models.Category;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CategoryResponses;

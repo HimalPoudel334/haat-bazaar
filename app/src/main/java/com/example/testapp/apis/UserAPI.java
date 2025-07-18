@@ -1,4 +1,4 @@
-package com.example.testapp.interfaces;
+package com.example.testapp.apis;
 
 import com.example.testapp.responses.UserResponses;
 
@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface UserAPI {
-    @GET("users")
+    @GET("admin/users")
     Call<UserResponses.MultiUserResponse> getUsers();
 
     @GET("users/{userId}")

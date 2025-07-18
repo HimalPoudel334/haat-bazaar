@@ -79,6 +79,10 @@ public class Payment implements Parcelable {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int describeContents() {
         return 0;

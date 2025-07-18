@@ -4,8 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.testapp.interfaces.KhaltiAPI;
-import com.example.testapp.managers.AuthManager;
+import com.example.testapp.apis.KhaltiAPI;
 import com.example.testapp.models.KhaltiPayment;
 import com.example.testapp.network.RetrofitClient;
 import com.google.gson.JsonElement;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class KhaltiPaymentGateway {
     public static final String TEST_SECRET_KEY = "test_secret_key_471495ae440c4ee1809f7ae9720da619";
@@ -42,7 +40,7 @@ public class KhaltiPaymentGateway {
                 Log.i("Demo | onPaymentResult", paymentResult.toString());
 
                 //call backed api to once again confirm payment and create payment
-                confirmPayment(paymentResult.getPayload().getPidx(), paymentResult.getPayload().getPurchaseOrderId(), userToken); //purchaseOrderId is actually OrderId
+//                confirmPayment(paymentResult.getPayload().getPidx(), paymentResult.getPayload().getPurchaseOrderId(), userToken); //purchaseOrderId is actually OrderId
 
                 khalti.close();
                 Toast.makeText(context, "Khalti Payment Successful", Toast.LENGTH_LONG).show();
@@ -62,7 +60,7 @@ public class KhaltiPaymentGateway {
             },
             khalti -> {
                 Log.i("Demo | onReturn", "OnReturn");
-                Toast.makeText(context, "onReturn Khalti Payment failed: ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "onReturn Khalti Payment failed: ", Toast.LENGTH_LONG).show();
             }
         );
     }

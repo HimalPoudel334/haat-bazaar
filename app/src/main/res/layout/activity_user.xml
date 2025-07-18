@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PaymentActivity">
+    tools:context=".UserActivity">
 
     <include
         layout="@layout/activity_base"
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_below="@id/custom_toolbar"
-        android:id="@+id/payment_list_rv"
+        android:id="@+id/user_list_rv"
         />
 
 </RelativeLayout>

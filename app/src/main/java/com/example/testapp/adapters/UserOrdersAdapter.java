@@ -19,11 +19,9 @@ import java.util.List;
 
 public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Order> orderList;
+    private final List<Order> orderList;
 
     public UserOrdersAdapter(Context context, List<Order> orderList) {
-        this.context = context;
         this.orderList = orderList;
     }
 
@@ -64,7 +62,7 @@ public class UserOrdersAdapter extends RecyclerView.Adapter<UserOrdersAdapter.Vi
         return orderList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView orderDateTv, orderProductNameTv, orderPriceTv, orderQuantityTv, orderStatusTv, orderDeliveryDateTv, orderDeliveryLocationTv;
         Button orderCancelButton, OrderItemsButton;
         public ViewHolder(@NonNull View itemView) {

@@ -5,22 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.testapp.helpers.BaseTypeHelper;
 import com.example.testapp.helpers.ImagePickerHelper;
-import com.example.testapp.interfaces.CategoryAPI;
-import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.apis.CategoryAPI;
+import com.example.testapp.apis.ProductAPI;
 import com.example.testapp.models.Category;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
@@ -151,6 +149,7 @@ public class AddProductActivity extends BaseActivity {
                         finish();
                     } else {
                         try {
+                            Toast.makeText(AddProductActivity.this, "Error adding product: " +response.message(), Toast.LENGTH_SHORT).show();
                             Log.d("Add Product", "onResponse: " + response.message() + ": " + response.errorBody().string());
                         } catch (IOException e) {
                             throw new RuntimeException(e);

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.ObjectKey;
 import com.example.testapp.R;
 import com.example.testapp.models.PopularProduct;
 
@@ -21,8 +20,8 @@ import java.util.List;
 public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecyclerViewAdapter.ViewHolder>{
 
     //variables
-    private List<PopularProduct> popularProducts;
-    private Context popularImageContext;
+    private final List<PopularProduct> popularProducts;
+    private final Context popularImageContext;
 
     public PopularRecyclerViewAdapter(Context popularImageContext, List<PopularProduct> popularProducts) {
         this.popularProducts = popularProducts;
@@ -51,9 +50,7 @@ public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecy
         holder.productTitle.setText(popularProducts.get(position).getImageTitle());
 
         //set click listener
-        holder.popularImage.setOnClickListener(view -> {
-            Toast.makeText(popularImageContext, String.format("%s clicked", popularProducts.get(position).getImageTitle()), Toast.LENGTH_SHORT).show();
-        });
+        holder.popularImage.setOnClickListener(view -> Toast.makeText(popularImageContext, String.format("%s clicked", popularProducts.get(position).getImageTitle()), Toast.LENGTH_SHORT).show());
 
     }
 
@@ -62,7 +59,7 @@ public class PopularRecyclerViewAdapter extends RecyclerView.Adapter<PopularRecy
         return popularProducts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView popularImage;
         TextView productTitle;

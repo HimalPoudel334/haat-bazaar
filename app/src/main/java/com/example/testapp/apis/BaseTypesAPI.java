@@ -1,4 +1,4 @@
-package com.example.testapp.interfaces;
+package com.example.testapp.apis;
 
 import java.util.List;
 

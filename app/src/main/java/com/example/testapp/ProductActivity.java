@@ -7,7 +7,6 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.ProductListAdapter;
-import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.apis.ProductAPI;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.ProductResponses;
@@ -81,12 +80,10 @@ public class ProductActivity extends BaseActivity {
     }
 
     private void setupMainContent() {
-
-
         RetrofitClient
             .getAuthClient(getUserToken())
             .create(ProductAPI.class)
-            .getProducts()
+            .getProducts(null) //for now
             .enqueue(new Callback<ProductResponses.MultipleProductResonse>() {
                 @Override
                 public void onResponse(Call<ProductResponses.MultipleProductResonse> call, Response<ProductResponses.MultipleProductResonse> response) {

@@ -1,8 +1,6 @@
-package com.example.testapp.interfaces;
+package com.example.testapp.apis;
 
 import com.example.testapp.models.KhaltiPayment;
-import com.example.testapp.models.Order;
-import com.example.testapp.responses.KhaltiResponses;
 import com.google.gson.JsonElement;
 
 import retrofit2.Call;

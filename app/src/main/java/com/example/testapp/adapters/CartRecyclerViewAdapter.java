@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.testapp.ProductDetailActivity;
 import com.example.testapp.R;
-import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.apis.ProductAPI;
 import com.example.testapp.models.Cart;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.ProductResponses;
@@ -27,7 +27,6 @@ import com.example.testapp.responses.ProductResponses;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;

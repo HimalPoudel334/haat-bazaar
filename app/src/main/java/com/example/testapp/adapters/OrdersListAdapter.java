@@ -2,7 +2,6 @@ package com.example.testapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.testapp.OrderDetailActivity;
 import com.example.testapp.R;
-import com.example.testapp.models.Order;
 import com.example.testapp.responses.OrderResponses;
 
 import java.util.List;
@@ -25,8 +23,8 @@ import java.util.Locale;
 
 public class OrdersListAdapter extends RecyclerView.Adapter<OrdersListAdapter.ViewHolder> {
 
-    private List<OrderResponses.AllOrder> newOrderList;
-    private Context context;
+    private final List<OrderResponses.AllOrder> newOrderList;
+    private final Context context;
 
     public OrdersListAdapter(List<OrderResponses.AllOrder> newOrderList, Context context) {
         this.newOrderList = newOrderList;

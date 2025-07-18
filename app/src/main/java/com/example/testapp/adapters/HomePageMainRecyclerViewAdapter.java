@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +12,21 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.ObjectKey;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.example.testapp.ProductDetailActivity;
 import com.example.testapp.R;
 import com.example.testapp.models.HomePageModel;
 import com.example.testapp.models.Product;
-import com.example.testapp.network.RetrofitClient;
 
-import java.util.Objects;
+import org.jetbrains.annotations.Contract;
+
+import java.util.List;
 
 public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //views
@@ -174,4 +175,64 @@ public class HomePageMainRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             productCardView = itemView.findViewById(R.id.product_card);
         }
     }
+
+    public void updateNormalProducts(List<Product> newProducts) {
+        DiffUtil.Callback diffCallback = getDiffCallback(newProducts);
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        homePageModel.getNormalProductsList().clear();
+        homePageModel.setNormalProductsList(newProducts);
+
+        diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position + NO_OF_CUSTOM_LAYOUT, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position + NO_OF_CUSTOM_LAYOUT, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition + NO_OF_CUSTOM_LAYOUT, toPosition + NO_OF_CUSTOM_LAYOUT);
+            }
+
+            @Override
+            public void onChanged(int position, int count, Object payload) {
+                notifyItemRangeChanged(position + NO_OF_CUSTOM_LAYOUT, count, payload);
+            }
+        });
+    }
+
+    @NonNull
+    @Contract("_ -> new")
+    private DiffUtil.Callback getDiffCallback(List<Product> newProducts) {
+        List<Product> oldProducts = homePageModel.getNormalProductsList();
+
+        return new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return oldProducts.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newProducts.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return oldProducts.get(oldItemPosition).getId().equals(newProducts.get(newItemPosition).getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return oldProducts.get(oldItemPosition).equals(newProducts.get(newItemPosition));
+            }
+        };
+    }
+
 }

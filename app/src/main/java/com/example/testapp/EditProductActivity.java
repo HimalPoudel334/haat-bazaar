@@ -1,15 +1,9 @@
 package com.example.testapp;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +15,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,21 +23,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.testapp.helpers.BaseTypeHelper;
 import com.example.testapp.helpers.ImagePickerHelper;
-import com.example.testapp.interfaces.BaseTypesAPI;
-import com.example.testapp.interfaces.CategoryAPI;
-import com.example.testapp.interfaces.ProductAPI;
+import com.example.testapp.apis.CategoryAPI;
+import com.example.testapp.apis.ProductAPI;
 import com.example.testapp.models.Category;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CategoryResponses;
 import com.example.testapp.responses.ProductResponses;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;

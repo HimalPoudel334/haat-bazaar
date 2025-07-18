@@ -56,7 +56,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public String getUserToken() {
-        return AuthManager.getInstance().getToken();
+        return AuthManager.getInstance().getAccessToken();
     }
     public String getCurrentUserId() {
         return getCurrentUser().getId();

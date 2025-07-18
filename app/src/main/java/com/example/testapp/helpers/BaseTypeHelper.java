@@ -1,12 +1,8 @@
 package com.example.testapp.helpers;
 
-import android.util.Log;
-
-import com.example.testapp.interfaces.BaseTypesAPI;
+import com.example.testapp.apis.BaseTypesAPI;
 import com.example.testapp.network.RetrofitClient;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

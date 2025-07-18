@@ -18,8 +18,8 @@ import java.util.List;
 
 public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.ViewHolder> {
 
-    private List<OrderItem> orderItems;
-    private Context context;
+    private final List<OrderItem> orderItems;
+    private final Context context;
 
     public OrderItemListAdapter(List<OrderItem> orderItems, Context context) {
         this.orderItems = orderItems;
@@ -54,8 +54,8 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView imageView;
-        private TextView productNameTv, priceTv, quantityTv, discountTv, amountTv;
+        private final ImageView imageView;
+        private final TextView productNameTv, priceTv, quantityTv, discountTv, amountTv;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

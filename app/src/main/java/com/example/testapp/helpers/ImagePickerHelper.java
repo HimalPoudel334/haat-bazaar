@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -148,21 +149,25 @@ public class ImagePickerHelper {
     }
 
     private File getFileFromUri(Uri uri) throws IOException {
-        InputStream inputStream = activity.getContentResolver().openInputStream(uri);
-        File file = File.createTempFile("upload_", ".jpg", activity.getCacheDir());
-        FileOutputStream outputStream = new FileOutputStream(file);
-        byte[] buffer = new byte[4096];
-        int read;
-        if (inputStream != null) {
-            while ((read = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, read);
-            }
-            inputStream.close();
-        }
+        // Decode image from the Uri directly into a Bitmap
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uri);
+
+        // Compress and return the file
+        return compressBitmapToFile(bitmap);
+    }
+
+    private File compressBitmapToFile(Bitmap bitmap) throws IOException {
+        File compressedFile = new File(activity.getCacheDir(), "compressed_upload.jpg");
+
+        FileOutputStream outputStream = new FileOutputStream(compressedFile);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
         outputStream.flush();
         outputStream.close();
-        return file;
+
+        return compressedFile;
     }
+
+
 
     private MultipartBody.Part createImagePart(File file) {
         RequestBody reqBody = RequestBody.create(file, MediaType.parse("image/*"));

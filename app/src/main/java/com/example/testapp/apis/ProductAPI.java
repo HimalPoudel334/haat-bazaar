@@ -1,25 +1,21 @@
-package com.example.testapp.interfaces;
+package com.example.testapp.apis;
 
-import com.example.testapp.models.Product;
 import com.example.testapp.responses.ProductResponses;
-
-import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ProductAPI {
     @GET("products")
-    Call<ProductResponses.MultipleProductResonse> getProducts();
-
+    Call<ProductResponses.MultipleProductResonse> getProducts(@Query("categoryId") String categoryId);
     @GET("products/{productId}")
     Call<ProductResponses.SingleProductResponse> getProduct(@Path("productId") String productId);
 

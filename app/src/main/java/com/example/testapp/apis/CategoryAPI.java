@@ -1,4 +1,4 @@
-package com.example.testapp.interfaces;
+package com.example.testapp.apis;
 
 import com.example.testapp.models.Category;
 import com.example.testapp.responses.CategoryResponses;

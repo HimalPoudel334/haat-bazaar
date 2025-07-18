@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.R;
-import com.example.testapp.interfaces.CategoryAPI;
+import com.example.testapp.apis.CategoryAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Category;
 import com.example.testapp.network.RetrofitClient;
@@ -28,8 +28,8 @@ import retrofit2.Response;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CategoryListViewHolder> {
 
-    private Context context;
-    private List<Category> categories;
+    private final Context context;
+    private final List<Category> categories;
 
     public CategoryListAdapter(Context context, List<Category> categories) {
         this.context = context;
@@ -126,12 +126,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     private void updateCategory(String newName, Category category, int position) {
         RetrofitClient
-            .getAuthClient(AuthManager.getInstance().getToken())
+            .getAuthClient(AuthManager.getInstance().getAccessToken())
             .create(CategoryAPI.class)
             .updateCategory(category.getId(), new Category.CategoryCreate(newName))
             .enqueue(new retrofit2.Callback<CategoryResponses.SingleCategoryResponse>() {
                 @Override
-                public void onResponse(Call<CategoryResponses.SingleCategoryResponse> call, Response<CategoryResponses.SingleCategoryResponse> response) {
+                public void onResponse(@NonNull Call<CategoryResponses.SingleCategoryResponse> call, @NonNull Response<CategoryResponses.SingleCategoryResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         notifyItemChanged(position, response.body().getCategory());
                         Toast.makeText(context, "Category updated successfully", Toast.LENGTH_SHORT).show();
@@ -139,7 +139,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 }
 
                 @Override
-                public void onFailure(Call<CategoryResponses.SingleCategoryResponse> call, Throwable t) {
+                public void onFailure(@NonNull Call<CategoryResponses.SingleCategoryResponse> call, @NonNull Throwable t) {
                     Log.d("Category Edit", "onFailure: " + t.getMessage());
                 }
             });

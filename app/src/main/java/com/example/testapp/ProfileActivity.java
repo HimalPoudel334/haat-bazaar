@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.UserOrdersAdapter;
-import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.User;
 import com.example.testapp.network.RetrofitClient;

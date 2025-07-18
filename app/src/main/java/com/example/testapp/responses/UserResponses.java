@@ -6,26 +6,26 @@ import java.util.List;
 
 public class UserResponses {
     public class SingleUserResponse {
-        private User User;
+        private User user;
 
         public User getUser() {
-            return User;
+            return user;
         }
 
-        public void setUser(User User) {
-            this.User = User;
+        public void setUser(User user) {
+            this.user = user;
         }
     }
 
     public class MultiUserResponse {
-        private List<User> Users;
+        private List<User> users;
 
         public List<User> getUsers() {
-            return Users;
+            return users;
         }
 
-        public void setUsers(List<User> Users) {
-            this.Users = Users;
+        public void setUsers(List<User> users) {
+            this.users = users;
         }
     }
 }

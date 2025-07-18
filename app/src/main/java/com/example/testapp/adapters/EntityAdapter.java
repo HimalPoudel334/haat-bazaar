@@ -1,11 +1,8 @@
 package com.example.testapp.adapters;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.CategoryActivity;
-import com.example.testapp.MainActivity;
 import com.example.testapp.OrderListActivity;
+import com.example.testapp.PaymentActivity;
 import com.example.testapp.ProductActivity;
 import com.example.testapp.R;
+import com.example.testapp.UserActivity;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Entity;
-import com.example.testapp.models.Order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.EntityViewHolder> {
@@ -73,7 +69,11 @@ public class EntityAdapter extends RecyclerView.Adapter<EntityAdapter.EntityView
                     context.startActivity(intent);
                     break;
                 case "payment":
-                    intent = new Intent(context, MainActivity.class);
+                    intent = new Intent(context, PaymentActivity.class);
+                    context.startActivity(intent);
+                    break;
+                case "users":
+                    intent = new Intent(context, UserActivity.class);
                     context.startActivity(intent);
                     break;
                 case "logout":

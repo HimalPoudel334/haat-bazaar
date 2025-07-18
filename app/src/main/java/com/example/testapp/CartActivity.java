@@ -13,24 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.testapp.adapters.CartRecyclerViewAdapter;
-import com.example.testapp.basetypes.Location;
-import com.example.testapp.interfaces.CartAPI;
-import com.example.testapp.interfaces.UserAPI;
-import com.example.testapp.interfaces.OrderAPI;
+import com.example.testapp.apis.CartAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Cart;
 import com.example.testapp.models.Payment;
-import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.OrderItem;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.responses.CartResponses;
-import com.example.testapp.responses.UserResponses;
 import com.example.testapp.responses.OrderResponses;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +67,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
         cartRecyclerView.setAdapter(adapter);
 
         // Make the API call
-        Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken());
+        Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getAccessToken());
         CartAPI cartAPI = retrofit.create(CartAPI.class);
         cartAPI.getUserCart(getCurrentUserId()).enqueue(new Callback<CartResponses.MultiCartResponse>() {
             @Override
@@ -111,7 +105,7 @@ public class CartActivity extends BaseActivity implements CartRecyclerViewAdapte
                 Log.d("Cart Activity", "onCheckBoxStateChanged: cart price: "+c.getPrice());
                 totalCharge[0] += c.getPrice();
             }
-            Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getToken());
+            Retrofit retrofit = RetrofitClient.getAuthClient(AuthManager.getInstance().getAccessToken());
             CartAPI cartAPI = retrofit.create(CartAPI.class);
             buttonRemove.setOnClickListener(view -> {
 

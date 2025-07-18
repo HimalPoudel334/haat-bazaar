@@ -24,12 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.testapp.BaseActivity;
-import com.example.testapp.CartActivity;
 import com.example.testapp.R;
-import com.example.testapp.interfaces.OrderAPI;
 import com.example.testapp.managers.AuthManager;
-import com.example.testapp.models.Cart;
 import com.example.testapp.models.Payment;
 import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
@@ -37,20 +33,14 @@ import com.example.testapp.models.OrderItem;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
-import com.example.testapp.responses.OrderResponses;
 import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
 import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.

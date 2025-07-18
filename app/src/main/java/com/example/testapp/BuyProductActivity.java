@@ -20,24 +20,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.ObjectKey;
 import com.example.testapp.basetypes.PaymentMethod;
-import com.example.testapp.interfaces.KhaltiAPI;
-import com.example.testapp.interfaces.OrderAPI;
-import com.example.testapp.managers.AuthManager;
+import com.example.testapp.apis.KhaltiAPI;
+import com.example.testapp.apis.OrderAPI;
 import com.example.testapp.models.OrderItem;
 import com.example.testapp.models.Payment;
-import com.example.testapp.models.User;
 import com.example.testapp.models.Order;
 import com.example.testapp.models.Product;
 import com.example.testapp.network.RetrofitClient;
 import com.example.testapp.paymentgateway.EsewaPaymentGateway;
 import com.example.testapp.paymentgateway.KhaltiPaymentGateway;
-import com.example.testapp.responses.KhaltiResponses;
 import com.example.testapp.responses.OrderResponses;
-import com.f1soft.esewapaymentsdk.EsewaConfiguration;
 import com.f1soft.esewapaymentsdk.EsewaPayment;
-import com.f1soft.esewapaymentsdk.ui.screens.EsewaPaymentActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -55,6 +49,7 @@ import retrofit2.Response;
 public class BuyProductActivity extends BaseActivity {
 
     private Product product;
+    private  EditText deliveryLocationEditText;
     private ActivityResultLauncher<Intent> registerActivity;
 
     @Override
@@ -139,6 +134,9 @@ public class BuyProductActivity extends BaseActivity {
         TextView totalPriceTextView = findViewById(R.id.total_amount);
         totalPriceTextView.setText(String.format("%s", product.getPrice() + deliveryCharge));
 
+        deliveryLocationEditText = findViewById(R.id.delivery_location_et);
+        deliveryLocationEditText.setText(getCurrentUser().getLocation());
+
         quantityTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -156,34 +154,19 @@ public class BuyProductActivity extends BaseActivity {
             }
         });
 
-        EditText deliveryLocationEditText = findViewById(R.id.delivery_location_et);
-        deliveryLocationEditText.setText(getCurrentUser().getLocation());
-
         ImageButton esewaButton = findViewById(R.id.button_esewa);
         esewaButton.setOnClickListener(v -> {
-            double quantity = getQuantity(quantityTextView);
-            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
-            if(deliveryLocation.isEmpty()) {
-                Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
-            } else if(!isUserLoggedIn()) {
-                    redirectToLogin();
-            } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.ESEWA);
-            }
-
+            createOrder(getQuantity(quantityTextView), PaymentMethod.ESEWA);
         });
 
         ImageButton khaltiButton = findViewById(R.id.button_khalti);
         khaltiButton.setOnClickListener(v -> {
-            double quantity = getQuantity(quantityTextView);
-            String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
-            if(deliveryLocation.isEmpty()) {
-                Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
-            } else if(!isUserLoggedIn()) {
-                redirectToLogin();
-            } else {
-                createOrder(quantity, deliveryLocation, deliveryCharge, PaymentMethod.KHALTI);
-            }
+            createOrder(getQuantity(quantityTextView), PaymentMethod.KHALTI);
+        });
+
+        ImageButton codButton = findViewById(R.id.button_cod);
+        codButton.setOnClickListener(v -> {
+            createOrder(getQuantity(quantityTextView), PaymentMethod.CASH);
         });
     }
 
@@ -215,8 +198,15 @@ public class BuyProductActivity extends BaseActivity {
         }
     }
 
-    private void createOrder(double quantity, String deliveryLocation, double deliveryCharge, String paymentMethod) {
+    private void createOrder(double quantity, String paymentMethod) {
+        TextView deliveryChargeTextView = findViewById(R.id.delivery_charge);
+        double deliveryCharge = Double.parseDouble(deliveryChargeTextView.getText().toString().split(" ")[1]);
 
+        String deliveryLocation = getDeliveryLocation(deliveryLocationEditText);
+        if(deliveryLocation.isEmpty()) Toast.makeText(getApplicationContext(), "Delivery location is required", Toast.LENGTH_SHORT).show();
+        if(!isUserLoggedIn()) redirectToLogin();
+
+        //Finally create order
         Payment payment = new Payment(paymentMethod);
 
         Order order = new Order(getCurrentUser(), deliveryLocation, deliveryCharge, payment);
@@ -242,6 +232,11 @@ public class BuyProductActivity extends BaseActivity {
                         createEsewaPayment(orderResp);
                     } else if (paymentMethod.equals(PaymentMethod.KHALTI)) {
                         createKhaltiPayment(orderResp);
+                    } else {
+                        Intent intent = new Intent(BuyProductActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                        finish();
+                        Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
