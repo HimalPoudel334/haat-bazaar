@@ -12,7 +12,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 
 
-import com.example.testapp.authrequests.LoginRequest;
+import com.example.testapp.requestmodels.LoginRequest;
 import com.example.testapp.apis.AuthAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.network.RetrofitClient;

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "520994186767",
+    "project_id": "haatbazaar-fa4fc",
+    "storage_bucket": "haatbazaar-fa4fc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520994186767:android:f0689bbe1b104d1349e57a",
+        "android_client_info": {
+          "package_name": "com.example.testapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2uJwDnNhPziZ45TDQXww884Mm4j5fCpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

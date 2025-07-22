@@ -34,6 +34,7 @@ public class AuthManager {
     private static final String KEY_USER_LOCATION = "user_location";
     private static final String KEY_USER_TYPE = "user_type";
     private static final String KEY_NEAREST_LANDMARK = "nearest_landmark";
+    private static final String KEY_FCM_TOKEN = "fcm_token";
 
     private static AuthManager instance;
     private SharedPreferences prefs;
@@ -110,6 +111,7 @@ public class AuthManager {
         editor.putString(KEY_USER_TYPE, user.getUserType());
         editor.putString(KEY_USER_LOCATION, user.getLocation());
         editor.putString(KEY_NEAREST_LANDMARK, user.getNearestLandmark());
+
         editor.apply();
 
         this.currentUser = user;
@@ -127,6 +129,12 @@ public class AuthManager {
     }
     public String getRefreshToken() {
         return prefs.getString(KEY_REFRESH_TOKEN, null);
+    }
+
+    public String getKeyFcmToken() { return prefs.getString(KEY_FCM_TOKEN, ""); }
+    public void setKeyFcmToken(String value) {
+        editor.putString(KEY_FCM_TOKEN, value);
+        editor.apply();
     }
 
     public void logout() {

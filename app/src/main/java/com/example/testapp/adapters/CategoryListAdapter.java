@@ -19,6 +19,7 @@ import com.example.testapp.apis.CategoryAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.models.Category;
 import com.example.testapp.network.RetrofitClient;
+import com.example.testapp.requestmodels.CategoryCreate;
 import com.example.testapp.responses.CategoryResponses;
 
 import java.util.List;
@@ -128,7 +129,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         RetrofitClient
             .getAuthClient(AuthManager.getInstance().getAccessToken())
             .create(CategoryAPI.class)
-            .updateCategory(category.getId(), new Category.CategoryCreate(newName))
+            .updateCategory(category.getId(), new CategoryCreate(newName))
             .enqueue(new retrofit2.Callback<CategoryResponses.SingleCategoryResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<CategoryResponses.SingleCategoryResponse> call, @NonNull Response<CategoryResponses.SingleCategoryResponse> response) {

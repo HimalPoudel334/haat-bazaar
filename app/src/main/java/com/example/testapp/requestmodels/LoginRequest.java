@@ -1,4 +1,4 @@
-package com.example.testapp.authrequests;
+package com.example.testapp.requestmodels;
 
 public class LoginRequest {
 

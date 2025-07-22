@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">Haatbazaar</string>
     <string name="title_activity_product_detail">ProductDetail</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -131,4 +131,6 @@
     <string name="esewa">Esewa</string>
     <string name="khalti">Khalti</string>
     <string name="payment_options">Payment Options</string>
+    <string name="channel_name">notification</string>
+    <string name="channel_description">channel_description</string>
 </resources>

@@ -20,7 +20,6 @@ public class Product implements Parcelable {
     private double stock;
     private String categoryId;
     private Category category;
-    private SubCategory subCategory;
 
     public Product(String name, String image, String description, double price, double previousPrice, String unit, double unitChange, double stock, Category category) {
         this.name = name;
@@ -120,14 +119,6 @@ public class Product implements Parcelable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public SubCategory getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(SubCategory subCategory) {
-        this.subCategory = subCategory;
     }
 
     protected Product(Parcel in) {

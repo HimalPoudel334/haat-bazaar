@@ -1,6 +1,6 @@
 package com.example.testapp.apis;
 
-import com.example.testapp.authrequests.LoginRequest;
+import com.example.testapp.requestmodels.LoginRequest;
 import com.example.testapp.responses.AuthResponses;
 
 import retrofit2.Call;

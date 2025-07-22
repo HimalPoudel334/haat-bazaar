@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android") version "2.0.0"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -58,5 +59,9 @@ dependencies {
     implementation(libs.checkout.android)
     implementation(libs.ui)
     implementation(libs.androidx.security.crypto)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
 
 }

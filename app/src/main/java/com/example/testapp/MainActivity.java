@@ -2,8 +2,6 @@ package com.example.testapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +17,7 @@ import com.example.testapp.adapters.CategoriesRecyclerViewAdapter;
 import com.example.testapp.adapters.HomePageMainRecyclerViewAdapter;
 import com.example.testapp.apis.CategoryAPI;
 import com.example.testapp.apis.ProductAPI;
-import com.example.testapp.helpers.ProductDiffCallback;
+import com.example.testapp.helpers.FcmRegistrationTokenApiHelper;
 import com.example.testapp.interfaces.CategoryChipClickListener;
 import com.example.testapp.models.Category;
 import com.example.testapp.models.HomePageModel;
@@ -45,6 +43,8 @@ public class MainActivity extends BaseActivity implements CategoryChipClickListe
     private final List<Product> productList = new ArrayList<>();
     HomePageMainRecyclerViewAdapter adapter;
     RecyclerView productRecyclerView;
+    private static final String TAG = "MainActivity";
+    private FcmRegistrationTokenApiHelper fcmApiHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity implements CategoryChipClickListe
     }
 
     private void getAllProducts(String categoryId) {
-        Log.d("Main Activity", "onCategoryClick: category id is " + categoryId);
+        Log.d(TAG, "onCategoryClick: category id is " + categoryId);
 
         ProductAPI productAPI = RetrofitClient.getClient().create(ProductAPI.class);
         productAPI.getProducts(categoryId).enqueue(new Callback<ProductResponses.MultipleProductResonse>() {

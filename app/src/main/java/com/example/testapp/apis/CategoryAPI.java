@@ -1,6 +1,6 @@
 package com.example.testapp.apis;
 
-import com.example.testapp.models.Category;
+import com.example.testapp.requestmodels.CategoryCreate;
 import com.example.testapp.responses.CategoryResponses;
 
 import retrofit2.Call;
@@ -12,7 +12,7 @@ import retrofit2.http.Path;
 
 public interface CategoryAPI {
     @POST("admin/categories")
-    Call<CategoryResponses.SingleCategoryResponse> createCategory(@Body Category.CategoryCreate category);
+    Call<CategoryResponses.SingleCategoryResponse> createCategory(@Body CategoryCreate category);
 
 
     @GET("categories")
@@ -22,6 +22,6 @@ public interface CategoryAPI {
     Call<CategoryResponses.SingleCategoryResponse> getCategory(@Path("categoryId") String categoryId);
 
     @PUT("admin/categories/{categoryId}")
-    Call<CategoryResponses.SingleCategoryResponse> updateCategory(@Path("categoryId") String categoryId, @Body Category.CategoryCreate category);
+    Call<CategoryResponses.SingleCategoryResponse> updateCategory(@Path("categoryId") String categoryId, @Body CategoryCreate category);
 
 }

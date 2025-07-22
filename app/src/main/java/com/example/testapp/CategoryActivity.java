@@ -23,6 +23,7 @@ import com.example.testapp.adapters.CategoryListAdapter;
 import com.example.testapp.apis.CategoryAPI;
 import com.example.testapp.models.Category;
 import com.example.testapp.network.RetrofitClient;
+import com.example.testapp.requestmodels.CategoryCreate;
 import com.example.testapp.responses.CategoryResponses;
 
 import java.io.IOException;
@@ -161,7 +162,7 @@ public class CategoryActivity extends BaseActivity {
     }
 
     private void createCategory(String name) {
-        Category.CategoryCreate category = new Category.CategoryCreate(name);
+        CategoryCreate category = new CategoryCreate(name);
         RetrofitClient
                 .getAuthClient(getUserToken())
                 .create(CategoryAPI.class)

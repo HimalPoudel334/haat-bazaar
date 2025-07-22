@@ -1,6 +1,7 @@
 [versions]
 agp = "8.2.0"
 checkoutAndroid = "latest.release"
+firebaseBom = "33.16.0"
 glide = "4.16.0"
 imageslideshow = "0.1.2"
 junit = "4.13.2"
@@ -19,6 +20,9 @@ securityCrypto = "1.1.0-alpha06"
 [libraries]
 checkout-android = { module = "com.khalti:checkout-android", version.ref = "checkoutAndroid" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 imageslideshow = { module = "com.github.denzcoskun:ImageSlideshow", version.ref = "imageslideshow" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

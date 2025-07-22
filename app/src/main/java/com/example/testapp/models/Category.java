@@ -79,16 +79,4 @@ public class Category implements Parcelable {
         parcel.writeString(name);
     }
 
-    public static class CategoryCreate {
-        private String name;
-
-        public CategoryCreate(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
 }
