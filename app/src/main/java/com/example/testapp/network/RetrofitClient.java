@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    public static final String BASE_URL = "http://159.13.60.202/haatbazaar-api/";
+    public static final String BASE_URL = "https://himalpoudel.name.np/haatbazaar-api/";
     private static volatile Retrofit publicClient = null;
     private static volatile Retrofit authClient = null;
     private static volatile String currentToken = null;

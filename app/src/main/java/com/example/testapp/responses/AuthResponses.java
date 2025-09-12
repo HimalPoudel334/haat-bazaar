@@ -53,4 +53,28 @@ public class AuthResponses {
             this.refreshToken = refreshToken;
         }
     }
+
+    public static class OtpResponse {
+        private String message;
+        private int expiresInMinutes;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public int getExpiresInMinutes() { return expiresInMinutes; }
+    }
+
+    public static class VerifyOtpResponse {
+        private String message;
+        private boolean isValid;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public boolean isValid() {
+            return isValid;
+        }
+    }
 }

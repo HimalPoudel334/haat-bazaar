@@ -12,7 +12,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 
 
-import com.example.testapp.requestmodels.LoginRequest;
+import com.example.testapp.requestmodels.AuthRequest;
 import com.example.testapp.apis.AuthAPI;
 import com.example.testapp.managers.AuthManager;
 import com.example.testapp.network.RetrofitClient;
@@ -67,12 +67,18 @@ public class LoginActivity extends BaseActivity {
            startActivity(intent);
            finish();
         });
+
+        TextView forgetPasswordTv = findViewById(R.id.forgotPasswordTv);
+        forgetPasswordTv.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ForgetPasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void performLogin(String username, String password) {
         Retrofit retrofitClient = RetrofitClient.getClient();
         AuthAPI authAPI = retrofitClient.create(AuthAPI.class);
-        LoginRequest request = new LoginRequest(username, password);
+        AuthRequest.LoginRequest request = new AuthRequest.LoginRequest(username, password);
 
         authAPI.login(request).enqueue(new Callback<AuthResponses.LoginResponse>() {
             @Override

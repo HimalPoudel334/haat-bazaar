@@ -39,7 +39,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         fcmApiHelper.sendRegistrationTokenToBackend(AuthManager.getInstance().getCurrentUser().getId(), token);
     }
 
-    @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
@@ -50,24 +49,87 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String orderId = data.get("order_id");
             String customerName = data.get("customer_name");
             String totalAmount = data.get("total_amount");
-            String eventType = data.get("event_type");
+            String eventType = data.get("event_type"); // This is crucial!
+            String messageTitle = data.get("title");
+            String messageBody = data.get("body");
 
-            if ("new_order".equals(eventType) && orderId != null) {
-                String title = "New Order: " + orderId;
-                String body = "Customer: " + customerName + ", Total: Rs. " + totalAmount;
-
-                // --- NEW: Pass orderId to showNotification ---
-                showNotification(orderId.hashCode(), title, body);
+            int notificationId = 0;
+            if (orderId != null && !orderId.isEmpty()) {
+                notificationId = orderId.hashCode();
             } else {
-                // Fallback for other data messages without specific orderId
-                showNotification(0, "New Message", "Data received: " + data.toString());
+
+                notificationId = eventType != null ? eventType.hashCode() : 0;
             }
+
+
+            switch (eventType) {
+                case "new_order":
+                    if (orderId != null) {
+                        String title = "New Order: " + orderId;
+                        String body = "Customer: " + customerName + ", Total: Rs. " + totalAmount;
+                        showNotification(notificationId, title, body);
+                    }
+                    break;
+
+                case "payment_received":
+                    // Assuming payment_received also sends relevant data like orderId or transactionId
+                    String paymentAmount = data.get("amount");
+                    String transactionId = data.get("transaction_id");
+                    String paymentMethod = data.get("payment_method");
+
+                    String titlePayment = "Payment Received!";
+                    StringBuilder bodyBuilder = new StringBuilder();
+                    bodyBuilder.append("Amount: Rs. ").append(paymentAmount);
+
+                    if (orderId != null && !orderId.isEmpty()) {
+                        bodyBuilder.append(" for Order: ").append(orderId);
+                    }
+                    if (transactionId != null && !transactionId.isEmpty()) {
+                        bodyBuilder.append(" (Txn: ").append(transactionId).append(")");
+                    }
+                    if (paymentMethod != null && !paymentMethod.isEmpty()) {
+                        bodyBuilder.append(" via ").append(paymentMethod);
+                    }
+
+                    String bodyPayment = bodyBuilder.toString();
+                    showNotification(notificationId, titlePayment, bodyPayment);
+                    break;
+
+                case "order_cancelled":
+                    String cancelReason = data.get("reason");
+                    String titleCancelled = "Order Cancelled: " + orderId;
+                    String bodyCancelled = "Reason: " + (cancelReason != null ? cancelReason : "N/A");
+                    showNotification(notificationId, titleCancelled, bodyCancelled);
+                    break;
+
+                case "order_fulfilled":
+                    String fulfillDetails = data.get("details"); // e.g., "delivered", "picked up"
+                    String titleFulfilled = "Order Fulfilled: " + orderId;
+                    String bodyFulfilled = fulfillDetails != null ? "Status: " + fulfillDetails : "Your order has been completed.";
+                    showNotification(notificationId, titleFulfilled, bodyFulfilled);
+                    break;
+
+                default:
+                    // Fallback for any other data messages not specifically handled above
+                    // or if 'title' and 'body' are sent directly in the data payload
+                    String defaultTitle = messageTitle != null ? messageTitle : "New Message";
+                    String defaultBody = messageBody != null ? messageBody : "Data received: " + data.toString();
+                    showNotification(notificationId, defaultTitle, defaultBody);
+                    break;
+            }
+
         } else if (remoteMessage.getNotification() != null) {
+            // This block handles "notification-only" messages sent from Firebase Console
+            // or messages where the server only sends the 'notification' payload.
+            // These typically don't have custom data like 'eventType'.
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            // If the message is a notification-only message (no data payload with order_id)
-            // you'll need a different strategy for a unique ID, e.g., a simple counter
-            // or a static ID if they are generic notifications that can be replaced.
-            showNotification(1, remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody()); // Use a different static ID or counter
+
+            // For generic notifications without a data payload, you often have to rely on
+            // a static ID or a very simple counter if you don't mind them overwriting each other,
+            // or if they are truly unique and you want them to stack.
+            // Using a static ID (e.g., 1) will replace the previous notification with the same ID.
+            // If you want them to stack, you'd need a dynamic ID (e.g., System.currentTimeMillis() or a counter).
+            showNotification(1, remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
     }
 

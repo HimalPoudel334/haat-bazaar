@@ -38,11 +38,7 @@ public class KhaltiPaymentGateway {
         return Khalti.Companion.init(context, getKhaltiPayConfig(pidx),
             (paymentResult, khalti) -> {
                 Log.i("Demo | onPaymentResult", paymentResult.toString());
-
-                //call backed api to once again confirm payment and create payment
-//                confirmPayment(paymentResult.getPayload().getPidx(), paymentResult.getPayload().getPurchaseOrderId(), userToken); //purchaseOrderId is actually OrderId
-
-                khalti.close();
+                    khalti.close();
                 Toast.makeText(context, "Khalti Payment Successful", Toast.LENGTH_LONG).show();
             },
             (payload, khalti) -> {
@@ -64,28 +60,4 @@ public class KhaltiPaymentGateway {
             }
         );
     }
-
-    private static void confirmPayment(String pidx, String orderId, String userToken) {
-        KhaltiPayment.KhaltiPaymentConfirmPayload payload = new KhaltiPayment.KhaltiPaymentConfirmPayload(pidx, orderId);
-        KhaltiAPI khaltiAPI = RetrofitClient.getAuthClient(userToken).create(KhaltiAPI.class);
-        khaltiAPI.verifyPayment(payload).enqueue(new Callback<JsonElement>() {
-            @Override
-            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
-                if(!response.isSuccessful()) {
-                    try {
-                        Log.d("Payment verification", "onResponse: creating payment eror: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonElement> call, Throwable t) {
-
-            }
-        });
-
-    }
-
 }
