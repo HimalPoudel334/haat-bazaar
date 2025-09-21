@@ -99,7 +99,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-
                     android:padding="5dp">
 
                     <TextView
@@ -114,14 +113,30 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <RatingBar
+                        android:id="@+id/product_rating"
+                        style="@style/Base.Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:padding="0dp"
+                        android:scaleX="2"
+                        android:scaleY="2"
+                        android:stepSize="0.5"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/rating_tv"
-                        android:id="@+id/product_rating"
-                        />
+                        app:layout_constraintRight_toLeftOf="@id/rate_btn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/rate_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rate"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/product_rating"
+                        app:layout_constraintRight_toRightOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -135,6 +150,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/reviews"
+                        android:id="@+id/review_tv"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_reviews_yet"
+                        android:id="@+id/no_reviews_tv"
+                        android:visibility="gone"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+
                         />
 
                     <androidx.recyclerview.widget.RecyclerView

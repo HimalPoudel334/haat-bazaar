@@ -71,10 +71,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
             resetPassword(email, otp, newPassword);
-
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
         });
     }
 
